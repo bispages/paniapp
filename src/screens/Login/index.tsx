@@ -276,7 +276,8 @@ import { Checkbox } from 'react-native-paper';
 import colors from '../../assets/colors';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { loginstep } from '../../Const/Api';
+import axios from 'axios';
 const array =[
   {
     ids:1,
@@ -314,6 +315,30 @@ const Login = () => {
        const onTextChange = (text: string) => {
              setPhone(text.replace(/[^0-9]/g, ''));
           };
+
+      // async function Phonenumber() {
+      //   const from = new FormData();
+      //   form.append("userPhone",phone)
+
+      //   const options = {
+      //     method:'POST',
+      //     url: loginstep,
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //       Accept: "application/json",
+      //     },
+      //     data: form,
+      //   };
+      //   await axios
+      //   .request(options)
+      // .then(function (response) {
+      //   Phonenumber();
+      //   navigation.navigate('verifyphone', { phone });
+      // })
+      // .catch(function (error) {
+      //   console.error(error);
+      // });
+      // }
 
   return (
     <View style={styles.container}>
@@ -388,7 +413,8 @@ const Login = () => {
           </View>
 
           <TouchableOpacity style={styles.submitbtn} onPress={() =>submit()}>
-            <Text style={styles.join}>Join</Text>
+          {/* <TouchableOpacity style={styles.submitbtn} onPress={() =>Phonenumber()}> */}
+              <Text style={styles.join}>Join</Text>
 
           </TouchableOpacity>
 

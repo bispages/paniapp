@@ -6,16 +6,16 @@ import styles from './AddMinusButton.style';
 
 const AddMinusButton = (props: any) => {
   const { colors } = useTheme();
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
   const [viewnum, setViewnum] = useState(1);
-  const [decnum, setDecnum] = useState();
+  const [decnum, setDecnum] = useState(0);
 
   const onAdd = () => {
     const countVal = count + 1;
     setCount(countVal);
     props.updateCount({ count: countVal });
     // viewnum+=1
-    setViewnum(viewnum + 1)
+    setViewnum(viewnum + 1);
     props.setNumb(viewnum);
   };
   const onMinus = () => {
@@ -24,7 +24,7 @@ const AddMinusButton = (props: any) => {
       setCount(countVal);
       props.updateCount({ count: countVal });
       // setDecnum(viewnum);
-      setViewnum(viewnum - 1)
+      setViewnum(viewnum - 1);
     props.setNumb(viewnum);
     }
   };
@@ -41,7 +41,7 @@ const AddMinusButton = (props: any) => {
           color={colors.primary}
           size={30}
           rippleColor={colors.accent}
-          onPress={onMinus}
+          onPress={()=>onMinus()}
         />
       </View>
       <View style={[styles.countText, { backgroundColor: "#E1E1E1" }]}>
@@ -55,7 +55,7 @@ const AddMinusButton = (props: any) => {
           color={colors.primary}
           size={30}
           rippleColor={colors.accent}
-          onPress={onAdd}
+          onPress={()=>onAdd()}
         />
       </View>
     </View>

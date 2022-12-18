@@ -143,15 +143,7 @@ const MaterialSpecView = ({
           </Text>
          
         </View>
-        {/* <View style={styles.alignMiddle}>
-          <IconButton
-            icon="close"
-            color={colors.text}
-            size={20}
-            rippleColor={colors.accent}
-            onPress={() => saveFormAndClose()}
-          />
-        </View> */}
+
       </View>
       <BottomSheetScrollView
         showsHorizontalScrollIndicator={false}
@@ -181,6 +173,7 @@ const MaterialSpecView = ({
                     count={getCountValue(material)}
                     setNumb={setNumb}
                     numb={numb}
+                    
                     // style={styless.addMinusBtns}
                     style={[styles.addMinusBtn, { backgroundColor: colorss.btncolor}]}
                     updateCount={({ count }: { count: number }) => {

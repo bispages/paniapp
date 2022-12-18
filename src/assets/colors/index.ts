@@ -55,7 +55,8 @@ const colors = {
   textcolor: '#323232',
   logintag:'#504E4E',
   loginselection:'#EBEDEF',
-  userpagetopback:'#DfDfDf'
+  userpagetopback:'#DfDfDf',
+  modalback:"rgba(1, 1, 1, 0.66)"
 
 };
 

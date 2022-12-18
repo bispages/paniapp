@@ -201,7 +201,6 @@ const styles = StyleSheet.create({
     borderRadius:50,
     backgroundColor:'#747883',
     alignItems:'center',
-    
     justifyContent:"center"
   },
   txt:{

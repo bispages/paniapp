@@ -1,275 +1,360 @@
-import React, {
-  RefObject,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { View, Pressable, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, useTheme, Button } from 'react-native-paper';
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import React, { useState } from "react";
+import { View,StyleSheet, Image, Text, TouchableOpacity, TextInput,ScrollView } from 'react-native';
+import Colors from "../../assets/colors";
 import { useNavigation } from '@react-navigation/native';
-import colorss from '../../assets/colors/index'
+import Product from '../../assets/img/productz.png';
+// import {colors} from '../../assets/colors'
 
-import MaterialSpecView from './MaterialSpecView';
+const arr =[
+  {
+    id:1,
+    title:'Ball valve',
+    img:Product
+  },
+  {
+    id:2,
+    title:'Coupler',
+    img:Product
+  },
+  {
+    id:3,
+    title:'Elbow',
+    img:Product
+  },
+  {
+    id:4,
+    title:'End cap',
+    img:Product
+  },
+  {
+    id:5,
+    title:'Reducer',
+    img:Product
+  },
+  {
+    id:6,
+    title:'Union',
+    img:Product
+  },
+  {
+    id:7,
+    title:'Elbow 90',
+    img:Product
+  },
+  {
+    id:8,
+    title:'elbow Holder',
+    img:Product
+  },
+  {
+    id:9,
+    title:'Equal tee',
+    img:Product
+  },
+  {
+    id:10,
+    title:'Flange Adapter',
+    img:Product
+  },
+  {
+    id:11,
+    title:'End cap2',
+    img:Product
+  },
+  {
+    id:12,
+    title:'Elbow 2',
+    img:Product
+  },
+  
 
+]
 
-import { MaterialType, MaterialItem } from '../../types';
-import useBackHandler from '../../hooks/useBackHandler';
-import { materialItemsList } from '../../utils/materialItemsList';
-import {
-  ESTIMATE_MATERIAL_BOTSHEET_SNAPMIN,
-  ESTIMATE_MATERIAL_BOTSHEET_SNAPMAX,
-} from '../../utils/constants';
-import styles from './Estimate.style';
+const countitem =[
+  {
+    id:1,
+    amount:"1.50"
+  },
+  {
+    id:2,
+    amount:"1.00"
+  },
+  {
+    id:3,
+    amount:"2.00"
+  },
+  {
+    id:4,
+    amount:"2.50"
+  },
+  {
+    id:5,
+    amount:"3.00"
+  },
+  {
+    id:6,
+    amount:"3.50"
+  },
+]
 
-type routeParams = {
-  route: { params: { type: MaterialType } };
-};
+  
 
-const MaterialItems = ({ route: { params } }: routeParams) => {
-  const { type } = params;
-  const { dark, colors } = useTheme();
-  const navigation = useNavigation();
+const MaterialItems =()=> {
+  const [visible, setVisible] = useState(false);
+  const [num,setNum] = useState(0);
 
-  const snapPoints = useMemo(
-    () => [
-      ESTIMATE_MATERIAL_BOTSHEET_SNAPMIN,
-      ESTIMATE_MATERIAL_BOTSHEET_SNAPMAX,
-    ],
-    [],
-  );
-  const [item, setItem] = useState<MaterialItem>();
-  const [isBotSheetActive, setIsBotSheetActive] = useState(false);
-  const materialSpecBottomSheet = useRef<BottomSheet>(null);
-  const backAction = useCallback(() => {
-    if (isBotSheetActive) {
-      closeMaterialSpecBotSheet(materialSpecBottomSheet);
-      return true;
+  const adding = () => {
+    setNum(num+1);
+  }
+
+  const decending = () => {
+    if(num>0){
+      setNum(num-1);
     }
-    return false;
-  }, [isBotSheetActive]);
-
-  // Adds hardware BackHandler hook.
-  useBackHandler(backAction);
-
-  // Save and Close the bottomSheet
-  const saveFormAndClose = () => {
-    closeMaterialSpecBotSheet(materialSpecBottomSheet);
-  };
-
-  const handleSheetChanges = useCallback(
-    (index: number) => {
-      if (index >= 0) {
-        setIsBotSheetActive(true);
-      } else {
-        setIsBotSheetActive(false);
-      }
-    },
-    [isBotSheetActive],
-  );
-
-  const renderBackdrop = useCallback(
-    props => (
-      <BottomSheetBackdrop
-        {...props}
-        pressBehavior={0}
-        disappearsOnIndex={-1}
-        appearsOnIndex={0}
-      />
-    ),
-    [],
-  );
-
-  const showMaterialSpecBotSheet = useCallback(
-    (item: MaterialItem, sheet: RefObject<BottomSheet>) => {
-      setItem(item);
-      setTimeout(() => {
-        sheet.current?.snapToIndex(1);
-      }, 100);
-    },
-    [],
-  );
-
-  const closeMaterialSpecBotSheet = useCallback(
-    (sheet: RefObject<BottomSheet>) => sheet.current?.close(),
-    [],
-  );
-
-  const renderBottomSheet = useCallback(
-    (type: MaterialType, item: MaterialItem | undefined) => (
-      <BottomSheet
-        ref={materialSpecBottomSheet}
-        index={-1}
-        // enablePanDownToClose
-        snapPoints={snapPoints}
-        backgroundStyle={{ backgroundColor: colors.background }}
-        handleIndicatorStyle={{ backgroundColor: colors.background }}
-        handleStyle={{
-          borderTopRightRadius: 10,
-          borderTopLeftRadius: 10,
-          
-        }}
-        onChange={(index: number) => handleSheetChanges(index)}
-        backdropComponent={renderBackdrop}>
-         
-        <MaterialSpecView
-          type={type}
-          item={item}
-          saveFormAndClose={saveFormAndClose}
-        />
-      </BottomSheet>
-    ),
-    [item, type],
-  );
-
-  // Function to render material Items List.
-  const renderMaterialItemsList = (item: MaterialItem) => (
-    <Pressable
-      key={item.id}
-      onPress={() => showMaterialSpecBotSheet(item, materialSpecBottomSheet)}
-      style={[styless.block, { backgroundColor: colorss.materialitemscard }]}
-
-      android_ripple={{ color: colors.background, radius: 200 }}>
-        
-        <Image source={require("../../assets/img/valve.png")} style={styless.product}/>
-        
-      <Text
-        style={{ fontSize: 14, fontWeight:"400" }}
-        theme={{ colors: { text: colorss.textcolor } }}>
-        {item.name}
-      </Text>
-    </Pressable>
-  );
-
-  const saveEstimate = () => {
-    navigation.navigate('EstimateTableView');
-  };
-
-  return (
-    <View style={styles.container}>
-      <View style={styless.headingContainer}>
-      <TouchableOpacity onPress={()=>navigation.goBack()}>
-      <Image source={require("../../assets/img/backarrow.png")} style={styless.back}/>
-      </TouchableOpacity>
-        <Text style={styless.heading}>Material Items</Text>
-      </View>
-      <View style={styless.itemsContainer}>
-        {materialItemsList ? (
-          <View style={{ flex: 1 }}>
-            <ScrollView>
-              <View style={styless.listContainer}>
-                {materialItemsList.map(renderMaterialItemsList)}
+    
+  }
+    
+    return (
+        <View style={styles.container}>
+          {
+            visible === true ?
+            <View style={styles.modalcontainer}>
+              <View style={styles.contentdiv}>
+                <View style={styles.contentdivtap}>
               </View>
-            </ScrollView>
-          </View>
-        ) : null}
-      </View>
-      <View style={styless.saveBtnContainer}>
-        <Button style={styless.saveBtn}>
-        <Image source={require("../../assets/img/icon-park-solid_back.png")} style={styless.backinfo}/>
-          <Text style={styless.saveBtntxt}>Save</Text>
-        </Button>
-        
-      </View>
-      {renderBottomSheet(type, item)}
-    </View>
-  );
-};
+              <View style={styles.contentbar}>
+                <Text  style={styles.producttxt}>PVC - Elbow Holder</Text>
+              </View>
+              <View style={styles.below}>
+                {
+                  countitem.map((item,i)=>{
+                    return (
+                    <View style={styles.itemcontentbar}>
+                <View style={styles.typecontentbar}>
+              <Text style={styles.amountline}>{item?.amount}<Text style={styles.inches}> inch</Text></Text>
+              </View>
+              <TouchableOpacity style={styles.btnselector} onPress={()=>decending()}>
+                <Text style={styles.icontxt}>—</Text>
+              </TouchableOpacity>
+              <View style={styles.number}>
+              <Text style={styles.Count}>{num}</Text>
+              </View>
+              <TouchableOpacity style={styles.btnselector} onPress={()=>adding()}>
+                <Text style={styles.icontxt}>+</Text>
+              </TouchableOpacity>
 
+              </View>)
+
+                  })
+                }
+              </View>
+              
+              
+              </View>
+            </View>
+            :
+            ("")
+          }
+          <View style={styles.headcontainer}>
+            <Image style={styles.back} source={require('../../assets/img/backarrow.png')}/>
+          <Text style={styles.head}>Material Items</Text>
+          </View>
+          <ScrollView style={styles.cardcontainer}>
+            <View style={styles.cardboxcontainer}>
+            {
+              arr?.map((item,i) => {
+                return (
+                  <TouchableOpacity style={styles.card} onPress={()=>setVisible(!visible)} key={i}>
+              <Image style={styles.productimg} source={item?.img}/>
+              <Text style={styles.txt}>{item?.title}</Text>
+              
+
+            </TouchableOpacity>
+
+                )
+              })
+            }
+            </View>
+          </ScrollView>
+                  
+        </View>
+    )
+}
 export default MaterialItems;
-const styless = StyleSheet.create({
-  listContainer: {
-    flex: 1,
-    width: '100%',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: '3%',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+const styles = StyleSheet.create({
+  container:{
+    flex:1,
+    backgroundColor:'#ffffff'
+
   },
-  headingContainer: {
-    flex: 0.1,
-    marginTop:-10,
-    width: '100%',
-    paddingHorizontal: 20,
+  itemcontentbar:{
+    width:'95%',
+    // height:55,
+    borderRadius:8,
+    backgroundColor:'#f5f5f5',
+    display:'flex',
     flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between',
+    marginVertical:10,
+    paddingHorizontal:10
+  },
+  below:{
+    display:'flex',
+    flexDirection:'column',
+    marginHorizontal:10
+  },
+  contentdiv:{
+    left:0,
+    right:0,
+    bottom:0,
+    flex:0.77,
+    backgroundColor:'#ffffff',
+    borderTopLeftRadius:20,
+    borderTopRightRadius:20,
     alignItems:"center",
-    justifyContent: 'flex-start',
-    backgroundColor:colorss.white
+    justifyContent:'flex-start',
   },
-  itemsContainer: {
-    flex: 0.78,
-    // backgroundColor:'red',
-   
-    width: '100%',
-    backgroundColor:colorss.white
-  },
-  block: {
-    width: '30%',
-    height: 110,
-    margin: 5,
-    borderRadius: 11,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor:colorss.materialbackground
-  },
-  product:{
-    width:50,
-    height:50
-  },
-  heading:{
-    fontSize:27,
-    lineHeight:32,
-    fontWeight:"400",
-    color:"#515253",
-    marginLeft:20
-  },
-  back:{
-    width:46,
-    height:46
-  },
-  saveBtnContainer: {
-    width: '100%',
-    flex: 0.12,
-    zIndex: 0,
-    marginTop: 15,
-    backgroundColor:colorss.materialbackground,
-    alignItems:'center',
-    justifyContent:'center'
-  },
-  saveBtn:{
-    width:135,
-    height:60,
-    borderRadius:30,
-    backgroundColor:colorss.btncolor,
-    alignItems:'center',
-    justifyContent:'center'
-  },
-  backinfo:{
-    width:25,
-    height:25
-  },
-  backinfos:{
-    width:20
-  },
-  saveBtntxt:{
-    fontSize:22,
-    lineHeight:26,
-    fontWeight:"400",
-    color:"#ffffff",
-    marginLeft:15
-  },
-  add:{
-    width:'100%',
-    backgroundColor:colorss.btncolor,
+  number:{
+    width:30,
     alignItems:'center',
     justifyContent:'center',
-    // marginTop:-40,
+    // backgroundColor:'red'
+  },
+  headcontainer:{
+    display:'flex',
+    width:'100%',
+    flexDirection:'row',
+    alignItems:'center',
+    paddingVertical:5,
+    borderBottomWidth:3,
+    borderBottomColor:"rgba(216, 214, 214, 0.8)"
+  },
+  back:{
+    width:40,
+    height:40,
+    marginHorizontal:30,
+    marginVertical:8
+  },
+  head:{
+    fontSize:22,
+    fontWeight:'400',
+    lineHeight:20,
+    color:"#515253"
+  },
+  cardcontainer:{
     
+    // marginHorizontal:10,
+    display:'flex',
+    // flexDirection:'row',
+    // flexWrap:'wrap',
+    width:'100%'
+  },
+  card:{
+    width: 110,
+    height: 110,
+    margin: 5,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor:'#f4f4f4',
+    display:'flex',
+    flexDirection:'column'
+  },
+  txt:{
+    fontSize:14,
+    fontWeight:"400",
+    lineHeight:17,
+    color:"#323232",
+    textAlign:'center'
 
+  },
+  productimg:{
+    width:66,
+    height:67
+  },
+  cardboxcontainer:{
+    display:'flex',
+    flexDirection:"row",
+    alignItems:'center',
+    justifyContent:'center',
+    flexWrap:'wrap',
+    marginVertical:10
+    
+  },
+  modalcontainer:{
+    display:'flex',
+    backgroundColor:Colors.modalback,
+    position:'absolute',
+    top:0,
+    left:0,
+    right:0,
+    bottom:0,
+    zIndex:1,
+    justifyContent:'flex-end'
+  },
+  contentdivtap:{
+    width:100,
+    height:13,
+    borderRadius:10,
+    backgroundColor:"#767676",
+    marginVertical:20
+  },
+  contentbar:{
+    borderBottomWidth:2,
+    width:"100%",
+    borderBottomColor:'#D8D6D6',
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  producttxt:{
+    fontSize:20,
+    fontWeight:'500',
+    lineHeight:20,
+    color:'#474747',
+    marginBottom:15,
+    marginTop:5
+  },
+  btnselector:{
+    width:60,
+    height:55,
+    alignItems:'center',
+    justifyContent:'center',
+    backgroundColor:Colors.btncolor,
+    borderRadius:4
+  },
+  icontxt:{
+    fontSize:35,
+    fontWeight:'600',
+    color:Colors.white
+  },
+  Count:{
+    fontSize:20,
+    fontWeight:'600',
+    color:'#5A5959',
+    lineHeight:20
+  },
+  amountline:{
+    fontSize:20,
+    fontWeight:'500',
+    color:'#5A5959',
+    lineHeight:20
+  },
+  inches:{
+    fontSize:18,
+    fontWeight:'300',
+    color:'#5A5959',
+    lineHeight:20,
+    marginHorizontal:10
+  },
+  typecontentbar:{
+    width:'40%',
+    // backgroundColor:"red"
   }
- 
+  
+
+
+    
 
 
 })
