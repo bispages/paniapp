@@ -73,80 +73,144 @@ const arr =[
 const countitem =[
   {
     id:1,
-    amount:"1.50"
+    amount:"1.50",
+    count:0,
   },
   {
     id:2,
-    amount:"1.00"
+    amount:"1.00",
+    count:0,
   },
   {
     id:3,
-    amount:"2.00"
+    amount:"2.00",
+    count:0,
   },
   {
     id:4,
-    amount:"2.50"
+    amount:"2.50",
+    count:0,
   },
   {
     id:5,
-    amount:"3.00"
+    amount:"3.00",
+    count:0,
   },
   {
     id:6,
-    amount:"3.50"
+    amount:"3.50",
+    count:0,
   },
+  {
+    id:7,
+    amount:"2.50",
+    count:0,
+  },
+  {
+    id:8,
+    amount:"3.00",
+    count:0,
+  },
+  {
+    id:9,
+    amount:"3.50",
+    count:0,
+  },
+  
 ]
 
   
 
 const MaterialItems =()=> {
   const [visible, setVisible] = useState(false);
-  const [num,setNum] = useState(0);
+  const [num,setNum] = useState(!num);
+  const [productDetails, setProductDetails] = useState([]);
+  const navigation = useNavigation();
 
-  const adding = () => {
-    setNum(num+1);
+
+  const popup=()=>{
+    setNum(true);
+    setTimeout(function(){
+      setNum(false)
+    }, 100);
   }
 
-  const decending = () => {
-    if(num>0){
-      setNum(num-1);
+  let adding = (index, value) => {
+    
+    let product_array;
+    product_array = [...countitem];
+    product_array[index][value] = parseInt(product_array[index]?.count) + 1;
+    product_array[index][value] = `${product_array[index]?.count}`;
+    setProductDetails(product_array);
+  }
+
+  let decending = (index, value) => {
+    
+      let product_array;
+      product_array = [...countitem];
+      if(product_array[index]?.count > 0){
+      product_array[index][value] = parseInt(product_array[index]?.count) - 1;
+      product_array[index][value] = `${product_array[index]?.count}`;
+      setProductDetails(product_array);
+      }
     }
     
-  }
+  
     
     return (
         <View style={styles.container}>
           {
             visible === true ?
             <View style={styles.modalcontainer}>
+              {
+                num === true ?
+                <View style={styles.countbar}>
+                  <Text style={styles.countnum}>+1</Text>
+                  </View>
+                :("")
+              }
+
               <View style={styles.contentdiv}>
                 <View style={styles.contentdivtap}>
               </View>
               <View style={styles.contentbar}>
                 <Text  style={styles.producttxt}>PVC - Elbow Holder</Text>
               </View>
-              <View style={styles.below}>
+              <ScrollView 
+              showsVerticalScrollIndicator={false}
+              style={styles.below}>
                 {
-                  countitem.map((item,i)=>{
+                  countitem?.map((item,index)=>{
                     return (
-                    <View style={styles.itemcontentbar}>
+                    <View style={styles.itemcontentbar} key={index}>
                 <View style={styles.typecontentbar}>
               <Text style={styles.amountline}>{item?.amount}<Text style={styles.inches}> inch</Text></Text>
               </View>
-              <TouchableOpacity style={styles.btnselector} onPress={()=>decending()}>
+              <View style={styles.rowset}>
+              <TouchableOpacity style={styles.btnselector} onPress={()=> [decending(index, "count"), popup()]}>
                 <Text style={styles.icontxt}>—</Text>
               </TouchableOpacity>
               <View style={styles.number}>
-              <Text style={styles.Count}>{num}</Text>
+              <Text style={styles.Count}>{item?.count}</Text>
               </View>
-              <TouchableOpacity style={styles.btnselector} onPress={()=>adding()}>
+              <TouchableOpacity style={styles.btnselector} onPress={()=> [adding(index, "count"), popup()]}>
                 <Text style={styles.icontxt}>+</Text>
               </TouchableOpacity>
+              </View>
 
               </View>)
 
                   })
                 }
+              </ScrollView>
+              <View style={styles.productback}>
+                <TouchableOpacity  style={styles.donebar} onPress={()=>navigation.navigate('MaterialTypes')}>
+                {/* <Text  style={styles.donetxt}>Back</Text> */}
+                <Image source={require('../../assets/img/Group112.png')}/>
+                </TouchableOpacity>
+                <TouchableOpacity  style={styles.donebar} onPress={()=>setVisible(false)}>
+                <Text  style={styles.donetxt}>Done</Text>
+                </TouchableOpacity>
               </View>
               
               
@@ -176,6 +240,9 @@ const MaterialItems =()=> {
             }
             </View>
           </ScrollView>
+          <View>
+
+          </View>
                   
         </View>
     )
@@ -188,7 +255,7 @@ const styles = StyleSheet.create({
 
   },
   itemcontentbar:{
-    width:'95%',
+    width:'97%',
     // height:55,
     borderRadius:8,
     backgroundColor:'#f5f5f5',
@@ -199,16 +266,46 @@ const styles = StyleSheet.create({
     marginVertical:10,
     paddingHorizontal:10
   },
+  rowset:{
+    display:'flex',
+    flexDirection:'row',
+    // backgroundColor:'green'
+  },
+  countbar:{
+    width:90,
+    height:90,
+    borderRadius:50,
+    backgroundColor:'#f5f5f5',
+    alignSelf:'center',
+    alignItems:'center',
+    justifyContent:'center'
+    
+    
+  },
   below:{
     display:'flex',
     flexDirection:'column',
     marginHorizontal:10
   },
+  donebar:{
+    backgroundColor:'#6B7887',
+    width:130,
+    height:55,
+    borderRadius:20,
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  donetxt:{
+    fontSize:22,
+    fontWeight:'500',
+    color:'#ffffff'
+  },
   contentdiv:{
     left:0,
     right:0,
     bottom:0,
-    flex:0.77,
+    // flex:0.9,
+    height:'83%',
     backgroundColor:'#ffffff',
     borderTopLeftRadius:20,
     borderTopRightRadius:20,
@@ -216,7 +313,7 @@ const styles = StyleSheet.create({
     justifyContent:'flex-start',
   },
   number:{
-    width:30,
+    width:50,
     alignItems:'center',
     justifyContent:'center',
     // backgroundColor:'red'
@@ -348,8 +445,25 @@ const styles = StyleSheet.create({
     marginHorizontal:10
   },
   typecontentbar:{
-    width:'40%',
+    width:'43%',
     // backgroundColor:"red"
+  },
+  productback:{
+    width:'100%',
+    height:70,
+    backgroundColor:'rgba(234, 234, 234,0.3)',
+    borderTopWidth:2,
+    borderTopColor:'#D8D6D6',
+    alignItems:'center',
+    justifyContent:'space-between',
+    display:'flex',
+    flexDirection:'row',
+    paddingHorizontal:20
+  },
+  countnum:{
+    fontSize:26,
+    fontWeight:'bold',
+    color:'#AAAAAA'
   }
   
 
