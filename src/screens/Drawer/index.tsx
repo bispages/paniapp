@@ -65,7 +65,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
             style={{
               flexDirection: 'column',
               alignItems: 'center',
-              marginTop: -40,
+              marginTop: 20,
             }}>
             <Title style={styles.title}>{user?.name ?? 'Name'}</Title>
             <Caption style={styles.caption}>{`${user?.pincode ?? ''}`}</Caption>
@@ -88,7 +88,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
               }}
             /> */}
             {
-              mode === 1 ?
+              mode == 1 ?
               <>
               <DrawerItem
               icon={({ color, size }) => (

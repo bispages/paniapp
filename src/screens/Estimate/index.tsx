@@ -52,7 +52,7 @@ const Estimate = () => {
     <View style={[styless.panelButtonContainer]}>
       <View style={styles.background}>
         {/* <View style={styles.landmark}> */}
-      {/* <Image style={styles.icon} source={require('../../assets/img/locationtab.png')}/> */}
+      <Image style={styles.locicon} source={require('../../assets/img/locationtab.png')}/>
       {/* </View> */}
       <TextInput style={styles.input} placeholder='608 301'>
       {/* <Image style={styles.icon} source={require('../../assets/img/locationtab.png')}/>  */}
@@ -105,15 +105,10 @@ const Estimate = () => {
           <Text style={styles.Righttag}>Find an Electritian</Text>
         </View>
           
-        
-      
       </TouchableOpacity>
 
       }
       
-
-
-
       <TouchableOpacity style={styles.cardcontainer} onPress={()=>navigation.navigate('Select')}>
         <View style={styles.LeftContainer}>
           <Image style={styles.iconimg} source={require('../../assets/img/shop.png')}/>
@@ -121,8 +116,6 @@ const Estimate = () => {
         <View style={styles.RightContainer}>
           <Text style={styles.Righttag}>Find a Elecrical Shop </Text>
         </View>
-          
-        
       
       </TouchableOpacity>
       {
@@ -134,12 +127,9 @@ const Estimate = () => {
         <View style={styles.RightContainer}>
           <Text style={styles.Righttag}>Find an Electritian</Text>
         </View>
-          
-        
-      
+
       </TouchableOpacity>
       :
-
 
       <TouchableOpacity style={styles.cardcontainer} onPress={()=>navigation.navigate('EstimateForm')}>
         <View style={styles.LeftContainer}>
@@ -148,12 +138,8 @@ const Estimate = () => {
         <View style={styles.RightContainer}>
           <Text style={styles.Righttag}>Estimate</Text>
         </View>
-          
-        
-      
       </TouchableOpacity>
       }
-
       <TouchableOpacity style={styles.cardcontainer}>
         <View style={styles.LeftContainer}>
           <Image style={styles.iconimg} source={require('../../assets/img/offer.png')}/>
@@ -161,13 +147,7 @@ const Estimate = () => {
         <View style={styles.RightContainer}>
           <Text style={styles.Righttag}>New Offers</Text>
         </View>
-          
-        
-      
       </TouchableOpacity>
-      
-     
-    
     </View>
   );
 };
@@ -187,14 +167,23 @@ const styles = StyleSheet.create({
 
 
   },
+  landmark:{
+    // backgroundColor: "red",zIndex:1,position:'absolute'
+  },
   
   LeftContainer:{
     // width:70,
     height:70,
    
   },
+  locicon:{
+    zIndex:1,
+    position:'absolute',
+    marginLeft:10
+  },
   icon:{
     zIndex:1,
+    // marginLeft:15
   },
   input:{
     width:'100%',
@@ -239,7 +228,8 @@ const styles = StyleSheet.create({
     alignItems:"center",
     justifyContent:'space-between',
     marginTop:10,
-    marginBottom:20
+    marginBottom:20,
+    // backgroundColor:'red'
   },
   pintitle:{
     position:'absolute',

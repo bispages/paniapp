@@ -70,7 +70,7 @@ const Order =()=> {
         {
             data.map((item, i)=>{
                 return (
-                    <TouchableOpacity style={styles.card} index={i}
+                    <TouchableOpacity style={styles.card} key={i}
                     onPress={()=>toggleTabs()}
                     >
                     <Image  source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg}/>

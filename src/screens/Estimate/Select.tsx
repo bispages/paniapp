@@ -53,7 +53,7 @@ const Select =()=> {
     return (
         <View style={styles.container}>
                   <View style={styles.background}>
-      {/* <Image style={styles.icon} source={require('../../assets/img/locationtab.png')}/> */}
+      <Image style={styles.locicon} source={require('../../assets/img/locationtab.png')}/>
         <TextInput style={styles.input} placeholder='608 301'></TextInput>
         <TouchableOpacity style={styles.pinbtn}>
          
@@ -269,15 +269,22 @@ const styles = StyleSheet.create({
         marginBottom:20
       },
       input:{
-        width:352,
-        height:42,
-        borderBottomLeftRadius:7,
-        borderBottomRightRadius:27,
-        borderTopLeftRadius:7,
-        borderTopRightRadius:27,
-        backgroundColor:Colors.backgroundcard,
-        paddingHorizontal:5
-      },
+    width:'100%',
+    height:42,
+    borderBottomLeftRadius:7,
+    borderBottomRightRadius:27,
+    borderTopLeftRadius:7,
+    borderTopRightRadius:27,
+    backgroundColor:Colors.backgroundcard,
+    paddingHorizontal:5,
+    zIndex:-1,
+    paddingLeft:30
+  }, 
+  locicon:{
+      zIndex:1,
+      position:'absolute',
+      marginLeft:10
+    },
       arrow:{
         width:25,
         height:25,

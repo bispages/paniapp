@@ -49,10 +49,12 @@ const EstimateForm = () => {
       <TextInput style={styless.textbox1} placeholder=' Name'></TextInput>
       </View>
       <View style={styless.boxfield}>
-        <TextInput style={styless.textbox2} placeholder='Address'></TextInput>
+      <Image style={styless.icons} source={require('../../assets/img/home.png')}/>
+        <TextInput multiline style={styless.textbox2} placeholder='Address'></TextInput>
       </View>
       <View style={styless.boxfield}>
-        <TextInput style={styless.textbox3} placeholder='Mobile Number'></TextInput>
+      <Image style={styless.icon} source={require('../../assets/img/phonecall.png')}/>
+        <TextInput keyboardType = 'numeric' style={styless.textbox3} placeholder='Mobile Number'></TextInput>
       </View>
 
       <Button style={styless.btn} onPress={()=>createEstimate()}> Estimate</Button>
@@ -82,36 +84,43 @@ export default EstimateForm;
 const styless = StyleSheet.create({
  
   textbox1:{
-    width:329,
+    width:"98%",
     height:55,
+    paddingLeft:15,
     borderWidth:1,
-    borderColor:'rgba(190,190,190,0.9)',
-    borderRadius:7,
+    borderColor:'lightgrey',
+    borderRadius:8,
     backgroundColor:colors.white,
   },
   boxfield:{
     marginVertical:10,
     display:'flex',
-    flexDirection:'row'
+    flexDirection:'row',
+    border:'none',
+    outline:'none'
 
   },
   textbox2:{
-    width:329,
-    height:100,
+    width:"98%",
+    outline:'none',
+    minHeight:55,
+    maxHeight:110,
     backgroundColor:colors.white,
     borderWidth:1,
-    borderColor:'rgba(190,190,190,0.9)',
-    borderRadius:7,
+    borderColor:'lightgrey',
+    borderRadius:8,
+    paddingLeft:15,
     // alignItems:'flex-start',
     display:'flex',
     justifyContent:'flex-start',
     textAlignVertical: 'top',
   },
   textbox3:{
-    width:329,
+    width:"98%",
     height:55,
     borderWidth:1,
-    borderColor:'rgba(190,190,190,0.9)',
+    paddingLeft:15,
+    borderColor:'lightgrey',
     borderRadius:10,
     backgroundColor:colors.white,
   },
@@ -127,8 +136,22 @@ const styless = StyleSheet.create({
   icon:{
     position:'absolute',
     width:16,
-    height:16
+    height:16,
+    zIndex:1,
+    marginLeft:5,
+    // marginRight:3,
+    alignSelf:'center'
   },
+  icons:{
+    position:'absolute',
+    width:16,
+    height:16,
+    zIndex:1,
+    marginLeft:5,
+    marginTop:10
+    
+  },
+  
   head:{
     fontSize:27,
     fontWeight:'400',

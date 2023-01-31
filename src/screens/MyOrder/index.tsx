@@ -45,9 +45,9 @@ const Profile = () => {
     <View style={styles.ordercontainer}>
          <View style={styles.container}>
         {
-            info?.map((item,key)=>{
+            info?.map((item,i)=>{
                 return (
-                    <View style={styles.cardcontainer}>
+                    <View style={styles.cardcontainer} key={i}>
                     <View style={styles.imagecard}>
                         <Image style={styles.img} source={item?.image}/>
         

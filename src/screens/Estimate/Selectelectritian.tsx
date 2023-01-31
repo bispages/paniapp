@@ -58,7 +58,7 @@ const Select =()=> {
     return (
         <View style={styles.container}>
                   <View style={styles.background}>
-      {/* <Image style={styles.icon} source={require('../../assets/img/locationtab.png')}/> */}
+      <Image style={styles.locicon} source={require('../../assets/img/locationtab.png')}/>
         <TextInput style={styles.input} placeholder='608 301'></TextInput>
         <TouchableOpacity style={styles.pinbtn}>
          
@@ -106,9 +106,9 @@ const Select =()=> {
         toggleState === false ?
         <View style={styles.filter}>
         {
-            datas.map((item)=>{
+            datas.map((item,i)=>{
                 return (
-                    <View style={styles.card}>
+                    <View style={styles.card} key={i}>
                     <Image  source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg}/>
                     <View style={styles.subcard}>
                         <Text style={styles.name}>{item?.title}</Text>
@@ -134,9 +134,9 @@ const Select =()=> {
       :
       <View style={styles.filter}>
       {
-          data.map((item)=>{
+          data.map((item,i)=>{
               return (
-                  <View style={styles.card}>
+                  <View style={styles.card} key={i}>
                   <Image  source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg}/>
                   <View style={styles.subcard}>
                       <Text style={styles.name}>{item?.title}</Text>
@@ -184,6 +184,11 @@ const styles = StyleSheet.create({
     filter:{
         display:'flex',
         flexDirection:'column'
+    },
+    locicon:{
+      zIndex:1,
+      position:'absolute',
+      marginLeft:10
     },
     subcard:{
         display:'flex',
@@ -274,14 +279,16 @@ const styles = StyleSheet.create({
         marginBottom:20
       },
       input:{
-        width:352,
+        width:'100%',
         height:42,
         borderBottomLeftRadius:7,
         borderBottomRightRadius:27,
         borderTopLeftRadius:7,
         borderTopRightRadius:27,
         backgroundColor:Colors.backgroundcard,
-        paddingHorizontal:5
+        paddingHorizontal:5,
+        zIndex:-1,
+        paddingLeft:30
       },
       arrow:{
         width:25,

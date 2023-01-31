@@ -75,46 +75,55 @@ const countitem =[
     id:1,
     amount:"1.50",
     count:0,
+    initialCount: 0
   },
   {
     id:2,
     amount:"1.00",
     count:0,
+    initialCount: 0
   },
   {
     id:3,
     amount:"2.00",
     count:0,
+    initialCount: 0
   },
   {
     id:4,
     amount:"2.50",
     count:0,
+    initialCount: 0
   },
   {
     id:5,
     amount:"3.00",
     count:0,
+    initialCount: 0
   },
   {
     id:6,
     amount:"3.50",
     count:0,
+    initialCount: 0
   },
   {
     id:7,
     amount:"2.50",
     count:0,
+    initialCount: 0
   },
   {
     id:8,
     amount:"3.00",
     count:0,
+    initialCount: 0
   },
   {
     id:9,
     amount:"3.50",
     count:0,
+    initialCount: 0
   },
   
 ]
@@ -123,8 +132,11 @@ const countitem =[
 
 const MaterialItems =()=> {
   const [visible, setVisible] = useState(false);
-  const [num,setNum] = useState(!num);
+  const [num,setNum] = useState(false);
   const [productDetails, setProductDetails] = useState([]);
+  const [data, setData] = useState(countitem)
+    const [load, setLoad] = useState(true)
+    const [click, setClick] = useState({ id: 0, count: 0 })
   const navigation = useNavigation();
 
 
@@ -135,25 +147,66 @@ const MaterialItems =()=> {
     }, 100);
   }
 
-  let adding = (index, value) => {
-    
-    let product_array;
-    product_array = [...countitem];
-    product_array[index][value] = parseInt(product_array[index]?.count) + 1;
-    product_array[index][value] = `${product_array[index]?.count}`;
-    setProductDetails(product_array);
-  }
+   const handleProductCount = (id, payload) => {
+        const item = data.find(item => item.id === id)
 
-  let decending = (index, value) => {
-    
-      let product_array;
-      product_array = [...countitem];
-      if(product_array[index]?.count > 0){
-      product_array[index][value] = parseInt(product_array[index]?.count) - 1;
-      product_array[index][value] = `${product_array[index]?.count}`;
-      setProductDetails(product_array);
-      }
+        if (payload === "inc") {
+            item.count += 1
+            item.initialCount += 1;
+            if (click.id === id) {
+                click.count += 1
+            } else {
+                if (item.initialCount > 0) {
+                    click.count = item.initialCount
+                } else {
+                    click.count = 1
+                }
+            }
+            click.id = id
+            setLoad(!load)
+        } else {
+            if (item.count > 0) {
+                item.count--
+                item.initialCount--
+                if (click.id === id) {
+                    click.count -= 1
+                } else {
+                    if (item.initialCount > 0) {
+                        click.count = item.initialCount
+                    } else {
+                        click.count = -1
+                    }
+                }
+                click.id = id
+                setLoad(!load)
+            } else {
+                alert("Something went wrong")
+            }
+
+        }
+
+        console.log('%%', data);
     }
+
+  // let adding = (index, value) => {
+    
+  //   let product_array;
+  //   product_array = [...countitem];
+  //   product_array[index][value] = parseInt(product_array[index]?.count) + 1;
+  //   product_array[index][value] = `${product_array[index]?.count}`;
+  //   setProductDetails(product_array);
+  // }
+
+  // let decending = (index, value) => {
+    
+  //     let product_array;
+  //     product_array = [...countitem];
+  //     if(product_array[index]?.count > 0){
+  //     product_array[index][value] = parseInt(product_array[index]?.count) - 1;
+  //     product_array[index][value] = `${product_array[index]?.count}`;
+  //     setProductDetails(product_array);
+  //     }
+  //   }
     
   
     
@@ -165,7 +218,7 @@ const MaterialItems =()=> {
               {
                 num === true ?
                 <View style={styles.countbar}>
-                  <Text style={styles.countnum}>+1</Text>
+                  <Text style={styles.countnum}>{click.count}</Text>
                   </View>
                 :("")
               }
@@ -187,13 +240,13 @@ const MaterialItems =()=> {
               <Text style={styles.amountline}>{item?.amount}<Text style={styles.inches}> inch</Text></Text>
               </View>
               <View style={styles.rowset}>
-              <TouchableOpacity style={styles.btnselector} onPress={()=> [decending(index, "count"), popup()]}>
+              <TouchableOpacity style={styles.btnselector} onPress={()=> [handleProductCount(item.id, "dec"), popup()]}>
                 <Text style={styles.icontxt}>—</Text>
               </TouchableOpacity>
               <View style={styles.number}>
-              <Text style={styles.Count}>{item?.count}</Text>
+              <Text style={styles.Count}>{item.count}</Text>
               </View>
-              <TouchableOpacity style={styles.btnselector} onPress={()=> [adding(index, "count"), popup()]}>
+              <TouchableOpacity style={styles.btnselector} onPress={()=> [handleProductCount(item.id, "inc"), popup()]}>
                 <Text style={styles.icontxt}>+</Text>
               </TouchableOpacity>
               </View>
@@ -208,7 +261,9 @@ const MaterialItems =()=> {
                 {/* <Text  style={styles.donetxt}>Back</Text> */}
                 <Image source={require('../../assets/img/Group112.png')}/>
                 </TouchableOpacity>
-                <TouchableOpacity  style={styles.donebar} onPress={()=>setVisible(false)}>
+                <TouchableOpacity  style={styles.donebar} onPress={()=>{setVisible(false),click.count = 0
+                        data.map((item, i) => item.initialCount = 0)
+                        setLoad(!load)}}>
                 <Text  style={styles.donetxt}>Done</Text>
                 </TouchableOpacity>
               </View>
