@@ -19,8 +19,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import useBackHandler from '../../hooks/useBackHandler';
 import styles from './OnBoarding.style';
-import { setIsOnBoarded } from 'store/slices/AppStateSlice';
-import { selectIsOnBoarded } from 'store/selectors';
+import { setIsOnBoarded } from '../../store/slices/AppStateSlice';
+import { selectIsOnBoarded } from '../../store/selectors';
 
 type Item = {
   key: string;
