@@ -37,7 +37,6 @@ const EstimateNavigationStack = () => {
 
   return (
     <EstimateStack.Navigator
-      headerMode="float"
       screenOptions={stackScreenOptions}>
       <EstimateStack.Screen
         name="Estimate"

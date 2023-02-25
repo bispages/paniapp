@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View,StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { TextInput, Button, useTheme, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { RootState } from '../../store';
+import { selectEstimate } from '../../store/selectors';
 import { EstimateFormValues } from '../../types';
-import { addCustomer } from '../../store/actions';
+import { addCustomer } from '../../store/slices/EstimateStateSlice';
 import styles from './Estimate.style';
 import colors from '../../assets/colors';
 
@@ -18,9 +18,7 @@ const EstimateForm = () => {
   const [area, setArea] = useState('');
   const [mobile, setMobile] = useState('');
   const [pincode, setPincode] = useState('');
-  const formVal: EstimateFormValues = useSelector(
-    (state: RootState) => state.estimate,
-  );
+  const formVal: EstimateFormValues = useSelector(selectEstimate);
   const { customer } = formVal;
 
   const createEstimate = () => {
@@ -30,35 +28,33 @@ const EstimateForm = () => {
 
   return (
     <View style={[styles.panelButtonContainer]}>
-      <View style={[styles.panelTextContainer]}>
-        
-        </View>
-       
-      <View style={styless.btnfield} >
-      <TouchableOpacity onPress={()=>navigation.goBack()}>
-        <Image style={styless.backbtn}  source={require('../../assets/img/backarrow.png')}
-        /></TouchableOpacity>
+      <View style={[styles.panelTextContainer]}></View>
+
+      <View style={styless.btnfield}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image style={styless.backbtn} source={require('../../assets/img/backarrow.png')} />
+        </TouchableOpacity>
       </View>
       <View style={styless.headfield}>
         <Text style={styless.head}> Customer Information </Text>
-        </View>
-      <View style={styless.boxfield}>
-      
-      <Image style={styless.icon} source={require('../../assets/img/addr.png')}/>
-      
-      <TextInput style={styless.textbox1} placeholder=' Name'></TextInput>
       </View>
       <View style={styless.boxfield}>
-      <Image style={styless.icons} source={require('../../assets/img/home.png')}/>
-        <TextInput multiline style={styless.textbox2} placeholder='Address'></TextInput>
+        <Image style={styless.icon} source={require('../../assets/img/addr.png')} />
+
+        <TextInput style={styless.textbox1} placeholder=" Name"></TextInput>
       </View>
       <View style={styless.boxfield}>
-      <Image style={styless.icon} source={require('../../assets/img/phonecall.png')}/>
-        <TextInput keyboardType = 'numeric' style={styless.textbox3} placeholder='Mobile Number'></TextInput>
+        <Image style={styless.icons} source={require('../../assets/img/home.png')} />
+        <TextInput multiline style={styless.textbox2} placeholder="Address"></TextInput>
+      </View>
+      <View style={styless.boxfield}>
+        <Image style={styless.icon} source={require('../../assets/img/phonecall.png')} />
+        <TextInput keyboardType="numeric" style={styless.textbox3} placeholder="Mobile Number"></TextInput>
       </View>
 
-      <Button style={styless.btn} onPress={()=>createEstimate()}> Estimate</Button>
-
+      <Button style={styless.btn} onPress={() => createEstimate()}>
+        Estimate
+      </Button>
 
       {/* <View style={[styles.panelButtonView]}>
         <Button
@@ -82,94 +78,89 @@ const EstimateForm = () => {
 export default EstimateForm;
 
 const styless = StyleSheet.create({
- 
-  textbox1:{
-    width:"98%",
-    height:55,
-    paddingLeft:15,
-    borderWidth:1,
-    borderColor:'lightgrey',
-    borderRadius:8,
-    backgroundColor:colors.white,
+  textbox1: {
+    width: '98%',
+    height: 55,
+    paddingLeft: 15,
+    borderWidth: 1,
+    borderColor: 'lightgrey',
+    borderRadius: 8,
+    backgroundColor: colors.white,
   },
-  boxfield:{
-    marginVertical:10,
-    display:'flex',
-    flexDirection:'row',
-    border:'none',
-    outline:'none'
-
+  boxfield: {
+    marginVertical: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    border: 'none',
+    outline: 'none',
   },
-  textbox2:{
-    width:"98%",
-    outline:'none',
-    minHeight:55,
-    maxHeight:110,
-    backgroundColor:colors.white,
-    borderWidth:1,
-    borderColor:'lightgrey',
-    borderRadius:8,
-    paddingLeft:15,
+  textbox2: {
+    width: '98%',
+    outline: 'none',
+    minHeight: 55,
+    maxHeight: 110,
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: 'lightgrey',
+    borderRadius: 8,
+    paddingLeft: 15,
     // alignItems:'flex-start',
-    display:'flex',
-    justifyContent:'flex-start',
+    display: 'flex',
+    justifyContent: 'flex-start',
     textAlignVertical: 'top',
   },
-  textbox3:{
-    width:"98%",
-    height:55,
-    borderWidth:1,
-    paddingLeft:15,
-    borderColor:'lightgrey',
-    borderRadius:10,
-    backgroundColor:colors.white,
+  textbox3: {
+    width: '98%',
+    height: 55,
+    borderWidth: 1,
+    paddingLeft: 15,
+    borderColor: 'lightgrey',
+    borderRadius: 10,
+    backgroundColor: colors.white,
   },
-  btn:{
-    width:148,
-    height:60,
-    borderRadius:30,
-    backgroundColor:colors.btncolor,
-    alignContent:'center',
-    justifyContent:'center',
-    marginVertical:20
+  btn: {
+    width: 148,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: colors.btncolor,
+    alignContent: 'center',
+    justifyContent: 'center',
+    marginVertical: 20,
   },
-  icon:{
-    position:'absolute',
-    width:16,
-    height:16,
-    zIndex:1,
-    marginLeft:5,
+  icon: {
+    position: 'absolute',
+    width: 16,
+    height: 16,
+    zIndex: 1,
+    marginLeft: 5,
     // marginRight:3,
-    alignSelf:'center'
+    alignSelf: 'center',
   },
-  icons:{
-    position:'absolute',
-    width:16,
-    height:16,
-    zIndex:1,
-    marginLeft:5,
-    marginTop:10
-    
+  icons: {
+    position: 'absolute',
+    width: 16,
+    height: 16,
+    zIndex: 1,
+    marginLeft: 5,
+    marginTop: 10,
   },
-  
-  head:{
-    fontSize:27,
-    fontWeight:'400',
-    letterSpacing:-0.01,
-    color:colors.headtag
+
+  head: {
+    fontSize: 27,
+    fontWeight: '400',
+    letterSpacing: -0.01,
+    color: colors.headtag,
   },
-  headfield:{
-    
+  headfield: {},
+  btnfield: {
+    width: '100%',
+    height: 80,
+    alignContent: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 30,
   },
-  btnfield:{
-    width:'100%',
-    height:80,
-    alignContent:'center',
-    justifyContent:'flex-start',
-    marginBottom:30,
+  backbtn: {
+    width: 46,
+    height: 46,
   },
-  backbtn:{
-    width:46,
-    height:46
-  }
-})
+});

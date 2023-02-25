@@ -1,30 +1,15 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
-import {
-  useTheme,
-  Avatar,
-  Title,
-  Caption,
-  Drawer,
-  Text,
-  TouchableRipple,
-  Switch,
-} from 'react-native-paper';
-import {
-  DrawerContentComponentProps,
-  DrawerContentScrollView,
-  DrawerItem,
-} from '@react-navigation/drawer';
+import { Image } from 'react-native-animatable';
+import { useTheme, Avatar, Title, Caption, Drawer } from 'react-native-paper';
+import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import styles from './Drawer.style';
-import ThemeContext from '../../components/Context';
-import { RootState } from '../../store';
-import { User } from '../../types';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { logout } from '../../store/actions';
-import { Image } from 'react-native-animatable';
+
+import styles from './Drawer.style';
+import { selectUser } from '../../store/selectors';
+import { logOutUser } from '../../store/slices/AppStateSlice';
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
   const {
@@ -32,18 +17,14 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
     navigation,
   } = props;
   const dispatchAction = useDispatch();
-  const { dark, colors } = useTheme();
-  const { toggleTheme } = React.useContext(ThemeContext);
-  const { user }: { user: User } = useSelector(
-    (state: RootState) => state.user,
-  );
+  const { colors } = useTheme();
+  const user = useSelector(selectUser);
 
   const [mode, setMode] = useState('');
-  
-  AsyncStorage.getItem('chooseitem')
-      .then((value) => {
-        setMode(value);
-      })
+
+  AsyncStorage.getItem('chooseitem').then(value => {
+    setMode(value || '');
+  });
 
   return (
     <View style={{ flex: 1 }}>
@@ -87,95 +68,78 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
                 navigation.navigate('EstimateStack');
               }}
             /> */}
-            {
-              mode == 1 ?
+            {mode === '1' ? (
               <>
-              <DrawerItem
-              icon={({ color, size }) => (
-                <Icon name="account-outline" color={color} size={size} />
-              )}
-              focused={routeNames[index] === ' My Profile'}
-              inactiveTintColor="#535454"
-              activeTintColor="#535454"
-              label="My Profile"
-              onPress={() => {
-                navigation.navigate('Profile');
-              }}
-            />
-            <DrawerItem
-              icon={({ color, size }) => (
-                <Icon name="account-check-outline" color={color} size={size} />
-              )}
-              focused={routeNames[index] === 'My Orders'}
-              inactiveTintColor="#535454"
-              activeTintColor="#535454"
-              label="My Orders"
-              onPress={() => {
-                navigation.navigate('MyOrder');
-              }}
-            />
-            </>
-            :
-            <>
-            <DrawerItem
-            icon={({ color, size }) => (
-              // <Icon name="account-outline" color={color} size={size} />
-              <Image source={require('../../assets/img/shopprofile.png')}/>
+                <DrawerItem
+                  icon={({ color, size }) => <Icon name="account-outline" color={color} size={size} />}
+                  focused={routeNames[index] === ' My Profile'}
+                  inactiveTintColor="#535454"
+                  activeTintColor="#535454"
+                  label="My Profile"
+                  onPress={() => {
+                    navigation.navigate('Profile');
+                  }}
+                />
+                <DrawerItem
+                  icon={({ color, size }) => <Icon name="account-check-outline" color={color} size={size} />}
+                  focused={routeNames[index] === 'My Orders'}
+                  inactiveTintColor="#535454"
+                  activeTintColor="#535454"
+                  label="My Orders"
+                  onPress={() => {
+                    navigation.navigate('MyOrder');
+                  }}
+                />
+              </>
+            ) : (
+              <>
+                <DrawerItem
+                  icon={({ color, size }) => (
+                    // <Icon name="account-outline" color={color} size={size} />
+                    <Image source={require('../../assets/img/shopprofile.png')} />
+                  )}
+                  focused={routeNames[index] === ' Shop Profile'}
+                  inactiveTintColor="#535454"
+                  activeTintColor="#535454"
+                  label="Shop Profile"
+                  onPress={() => {
+                    navigation.navigate('ShopProfile');
+                  }}
+                />
+                <DrawerItem
+                  icon={({ color, size }) => <Image source={require('../../assets/img/Group25.png')} />}
+                  focused={routeNames[index] === 'OrdersHistory'}
+                  inactiveTintColor="#535454"
+                  activeTintColor="#535454"
+                  label="Orders History"
+                  onPress={() => {
+                    navigation.navigate('OrdersHistory');
+                  }}
+                />
+                <DrawerItem
+                  icon={({ color, size }) => <Image source={require('../../assets/img/Group39.png')} />}
+                  focused={routeNames[index] === 'Promotions'}
+                  inactiveTintColor="#535454"
+                  activeTintColor="#535454"
+                  label="Promotions"
+                  onPress={() => {
+                    navigation.navigate('Promotions');
+                  }}
+                />
+              </>
             )}
-            focused={routeNames[index] === ' Shop Profile'}
-            inactiveTintColor="#535454"
-            activeTintColor="#535454"
-            label="Shop Profile"
-            onPress={() => {
-              navigation.navigate('ShopProfile');
-            }}
-          />
-          <DrawerItem
-              icon={({ color, size }) => (
-                <Image source={require('../../assets/img/Group25.png')}/>
-              )}
-              focused={routeNames[index] === 'OrdersHistory'}
-              inactiveTintColor="#535454"
-              activeTintColor="#535454"
-              label="Orders History"
-              onPress={() => {
-                navigation.navigate('OrdersHistory');
-              }}
-            />
             <DrawerItem
-              icon={({ color, size }) => (
-                <Image source={require('../../assets/img/Group39.png')}/>
-              )}
-              focused={routeNames[index] === 'Promotions'}
-              inactiveTintColor="#535454"
-              activeTintColor="#535454"
-              label="Promotions"
-              onPress={() => {
-                navigation.navigate('Promotions');
-              }}
-            />
-            </>
-
-            }
-         
-            
-
-            <DrawerItem
-              icon={({ color, size }) => (
-                <Image source={require('../../assets/img/Group24.png')}/>
-              )}
+              icon={({ color, size }) => <Image source={require('../../assets/img/Group24.png')} />}
               focused={routeNames[index] === 'Support'}
               inactiveTintColor="#535454"
               activeTintColor="#535454"
               label="Support"
-              // onPress={() => {
-              //   navigation.navigate('Support');
-              // }}
+              onPress={() => {
+                navigation.navigate('Support');
+              }}
             />
             <DrawerItem
-              icon={({ color, size }) => (
-                <Image source={require('../../assets/img/Vectorshare.png')}/>
-              )}
+              icon={({ color, size }) => <Image source={require('../../assets/img/Vectorshare.png')} />}
               focused={routeNames[index] === 'Settings'}
               inactiveTintColor="#535454"
               activeTintColor="#535454"
@@ -189,14 +153,10 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
       </DrawerContentScrollView>
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
-          icon={({ color, size }) => (
-            <Image source={require('../../assets/img/signout.png')}/>
-          )}
+          icon={({ color, size }) => <Image source={require('../../assets/img/signout.png')} />}
           label="Sign Out"
           onPress={() => {
-            AsyncStorage.removeItem('user').then(() =>  
-              dispatchAction(logout()),
-            );
+            AsyncStorage.removeItem('user').then(() => dispatchAction(logOutUser()));
           }}
           inactiveTintColor="#535454"
           activeTintColor="#535454"

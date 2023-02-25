@@ -1,21 +1,24 @@
-import { applyMiddleware, compose, createStore, StoreEnhancer } from 'redux';
-import createSagaMiddleware from 'redux-saga';
+import { configureStore } from '@reduxjs/toolkit';
+import { ApiSlice } from './slices/ApiSlice';
+import { appStateReducer } from './slices/AppStateSlice';
+import { estimateStateReducer } from './slices/EstimateStateSlice';
 
-import rootReducer from './reducers';
-import rootSaga from './sagas';
+const middlewares: any = [];
 
-// create the saga middleware
-const sagaMiddleware = createSagaMiddleware();
-export type RootState = ReturnType<typeof rootReducer>;
-
-// Configures redux store with saga middleware.
-export default function configureStore() {
-  const middlewares = [sagaMiddleware];
-  const middlewareEnhancer = applyMiddleware(...middlewares);
-  const enhancers = [middlewareEnhancer];
-  const composedEnhancers: StoreEnhancer = compose(...enhancers);
-  const store = createStore(rootReducer, composedEnhancers);
-  sagaMiddleware.run(rootSaga);
-
-  return store;
+if (__DEV__) {
+  const createDebugger = require('redux-flipper').default;
+  middlewares.push(createDebugger());
 }
+
+export const store = configureStore({
+  reducer: {
+    appState: appStateReducer,
+    estimateState: estimateStateReducer,
+  },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({ serializableCheck: false }).concat(ApiSlice.middleware, middlewares),
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+
+export type AppDispatch = typeof store.dispatch;

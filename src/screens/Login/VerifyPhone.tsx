@@ -1,36 +1,11 @@
-import React, {
-  useEffect,
-  useReducer,
-  createRef,
-  RefObject,
-  useState,
-  useCallback,
-} from 'react';
-import {
-  View,
-  TextInput,
-  Keyboard,
-  TouchableOpacity,
-  useWindowDimensions,
-  StyleSheet,
-  Image,
-} from 'react-native';
-import {
-  Text,
-  TextInput as PaperTextInput,
-  Button,
-  useTheme,
-} from 'react-native-paper';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  Easing,
-} from 'react-native-reanimated';
+import React, { useEffect, useReducer, createRef, RefObject, useState, useCallback } from 'react';
+import { View, TextInput, Keyboard, TouchableOpacity, useWindowDimensions, StyleSheet, Image } from 'react-native';
+import { Text, TextInput as PaperTextInput, Button, useTheme } from 'react-native-paper';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
-import { login } from '../../store/actions';
+import { logInUser } from '../../store/slices/AppStateSlice';
 import useIsLoggedIn from '../../hooks/useIsLoggedIn';
 import styles from './Login.style';
 import Verifyphone from '../../assets/img/verifyphone.svg';
@@ -73,7 +48,7 @@ type routeParams = {
   route: { params: { phone: string } };
 };
 
-const VerifyPhone = ({select, route: { params } }: routeParams) => {
+const VerifyPhone = ({ route: { params } }: routeParams) => {
   const INITIAL_SCALE = 1;
   const INITIAL_OFFSET = 0;
   const { phone } = params;
@@ -111,11 +86,7 @@ const VerifyPhone = ({select, route: { params } }: routeParams) => {
   //   };
   // });
 
-  const scaleImage = (
-    scaleValue: number,
-    offsetViewValue: number,
-    offsetImageValue: number,
-  ) => {
+  const scaleImage = (scaleValue: number, offsetViewValue: number, offsetImageValue: number) => {
     scale.value = withTiming(scaleValue, {
       duration: 500,
       easing: Easing.bezier(0.25, 0.1, 0.25, 1),
@@ -140,16 +111,14 @@ const VerifyPhone = ({select, route: { params } }: routeParams) => {
     Keyboard.addListener('keyboardDidShow', keyboardDidShow);
     // cleanup function
     return () => {
-      Keyboard.removeListener('keyboardDidHide', keyboardDidHide);
-      Keyboard.removeListener('keyboardDidShow', keyboardDidShow);
+      Keyboard.removeAllListeners('keyboardDidHide');
+      Keyboard.removeAllListeners('keyboardDidShow');
     };
   }, []);
 
-  const keyboardDidHide = () =>
-    scaleImage(INITIAL_SCALE, INITIAL_OFFSET, INITIAL_OFFSET);
+  const keyboardDidHide = () => scaleImage(INITIAL_SCALE, INITIAL_OFFSET, INITIAL_OFFSET);
 
-  const keyboardDidShow = () =>
-    scaleImage(0.5, -windowHeight * 0.12, -windowHeight * 0.03);
+  const keyboardDidShow = () => scaleImage(0.5, -windowHeight * 0.12, -windowHeight * 0.03);
 
   const onTextChange = (key: string, text: string, index: number) => {
     const val = text.replace(/[^0-9]/g, '');
@@ -158,8 +127,7 @@ const VerifyPhone = ({select, route: { params } }: routeParams) => {
   };
 
   const isVerifyActionDisabled = useCallback(() => {
-    const isFilled = Object.keys(initialState).filter(key => state[key] === '')
-      .length;
+    const isFilled = Object.keys(initialState).filter(key => state[key] === '').length;
     setVerifyActionDisabled(isFilled > 0);
   }, [state]);
 
@@ -170,22 +138,20 @@ const VerifyPhone = ({select, route: { params } }: routeParams) => {
   const resend = () => null;
 
   const verify = () => {
-    const loginUser = { phone };
+    const user = { phone };
     // TODO - Here we need to check user is already there or not by calling api.
     // Remove user check from hook and call api.
     if (user === null) {
       navigation.navigate('userform', { phone });
     } else {
-      dispatchAction(login(loginUser));
+      dispatchAction(logInUser(user));
     }
   };
 
   return (
     <View style={styless.login}>
       <View style={styless.loginlogo}>
-      <Image source={require('../../assets/img/Group189.png')}
-      style={styless.logo}
-      />
+        <Image source={require('../../assets/img/Group189.png')} style={styless.logo} />
       </View>
       {/* <Animated.View
         style={[styles.image, animatedImageTranslateStyles, { paddingTop: 8 }]}
@@ -208,17 +174,9 @@ const VerifyPhone = ({select, route: { params } }: routeParams) => {
           ]}
         />
         <View style={styles.headline}>
-          <Text
-            style={styless.heading}
-            >
-            OTP Verification
-          </Text>
+          <Text style={styless.heading}>OTP Verification</Text>
           <View style={[styles.phoneVerifyContainer]}>
-            <Text
-              style={styless.subHeading}
-              >
-              Enter the OTP sent to
-            </Text>
+            <Text style={styless.subHeading}>Enter the OTP sent to</Text>
             <Text
               style={[styles.phonenum]}
               theme={{
@@ -258,16 +216,12 @@ const VerifyPhone = ({select, route: { params } }: routeParams) => {
             })}
           </View>
           <View style={styles.resendContainer}>
-            <Text
-              style={styless.resendText}
-              theme={{ colors: { text: appColors.primary } }}>
+            <Text style={styless.resendText} theme={{ colors: { text: appColors.primary } }}>
               Didn't received OTP?
             </Text>
             <View style={styles.resendBtn}>
               <TouchableOpacity onPress={resend}>
-                <Text style={styless.resendBtnTxt}>
-                  Resent Code
-                </Text>
+                <Text style={styless.resendBtnTxt}>Resent Code</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -299,49 +253,48 @@ const styless = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor:'#ffffff'
-    
+    backgroundColor: '#ffffff',
   },
-  loginlogo:{
-    flex:0.5,
+  loginlogo: {
+    flex: 0.5,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  logo:{
-    width:232,
-    height:232
+  logo: {
+    width: 232,
+    height: 232,
   },
-  heading:{
-    fontWeight:'bold',
-    fontSize:26,
-    lineHeight:31.2,
-    color:'#4A4A4A',
+  heading: {
+    fontWeight: 'bold',
+    fontSize: 26,
+    lineHeight: 31.2,
+    color: '#4A4A4A',
   },
-  subHeading:{
-    fontWeight:'400',
-    fontSize:15,
-    lineHeight:18,
-    color:'#4D4D4D',
-    marginVertical:10
+  subHeading: {
+    fontWeight: '400',
+    fontSize: 15,
+    lineHeight: 18,
+    color: '#4D4D4D',
+    marginVertical: 10,
   },
-  resendText:{
-    fontWeight:'400',
-    fontSize:13,
-  
-    color:'#878787'
+  resendText: {
+    fontWeight: '400',
+    fontSize: 13,
+
+    color: '#878787',
   },
-  resendBtnTxt:{
-    fontWeight:'600',
-    fontSize:13,
-    marginTop:-5,
-    color:'#4D4D4D'
+  resendBtnTxt: {
+    fontWeight: '600',
+    fontSize: 13,
+    marginTop: -5,
+    color: '#4D4D4D',
   },
 
-  button:{
+  button: {
     width: '30%',
-    height:52,
-    borderRadius:50,
-    alignItems:'center',
-    justifyContent:'center'
-  }
-})
+    height: 52,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

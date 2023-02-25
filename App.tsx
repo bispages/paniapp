@@ -14,9 +14,12 @@ import {
   StyleSheet,
   ColorSchemeName,
 } from 'react-native';
-import { enableScreens } from 'react-native-screens';
+import { enableFreeze } from 'react-native-screens';
 import BootSplash from 'react-native-bootsplash';
 import { Provider as StoreProvider } from 'react-redux';
+import { store } from './src/store';
+import { Dirs } from 'react-native-file-access';
+import { CacheManager } from '@georstat/react-native-image-cache';
 import {
   DefaultTheme as PaperDefaultTheme,
   DarkTheme as PaperDarkTheme,
@@ -31,11 +34,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import ThemeContext from './src/components/Context';
 import RootNavigationContainer from './src/navigations/RootNavigationContainer';
-import configureStore from './src/store';
 import Colors from './src/assets/colors';
 
-enableScreens();
-const store = configureStore();
+enableFreeze(true);
 
 declare global {
   namespace ReactNativePaper {
@@ -44,6 +45,22 @@ declare global {
     }
   }
 }
+
+CacheManager.config = {
+  baseDir: `${Dirs.CacheDir}/images_cache/`,
+  blurRadius: 15,
+  cacheLimit: 1024 * 1024 * 200,
+  sourceAnimationDuration: 500,
+  thumbnailAnimationDuration: 500,
+  getCustomCacheKey: (source: string) => {
+    // Remove params from the URL for caching images (useful for caching images from Amazons S3 bucket and etc)
+    let newCacheKey = source;
+    if (source.includes('?')) {
+      newCacheKey = source.substring(0, source.lastIndexOf('?'));
+    }
+    return newCacheKey;
+  },
+};
 
 const lightTheme = {
   ...NavigationDefaultTheme,

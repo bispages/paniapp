@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { saveUser } from '../store/actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { User } from '../types';
+import { saveUser } from '../store/slices/AppStateSlice';
 
 // Hook checks for login.
 const useIsLoggedIn = () => {

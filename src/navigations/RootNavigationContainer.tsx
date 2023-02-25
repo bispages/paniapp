@@ -1,35 +1,30 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer, Theme } from '@react-navigation/native';
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from '@react-navigation/stack';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Splash from '../screens/Splash';
 import useIsLoggedIn from '../hooks/useIsLoggedIn';
 import AppNavigationDrawer from './AppNavigationDrawer';
-import OnBoardingNavigationStack, {
-  LoginNavigationStack,
-} from './OnBoardingNavigationStack';
-import { onBoard } from '../store/actions';
+import OnBoardingNavigationStack, { LoginNavigationStack } from './OnBoardingNavigationStack';
 import Colors from '../assets/colors';
-import { RootState } from '../store';
+import { setIsOnBoarded } from '../store/slices/AppStateSlice';
+import { selectIsOnBoarded, selectIsLoggedIn } from '../store/selectors';
 
 const RootStack = createStackNavigator();
 
 const RootNavigationContainer = ({ theme }: { theme: Theme }) => {
   const dispatch = useDispatch();
-  const { onBoarded } = useSelector((state: RootState) => state.onboard);
-  const { login } = useSelector((state: RootState) => state.auth);
+  const onBoarded = useSelector(selectIsOnBoarded);
+  const login = useSelector(selectIsLoggedIn);
 
   const { loading, user } = useIsLoggedIn();
 
   useEffect(() => {
     AsyncStorage.getItem('onboarded').then(value => {
       if (value !== null && value === '1') {
-        dispatch(onBoard());
+        dispatch(setIsOnBoarded(true));
       }
     });
   }, []);
@@ -49,15 +44,9 @@ const RootNavigationContainer = ({ theme }: { theme: Theme }) => {
       ) : (
         <RootStack.Navigator screenOptions={{ ...screenOptions }}>
           {onBoarded ? (
-            <RootStack.Screen
-              name="loginstack"
-              component={LoginNavigationStack}
-            />
+            <RootStack.Screen name="loginstack" component={LoginNavigationStack} />
           ) : (
-            <RootStack.Screen
-              name="onboardstack"
-              component={OnBoardingNavigationStack}
-            />
+            <RootStack.Screen name="onboardstack" component={OnBoardingNavigationStack} />
           )}
         </RootStack.Navigator>
       )}

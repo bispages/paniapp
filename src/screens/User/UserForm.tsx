@@ -1,33 +1,9 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-  useMemo,
-  RefObject,
-} from 'react';
-import {
-  Text,
-  View,
-  Keyboard,
-  Pressable,
-  ImageBackground,
-  StyleSheet,
-  useWindowDimensions,
-} from 'react-native';
-import {
-  TextInput,
-  Button,
-  Chip,
-  useTheme,
-  Snackbar,
-} from 'react-native-paper';
+import React, { useEffect, useState, useRef, useCallback, useMemo, RefObject } from 'react';
+import { Text, View, Keyboard, Pressable, ImageBackground, StyleSheet, useWindowDimensions } from 'react-native';
+import { TextInput, Button, Chip, useTheme, Snackbar } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetScrollView,
-} from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetBackdrop, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import ImagePicker, { Image } from 'react-native-image-crop-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -41,8 +17,9 @@ import {
   USERFORM_BOTSHEET_SNAPMIN,
 } from '../../utils/constants';
 import { ItemList } from '../../types';
-import { login, saveUser } from '../../store/actions';
+import { logInUser, saveUser } from '../../store/slices/AppStateSlice';
 import useBackHandler from '../../hooks/useBackHandler';
+import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 // import { professionList } from '../../utils/professionList';
 // import { categoryList } from '../../utils/categoryList';
 
@@ -50,7 +27,7 @@ type routeParams = {
   route: { params: { phone: string } };
 };
 
-const UserForm = ({select, route: { params } }: routeParams) => {
+const UserForm = ({ route: { params } }: routeParams) => {
   const { phone } = params;
   const [name, setName] = useState('');
   const [pincode, setPincode] = useState('');
@@ -68,23 +45,15 @@ const UserForm = ({select, route: { params } }: routeParams) => {
   const windowWidth = useWindowDimensions().width;
   const { appColors } = useTheme();
   const dispatchAction = useDispatch();
-  const user =  AsyncStorage.getItem('chooseitem');
+  const user = AsyncStorage.getItem('chooseitem');
 
   const snapPoints = useMemo(
-    () => [
-      USERFORM_BOTSHEET_SNAPMIN,
-      USERFORM_BOTSHEET_SNAPMID,
-      USERFORM_BOTSHEET_SNAPMAX,
-    ],
+    () => [USERFORM_BOTSHEET_SNAPMIN, USERFORM_BOTSHEET_SNAPMID, USERFORM_BOTSHEET_SNAPMAX],
     [],
   );
   const renderBackdrop = useCallback(
-    props => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={0}
-        appearsOnIndex={1}
-      />
+    (props: JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps) => (
+      <BottomSheetBackdrop {...props} disappearsOnIndex={0} appearsOnIndex={1} />
     ),
     [],
   );
@@ -101,18 +70,12 @@ const UserForm = ({select, route: { params } }: routeParams) => {
     [isBotSheetActive],
   );
 
-  const showBotSheet = useCallback(
-    (sheet: RefObject<BottomSheet>) => {
-      keyboardDidHide();
-      sheet.current?.snapToIndex(1)
-    },
-    [],
-  );
+  const showBotSheet = useCallback((sheet: RefObject<BottomSheet>) => {
+    keyboardDidHide();
+    sheet.current?.snapToIndex(1);
+  }, []);
 
-  const closeBotSheet = useCallback(
-    (sheet: RefObject<BottomSheet>) => sheet.current?.close(),
-    [],
-  );
+  const closeBotSheet = useCallback((sheet: RefObject<BottomSheet>) => sheet.current?.close(), []);
 
   const backAction = useCallback(() => {
     if (isBotSheetActive) {
@@ -136,7 +99,7 @@ const UserForm = ({select, route: { params } }: routeParams) => {
 
     // cleanup function
     return () => {
-      Keyboard.removeListener('keyboardDidHide', keyboardDidHide);
+      Keyboard.removeAllListeners('keyboardDidHide');
     };
   }, []);
 
@@ -158,7 +121,6 @@ const UserForm = ({select, route: { params } }: routeParams) => {
   }, [name, pincode, place]);
   // }, [name, pincode, selectedItems]);
 
-
   const saveDetails = () => {
     const userDetails = {
       phone,
@@ -168,11 +130,11 @@ const UserForm = ({select, route: { params } }: routeParams) => {
       image,
       place,
       // category: selectedItems,
-      category: []
+      category: [],
     };
     AsyncStorage.setItem('user', JSON.stringify(userDetails)).then(() => {
       dispatchAction(saveUser(userDetails));
-      dispatchAction(login({ phone }));
+      dispatchAction(logInUser({ phone }));
     });
   };
 
@@ -358,10 +320,10 @@ const UserForm = ({select, route: { params } }: routeParams) => {
     <View style={styless.container}>
       <View style={[styles.container, { backgroundColor: appColors.userpagetopback }]}>
         {/* <View style={styless.logocontainer}> */}
-         {/* <Image source={require('../../assets/img/panilogo.png')}
+        {/* <Image source={require('../../assets/img/panilogo.png')}
         style={styless.logo}
         /> */}
-       
+
         {/* </View> */}
         <View style={[styles.userBannerContainer]}>
           {image ? (
@@ -396,134 +358,129 @@ const UserForm = ({select, route: { params } }: routeParams) => {
                 },
               ]}
               onPress={() => showBotSheet(photoBottomSheet)}>
-              <Icon
-                name="camera-plus-outline"
-                color={appColors.primary}
-                size={30}
-                style={styles.icon}
-              />
+              <Icon name="camera-plus-outline" color={appColors.primary} size={30} style={styles.icon} />
             </Pressable>
           )}
         </View>
         <View style={[styles.formContainer]}>
-          <View
-            style={[
-              StyleSheet.absoluteFillObject,
-              {
-                width: windowWidth,
-                height: windowWidth * 2,
-                
-                backgroundColor: '#ffffff',
-                transform: [{ translateY: -windowWidth * 0.01 }],
-              },
-            ]}
-          />
-          <View style={[styles.textContainer]}>
-            <TextInput
-              mode="outlined"
-              label="Name"
-              // left={
-              //   <TextInput.Icon
-              //     name="account-outline"
-              //     style={styles.preText}
-              //     color={appColors.secondary}
-              //   />
-              // }
-              theme={{
-                colors: {
-                  primary: appColors.secondary,
-                  text: appColors.primary,
-                  background: appColors.white,
+          <>
+            <View
+              style={[
+                StyleSheet.absoluteFillObject,
+                {
+                  width: windowWidth,
+                  height: windowWidth * 2,
+
+                  backgroundColor: '#ffffff',
+                  transform: [{ translateY: -windowWidth * 0.01 }],
                 },
-              }}
-              style={[styles.textInput]}
-              keyboardType="default"
-              maxLength={40}
-              onChangeText={(text: string) => setName(text)}
-              defaultValue={name}
-              value={name}
-              autoCorrect={false}
-              autoCompleteType="name"
-              returnKeyType="next"
-              textAlign="left"
-              textContentType="name"
+              ]}
             />
-          </View>
-          <View style={[styles.textContainer]}>
-            <TextInput
-              mode="outlined"
-              label="Pincode"
-              // left={
-              //   <TextInput.Icon
-              //     name="map-marker-outline"
-              //     style={styles.preText}
-              //     color={appColors.secondary}
-              //   />
-              // }
-              theme={{
-                colors: {
-                  primary: appColors.secondary,
-                  text: appColors.primary,
-                  background: appColors.white,
-                },
-              }}
-              style={[styles.textInput]}
-              keyboardType="numeric"
-              maxLength={6}
-              onChangeText={(text: string) => setPincode(text)}
-              defaultValue={pincode}
-              value={pincode}
-              autoCorrect={false}
-              autoCompleteType="postal-code"
-              returnKeyType="next"
-              textAlign="left"
-              textContentType="postalCode"
-            />
-          </View>
-          <View style={[styles.textContainer]}>
-            <TextInput
-              mode="outlined"
-              label="Place"
-            
-              theme={{
-                colors: {
-                  primary: appColors.secondary,
-                  text: appColors.primary,
-                  background: appColors.white,
-                },
-              }}
-              style={[styles.textInput]}
-              // keyboardType="default"
-              maxLength={80}
-              onChangeText={(text: string) => setPlace(text)}
-              defaultValue={place}
-              value={place}
-              autoCorrect={false}
-              // autoCompleteType="place"
-              // returnKeyType="next"
-              // textAlign="left"
-              // textContentType="name"
-            />
+            <View style={[styles.textContainer]}>
+              <TextInput
+                mode="outlined"
+                label="Name"
+                // left={
+                //   <TextInput.Icon
+                //     name="account-outline"
+                //     style={styles.preText}
+                //     color={appColors.secondary}
+                //   />
+                // }
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput]}
+                keyboardType="default"
+                maxLength={40}
+                onChangeText={(text: string) => setName(text)}
+                defaultValue={name}
+                value={name}
+                autoCorrect={false}
+                autoComplete="name"
+                returnKeyType="next"
+                textAlign="left"
+                textContentType="name"
+              />
+            </View>
+            <View style={[styles.textContainer]}>
+              <TextInput
+                mode="outlined"
+                label="Pincode"
+                // left={
+                //   <TextInput.Icon
+                //     name="map-marker-outline"
+                //     style={styles.preText}
+                //     color={appColors.secondary}
+                //   />
+                // }
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput]}
+                keyboardType="numeric"
+                maxLength={6}
+                onChangeText={(text: string) => setPincode(text)}
+                defaultValue={pincode}
+                value={pincode}
+                autoCorrect={false}
+                autoComplete="postal-code"
+                returnKeyType="next"
+                textAlign="left"
+                textContentType="postalCode"
+              />
+            </View>
+            <View style={[styles.textContainer]}>
+              <TextInput
+                mode="outlined"
+                label="Place"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput]}
+                // keyboardType="default"
+                maxLength={80}
+                onChangeText={(text: string) => setPlace(text)}
+                defaultValue={place}
+                value={place}
+                autoCorrect={false}
+                // autoCompleteType="place"
+                // returnKeyType="next"
+                // textAlign="left"
+                // textContentType="name"
+              />
             </View>
             {console.log(user)}
-         
 
-          <View style={styles.savebtnContainer}>
-            <Button
-              dark
-              loading={false}
-              mode="contained"
-              disabled={saveDisabled}
-              onPress={saveDetails}
-              style={styless.saveButton}
-              theme={{
-                colors: {
-                  primary: appColors.btncolor,
-                },
-              }}>
-              SAVE
-            </Button>
-          </View>
+            <View style={styles.savebtnContainer}>
+              <Button
+                dark
+                loading={false}
+                mode="contained"
+                disabled={saveDisabled}
+                onPress={saveDetails}
+                style={styless.saveButton}
+                theme={{
+                  colors: {
+                    primary: appColors.btncolor,
+                  },
+                }}>
+                SAVE
+              </Button>
+            </View>
+          </>
         </View>
       </View>
       <Snackbar
@@ -535,7 +492,7 @@ const UserForm = ({select, route: { params } }: routeParams) => {
         }}>
         {message}
       </Snackbar>
-      
+
       {renderPhotoBottomSheet()}
     </View>
   );
@@ -543,22 +500,22 @@ const UserForm = ({select, route: { params } }: routeParams) => {
 
 export default UserForm;
 const styless = StyleSheet.create({
-  container:{
+  container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor:'#DfDfDf'
+    backgroundColor: '#DfDfDf',
   },
-  logocontainer:{
-    flexDirection:"column",
-    alignItems:'center',
-    justifyContent:'center'
+  logocontainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  saveButton:{
+  saveButton: {
     width: '30%',
-    height:52,
-    borderRadius:50,
-    alignItems:'center',
-    justifyContent:'center'
-  }
-})
+    height: 52,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
