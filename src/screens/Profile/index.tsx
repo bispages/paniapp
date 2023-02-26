@@ -4,8 +4,15 @@ import { Text } from 'react-native-paper';
 import colors from '../../assets/colors';
 
 import styless from './Profile.style';
+import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
+
+
 
 const Profile = () => {
+
+  const { data: users } = useGetUsersQuery();
+  console.log(users,"getUsersiooio");
+
   return (
     <View style={styless.container}>
       <View  style={styles.profilecontainer}>
@@ -14,13 +21,21 @@ const Profile = () => {
         </View>
         <Text  style={styles.profiletag}>Add Profile Picture</Text>
       </View>
-      <View style={styles.details}>
-        <TextInput  style={styles.inputdetails}></TextInput>
-        <TextInput  style={styles.inputdetails}></TextInput>
-        <TextInput  style={styles.inputdetails}></TextInput>
+      {
+        users?.users?.map((item, i) => {
+            return (
+              <View style={styles.details}>
+        <TextInput  style={styles.inputdetails}>{item?.userName}</TextInput>
+        <TextInput  style={styles.inputdetails}>{item?.place}</TextInput>
+        <TextInput  style={styles.inputdetails}>{item?.pincode}</TextInput>
+        <TextInput  style={styles.inputdetails}>{item?.userPhone}</TextInput>
 
 
       </View>
+
+            )})
+      }
+      
 
       <View style={styles.savebtn}>
         <TouchableOpacity style={styles.save}>

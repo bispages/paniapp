@@ -3,17 +3,32 @@ import { ApiSlice } from './ApiSlice';
 
 export const IdentityApiSlice = ApiSlice.injectEndpoints({
   endpoints: builder => ({
-<<<<<<< HEAD
-    
-=======
     getUsers: builder.query<User[], void>({
       query: () => `users`,
     }),
->>>>>>> b48ef9b6e85b963949c3598effb1c1a2f6a4b583
+    updateUserProfile: builder.mutation<User, User>({
+      query: function (data) {
+        return { url: 'users/updateProfile', method: 'PUT', body: { ...data } };
+      },
+      invalidatesTags: ['User'],
+    }),
+
+    updateEstimate: builder.mutation<User, User>({
+      query: function (data) {
+        return { url: 'estimates/update', method: 'PUT', body: { ...data } };
+      },
+      invalidatesTags: ['User'],
+    }),
+
   }),
   overrideExisting: true,
 });
 
-export const { useGetUsersQuery } = IdentityApiSlice;
+export const { 
+  useGetUsersQuery, 
+  useUpdateUserProfileMutation, 
+  useUpdateEstimateMutation } = IdentityApiSlice;
 
-export const { getUsers } = IdentityApiSlice.endpoints;
+export const { getUsers, updateUserProfile } = IdentityApiSlice.endpoints;
+
+

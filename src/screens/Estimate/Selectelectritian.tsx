@@ -27,32 +27,6 @@ const data = [
   },
 ];
 
-<<<<<<< HEAD
-const data =[   
-    {
-      id:1,
-      title:'Anand krish',
-      tag: '680301'
-    },
-    {
-      id:2,
-      title:'Alphy benny ',
-      tag: '680301'
-    },
-    {
-      id:3,
-      title:"Alwin John",
-      tag: '680302'
-    },
-    {
-        id:4,
-        title:"Hari Krishnan",
-        tag: '680302'
-      },
-      
-    
-  ]
-=======
 const datas = [
   {
     id: 1,
@@ -65,10 +39,10 @@ const datas = [
     tag: '680302',
   },
 ];
->>>>>>> b48ef9b6e85b963949c3598effb1c1a2f6a4b583
 
 const Select = () => {
   const [toggleState, setToggleState] = useState(true);
+  
   const navigation = useNavigation();
   const toggleTab = () => {
     setToggleState(false);
@@ -78,7 +52,11 @@ const Select = () => {
   };
 
   const { data: users } = useGetUsersQuery();
-  console.log(users);
+  console.log(users,"getUsers");
+
+  
+  
+
 
   return (
     <View style={styles.container}>
@@ -124,16 +102,16 @@ const Select = () => {
 
       {toggleState === false ? (
         <View style={styles.filter}>
-          {datas.map((item, i) => {
+          {users?.users?.favoriteUsers?.map((item, i) => {
             return (
               <View style={styles.card} key={i}>
                 <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
                 <View style={styles.subcard}>
-                  <Text style={styles.name}>{item?.title}</Text>
+                  <Text style={styles.name}>{item?.userName}</Text>
 
                   <View style={styles.detcard}>
                     <Image source={require('../../assets/img/star.png')} style={styles.favicon} />
-                    <Text style={styles.det}>{item?.tag}</Text>
+                    <Text style={styles.det}>{item?.pincode}</Text>
                   </View>
                 </View>
                 <View style={styles.call}>
@@ -145,16 +123,16 @@ const Select = () => {
         </View>
       ) : (
         <View style={styles.filter}>
-          {data.map((item, i) => {
+          {users?.users?.map((item, i) => {
             return (
               <View style={styles.card} key={i}>
                 <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
                 <View style={styles.subcard}>
-                  <Text style={styles.name}>{item?.title}</Text>
+                  <Text style={styles.name}>{item?.userName}</Text>
 
                   <View style={styles.detcard}>
                     <Image source={require('../../assets/img/Vector.png')} style={styles.favicon} />
-                    <Text style={styles.det}>{item?.tag}</Text>
+                    <Text style={styles.det}>{item?.pincode}</Text>
                   </View>
                 </View>
                 <View style={styles.call}>
