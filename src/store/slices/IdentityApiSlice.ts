@@ -1,10 +1,15 @@
+import { User } from 'types';
 import { ApiSlice } from './ApiSlice';
 
 export const IdentityApiSlice = ApiSlice.injectEndpoints({
-  endpoints: builder => ({}),
+  endpoints: builder => ({
+    getUsers: builder.query<User[], void>({
+      query: () => `users`,
+    }),
+  }),
   overrideExisting: true,
 });
 
-export const {} = IdentityApiSlice;
+export const { useGetUsersQuery } = IdentityApiSlice;
 
-export const {} = IdentityApiSlice.endpoints;
+export const { getUsers } = IdentityApiSlice.endpoints;

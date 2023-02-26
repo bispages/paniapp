@@ -12,6 +12,7 @@ if (__DEV__) {
 
 export const store = configureStore({
   reducer: {
+    [ApiSlice.reducerPath]: ApiSlice.reducer,
     appState: appStateReducer,
     estimateState: estimateStateReducer,
   },
