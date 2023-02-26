@@ -269,8 +269,7 @@
 
 // export default Login;
 
-
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Image, Text } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import colors from '../../assets/colors';
@@ -278,151 +277,122 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loginstep } from '../../Const/Api';
 import axios from 'axios';
-const array =[
+const array = [
   {
-    ids:1,
-    img:require('../../assets/img/worker.png'),
-    tag:"Personal"
-  }
-  
-]
-const idea =[
-
+    ids: 1,
+    img: require('../../assets/img/worker.png'),
+    tag: 'Personal',
+  },
+];
+const idea = [
   {
-    ids:2,
-    img:require('../../assets/img/shopicon.png'),
-    tag:"Shop"
-  }
-]
-
+    ids: 2,
+    img: require('../../assets/img/shopicon.png'),
+    tag: 'Shop',
+  },
+];
 
 const Login = () => {
-  const [click,setClick] = useState(false);
+  const [click, setClick] = useState(false);
   const [phone, setPhone] = useState('');
   const navigation = useNavigation();
   const [select, setSelect] = useState(false);
 
-  const togglecheck = ()=> {
-    setClick(!click)
-  }
+  const togglecheck = () => {
+    setClick(!click);
+  };
 
   const submit = () => {
-         
-         navigation.navigate('verifyphone', { phone });
-       };
- 
+    navigation.navigate('verifyphone', { phone });
+  };
 
-       const onTextChange = (text: string) => {
-             setPhone(text.replace(/[^0-9]/g, ''));
-          };
+  const onTextChange = (text: string) => {
+    setPhone(text.replace(/[^0-9]/g, ''));
+  };
 
-      // async function Phonenumber() {
-      //   const from = new FormData();
-      //   form.append("userPhone",phone)
+  // async function Phonenumber() {
+  //   const from = new FormData();
+  //   form.append("userPhone",phone)
 
-      //   const options = {
-      //     method:'POST',
-      //     url: loginstep,
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //       Accept: "application/json",
-      //     },
-      //     data: form,
-      //   };
-      //   await axios
-      //   .request(options)
-      // .then(function (response) {
-      //   Phonenumber();
-      //   navigation.navigate('verifyphone', { phone });
-      // })
-      // .catch(function (error) {
-      //   console.error(error);
-      // });
-      // }
+  //   const options = {
+  //     method:'POST',
+  //     url: loginstep,
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //       Accept: "application/json",
+  //     },
+  //     data: form,
+  //   };
+  //   await axios
+  //   .request(options)
+  // .then(function (response) {
+  //   Phonenumber();
+  //   navigation.navigate('verifyphone', { phone });
+  // })
+  // .catch(function (error) {
+  //   console.error(error);
+  // });
+  // }
 
   return (
     <View style={styles.container}>
-      
       <View style={styles.subcontainer}>
-        <View  style={styles.logocontainer}>
-          <Image style={styles.logo} source={require('../../assets/img/panilogo.png')}/>
-          <Image source={require('../../assets/img/panitit.png')}/>
-
+        <View style={styles.logocontainer}>
+          <Image style={styles.logo} source={require('../../assets/img/panilogo.png')} />
+          <Image source={require('../../assets/img/panitit.png')} />
         </View>
-
       </View>
       <View style={styles.subcontainers}>
-      <Text style={styles.txt}>Enter your phone number</Text>
-      <TextInput style={styles.inputfield}
-      keyboardType="phone-pad"
-      maxLength={10}
-      onChangeText={text => onTextChange(text)}
-      >
-      
-      </TextInput>
+        <Text style={styles.txt}>Enter your phone number</Text>
+        <TextInput
+          style={styles.inputfield}
+          keyboardType="phone-pad"
+          maxLength={10}
+          onChangeText={text => onTextChange(text)}></TextInput>
 
-      
-      <View style={styles.logocontainer}>
-        <Text style={styles.optiontag}>Select option</Text>
-        <View style={styles.select}>
-          {
-            array.map((item,i)=> {
+        <View style={styles.logocontainer}>
+          <Text style={styles.optiontag}>Select option</Text>
+          <View style={styles.select}>
+            {array.map((item, i) => {
               return (
-                <TouchableOpacity style={select === false ? styles.selecticons : styles.selecticon}
-                 key={i}
-                 onPress={()=>[setSelect(false),
-                  AsyncStorage.setItem('chooseitem','1')]}
-                 >
-            <Image  source={item?.img} style={styles.custicon}/>
-            <Text style={styles.selecttag}>{item?.tag}</Text>
-          </TouchableOpacity>
-
-              )
-            })
-          }
-          {
-            idea.map((item,i)=> {
+                <TouchableOpacity
+                  style={select === false ? styles.selecticons : styles.selecticon}
+                  key={i}
+                  onPress={() => [setSelect(false), AsyncStorage.setItem('chooseitem', '1')]}>
+                  <Image source={item?.img} style={styles.custicon} />
+                  <Text style={styles.selecttag}>{item?.tag}</Text>
+                </TouchableOpacity>
+              );
+            })}
+            {idea.map((item, i) => {
               return (
-                <TouchableOpacity style={select === false ? styles.selecticon : styles.selecticons} 
-                key={i}
-                onPress={()=>[setSelect(true),
-                AsyncStorage.setItem('chooseitem','2')]}
-                >
-            <Image  source={item?.img} style={styles.custicon}/>
-            <Text style={styles.selecttag}>{item?.tag}</Text>
-          </TouchableOpacity>
-
-              )
-            })
-          }
-          
-        </View>
-        <View style={styles.selectdiv}>
-          {/* <Checkbox style={styles.check}/> */}
-          <TouchableOpacity style={styles.check} onPress={()=>togglecheck()}>
-            {
-              click === true ?
-              <View style={styles.checked}></View>
-              :("")
-            }
-          
-
-          </TouchableOpacity>
-          <Text style={styles.checktag}> Agree with <Text  style={styles.checkline}>Terms & Conditions</Text></Text>
-
+                <TouchableOpacity
+                  style={select === false ? styles.selecticon : styles.selecticons}
+                  key={i}
+                  onPress={() => [setSelect(true), AsyncStorage.setItem('chooseitem', '2')]}>
+                  <Image source={item?.img} style={styles.custicon} />
+                  <Text style={styles.selecttag}>{item?.tag}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+          <View style={styles.selectdiv}>
+            {/* <Checkbox style={styles.check}/> */}
+            <TouchableOpacity style={styles.check} onPress={() => togglecheck()}>
+              {click === true ? <View style={styles.checked}></View> : ''}
+            </TouchableOpacity>
+            <Text style={styles.checktag}>
+              {' '}
+              Agree with <Text style={styles.checkline}>Terms & Conditions</Text>
+            </Text>
           </View>
 
-          <TouchableOpacity style={styles.submitbtn} onPress={() =>submit()}>
-          {/* <TouchableOpacity style={styles.submitbtn} onPress={() =>Phonenumber()}> */}
-              <Text style={styles.join}>Join</Text>
-
+          <TouchableOpacity style={styles.submitbtn} onPress={() => submit()}>
+            {/* <TouchableOpacity style={styles.submitbtn} onPress={() =>Phonenumber()}> */}
+            <Text style={styles.join}>Join</Text>
           </TouchableOpacity>
-
+        </View>
       </View>
-      </View>
-
-    
-   
     </View>
   );
 };
@@ -430,144 +400,139 @@ const Login = () => {
 export default Login;
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    backgroundColor:colors.white,
-    flexDirection:'column'
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+    flexDirection: 'column',
   },
-  subcontainer:{
-    flex:.5,
-    alignItems:'center',
-    justifyContent:'center'
+  subcontainer: {
+    flex: 0.5,
+    alignItems: 'center',
+    justifyContent: 'center',
     // backgroundColor:'red'
   },
-  subcontainers:{
-    flex:.5,
-    marginHorizontal:20,
-    justifyContent:'center',
+  subcontainers: {
+    flex: 0.5,
+    marginHorizontal: 20,
+    justifyContent: 'center',
     // position:'relative'
     // backgroundColor:'red'
   },
-  logocontainer:{
-    alignItems:'center',
-    justifyContent:'center',
-    flexDirection:'column',
+  logocontainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
     // height:"40%",
     // backgroundColor:'red'
   },
-  
 
-  logo:{
-    marginVertical:8
+  logo: {
+    marginVertical: 8,
   },
-  txt:{
-    fontSize:18,
-    fontWeight:'bold',
-    color:colors.logintag,
-    marginVertical:8
+  txt: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.logintag,
+    marginVertical: 8,
   },
-  inputfield:{
-    width:'90%',
-    height:50,
-    borderRadius:7,
-    borderWidth:1,
-    borderColor:colors.logintag,
-    paddingHorizontal:10
+  inputfield: {
+    width: '90%',
+    height: 50,
+    borderRadius: 7,
+    borderWidth: 1,
+    borderColor: colors.logintag,
+    paddingHorizontal: 10,
   },
-  optiontag:{
-    fontSize:16,
-    lineHeight:19.2,
-    fontWeight:'bold',
-    color:colors.logintag,
-    marginVertical:15
-    
+  optiontag: {
+    fontSize: 16,
+    lineHeight: 19.2,
+    fontWeight: 'bold',
+    color: colors.logintag,
+    marginVertical: 15,
   },
-  select:{
-    flexDirection:'row',
-    alignItems:"center",
-    justifyContent:'center'
+  select: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  selectdiv:{
-    flexDirection:'row',
-    alignItems:"center",
-    justifyContent:'center',
-    marginVertical:30,
+  selectdiv: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 30,
   },
-  selecticon:{
-    width:78,
-    height:70,
-    borderRadius:7,
-    backgroundColor:colors.loginselection,
-    marginHorizontal:8,
-    flexDirection:'column',
-    alignItems:'center',
-    justifyContent:'center'
+  selecticon: {
+    width: 78,
+    height: 70,
+    borderRadius: 7,
+    backgroundColor: colors.loginselection,
+    marginHorizontal: 8,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  selecticons:{
-    width:78,
-    height:70,
-    borderRadius:7,
-    backgroundColor:colors.loginselection,
-    marginHorizontal:8,
-    flexDirection:'column',
-    alignItems:'center',
-    justifyContent:'center',
-    borderWidth:2,
-    borderColor:'#6A6C6E'
+  selecticons: {
+    width: 78,
+    height: 70,
+    borderRadius: 7,
+    backgroundColor: colors.loginselection,
+    marginHorizontal: 8,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#6A6C6E',
   },
-  custicon:{
-    width:36,
-    height:35
+  custicon: {
+    width: 36,
+    height: 35,
   },
-  selecttag:{
-    fontSize:11,
-    lineHeight:19.2,
-    fontWeight:'400',
-    color:colors.logintag,
+  selecttag: {
+    fontSize: 11,
+    lineHeight: 19.2,
+    fontWeight: '400',
+    color: colors.logintag,
   },
-  check:{
-    borderRadius:50,
-    borderColor:colors.logintag,
-    borderWidth:1,
-    width:18,
-    height:18,
-    alignItems:'center',
-    justifyContent:'center'
+  check: {
+    borderRadius: 50,
+    borderColor: colors.logintag,
+    borderWidth: 1,
+    width: 18,
+    height: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  checked:{
-    borderRadius:50,
-    backgroundColor:colors.logintag,
-    borderWidth:1,
-    width:12,
-    height:12
+  checked: {
+    borderRadius: 50,
+    backgroundColor: colors.logintag,
+    borderWidth: 1,
+    width: 12,
+    height: 12,
   },
-  checktag:{
-    fontSize:14,
-    color:'#4D4D4D',
-    lineHeight:16.8
+  checktag: {
+    fontSize: 14,
+    color: '#4D4D4D',
+    lineHeight: 16.8,
   },
-  checkline:{
-    fontSize:14,
-    color:'#4D4D4D',
-    lineHeight:16.8,
-    textDecorationLine:"underline"
+  checkline: {
+    fontSize: 14,
+    color: '#4D4D4D',
+    lineHeight: 16.8,
+    textDecorationLine: 'underline',
   },
-  submitbtn:{
-    width:100,
-    height:60,
-    borderRadius:30,
-    backgroundColor:colors.btncolor,
-    alignItems:'center',
-    justifyContent:'center',
-    marginBottom:30
+  submitbtn: {
+    width: 100,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: colors.btncolor,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 30,
+  },
 
+  join: {
+    fontSize: 20,
+    fontWeight: '500',
+    color: colors.white,
   },
-            
-join:{
-  fontSize:20,
-  fontWeight:'500',
-  color:colors.white
-}
-
-
-})
+});
