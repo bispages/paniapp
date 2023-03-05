@@ -270,69 +270,47 @@
 // export default Login;
 
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, TouchableOpacity, Image, Text } from 'react-native';
-import { Checkbox } from 'react-native-paper';
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import colors from '../../assets/colors';
-import { useNavigation } from '@react-navigation/native';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { loginstep } from '../../Const/Api';
-import axios from 'axios';
-const array = [
+import { StackNavigationProp } from '@react-navigation/stack';
+import { USERTYPE } from '../../utils/constants';
+import { Text, TextInput, Button, useTheme } from 'react-native-paper';
+
+const userOptions = [
   {
-    ids: 1,
+    ids: 0,
     img: require('../../assets/img/worker.png'),
     tag: 'Personal',
   },
-];
-const idea = [
   {
-    ids: 2,
+    ids: 1,
     img: require('../../assets/img/shopicon.png'),
     tag: 'Shop',
   },
 ];
 
 const Login = () => {
-  const [click, setClick] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
   const [phone, setPhone] = useState('');
-  const navigation = useNavigation();
-  const [select, setSelect] = useState(false);
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const [userType, setUserType] = useState(USERTYPE.USER);
+  const { appColors } = useTheme();
 
   const togglecheck = () => {
-    setClick(!click);
+    setAgreeTerms(prevAgreeTerms => !prevAgreeTerms);
   };
 
   const submit = () => {
+    if (phone.length < 10 || !agreeTerms) return;
     navigation.navigate('verifyphone', { phone });
   };
 
-  const onTextChange = (text: string) => {
-    setPhone(text.replace(/[^0-9]/g, ''));
+  const onTextChange = (phoneNumber: string) => {
+    phoneNumber = phoneNumber.replace(/[^\d]/g, '');
+    setPhone(phoneNumber);
   };
-
-  // async function Phonenumber() {
-  //   const from = new FormData();
-  //   form.append("userPhone",phone)
-
-  //   const options = {
-  //     method:'POST',
-  //     url: loginstep,
-  //     headers: {
-  //       "Content-Type": "multipart/form-data",
-  //       Accept: "application/json",
-  //     },
-  //     data: form,
-  //   };
-  //   await axios
-  //   .request(options)
-  // .then(function (response) {
-  //   Phonenumber();
-  //   navigation.navigate('verifyphone', { phone });
-  // })
-  // .catch(function (error) {
-  //   console.error(error);
-  // });
-  // }
 
   return (
     <View style={styles.container}>
@@ -345,31 +323,35 @@ const Login = () => {
       <View style={styles.subcontainers}>
         <Text style={styles.txt}>Enter your phone number</Text>
         <TextInput
-          style={styles.inputfield}
-          keyboardType="phone-pad"
+          mode="outlined"
+          theme={{
+            colors: {
+              primary: appColors.secondary,
+              text: appColors.primary,
+              background: appColors.white,
+            },
+          }}
+          keyboardType="numeric"
           maxLength={10}
-          onChangeText={text => onTextChange(text)}></TextInput>
+          autoCorrect={false}
+          textAlign="center"
+          textContentType="oneTimeCode"
+          style={styles.inputfield}
+          value={phone}
+          onChangeText={onTextChange}></TextInput>
 
         <View style={styles.logocontainer}>
-          <Text style={styles.optiontag}>Select option</Text>
+          <Text style={styles.optiontag}>Select your need</Text>
           <View style={styles.select}>
-            {array.map((item, i) => {
+            {userOptions.map(item => {
               return (
                 <TouchableOpacity
-                  style={select === false ? styles.selecticons : styles.selecticon}
-                  key={i}
-                  onPress={() => [setSelect(false), AsyncStorage.setItem('chooseitem', '1')]}>
-                  <Image source={item?.img} style={styles.custicon} />
-                  <Text style={styles.selecttag}>{item?.tag}</Text>
-                </TouchableOpacity>
-              );
-            })}
-            {idea.map((item, i) => {
-              return (
-                <TouchableOpacity
-                  style={select === false ? styles.selecticon : styles.selecticons}
-                  key={i}
-                  onPress={() => [setSelect(true), AsyncStorage.setItem('chooseitem', '2')]}>
+                  style={userType === item.ids ? styles.selecticons : styles.selecticon}
+                  key={item.tag}
+                  onPress={() => {
+                    setUserType(item.ids);
+                    AsyncStorage.setItem('usertype', item.ids.toString());
+                  }}>
                   <Image source={item?.img} style={styles.custicon} />
                   <Text style={styles.selecttag}>{item?.tag}</Text>
                 </TouchableOpacity>
@@ -377,20 +359,27 @@ const Login = () => {
             })}
           </View>
           <View style={styles.selectdiv}>
-            {/* <Checkbox style={styles.check}/> */}
-            <TouchableOpacity style={styles.check} onPress={() => togglecheck()}>
-              {click === true ? <View style={styles.checked}></View> : ''}
+            <TouchableOpacity style={styles.check} onPress={togglecheck}>
+              {!!agreeTerms ? <View style={styles.checked}></View> : null}
             </TouchableOpacity>
             <Text style={styles.checktag}>
-              {' '}
               Agree with <Text style={styles.checkline}>Terms & Conditions</Text>
             </Text>
           </View>
-
-          <TouchableOpacity style={styles.submitbtn} onPress={() => submit()}>
-            {/* <TouchableOpacity style={styles.submitbtn} onPress={() =>Phonenumber()}> */}
-            <Text style={styles.join}>Join</Text>
-          </TouchableOpacity>
+          <Button
+            dark
+            loading={false}
+            mode="contained"
+            disabled={!(phone.length >= 10 && agreeTerms)}
+            onPress={submit}
+            style={styles.button}
+            theme={{
+              colors: {
+                primary: appColors.btncolor,
+              },
+            }}>
+            JOIN
+          </Button>
         </View>
       </View>
     </View>
@@ -415,6 +404,7 @@ const styles = StyleSheet.create({
     flex: 0.5,
     marginHorizontal: 20,
     justifyContent: 'center',
+    alignItems: 'center',
     // position:'relative'
     // backgroundColor:'red'
   },
@@ -436,12 +426,12 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   inputfield: {
-    width: '90%',
+    width: '70%',
     height: 50,
-    borderRadius: 7,
-    borderWidth: 1,
     borderColor: colors.logintag,
-    paddingHorizontal: 10,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    fontSize: 28,
   },
   optiontag: {
     fontSize: 16,
@@ -513,6 +503,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#4D4D4D',
     lineHeight: 16.8,
+    marginLeft: 8,
   },
   checkline: {
     fontSize: 14,
@@ -520,16 +511,13 @@ const styles = StyleSheet.create({
     lineHeight: 16.8,
     textDecorationLine: 'underline',
   },
-  submitbtn: {
-    width: 100,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: colors.btncolor,
+  button: {
+    width: '70%',
+    height: 52,
+    borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 30,
   },
-
   join: {
     fontSize: 20,
     fontWeight: '500',

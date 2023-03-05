@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput } from 'react-native';
 import Colors from '../../assets/colors';
-import { useNavigation } from '@react-navigation/native';
-import { useGetUsersQuery, useGetNearUsersQuery, useGetFavUsersQuery } from '../../store/slices/IdentityApiSlice';
+// import { useNavigation } from '@react-navigation/native';
+import {  useGetNearUsersQuery, useGetFavUsersQuery } from '../../store/slices/IdentityApiSlice';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
+import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const data = [
   {
@@ -42,8 +45,7 @@ const datas = [
 
 const Select = () => {
   const [toggleState, setToggleState] = useState(true);
-  
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const toggleTab = () => {
     setToggleState(false);
   };

@@ -15,7 +15,7 @@ export type User = {
   phone: string;
   name?: string;
   pincode?: string;
-  userType?: string;
+  userType?: number;
   image?: Image | null;
   category?: ItemList[];
   userId?: string;

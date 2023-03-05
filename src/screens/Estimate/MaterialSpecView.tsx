@@ -9,9 +9,10 @@ import { materialSpecList } from '../../utils/materialSpecList';
 import { MaterialType, MaterialItem, Materials, FormValue, EstimateFormValues, MaterialSpec } from '../../types';
 import styles from './Estimate.style';
 import colorss from '../../assets/colors';
-import { useNavigation } from '@react-navigation/native';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { selectEstimate } from 'store/selectors';
 import { addEstimate } from 'store/slices/EstimateStateSlice';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const MaterialSpecView = ({
   type,
@@ -26,7 +27,7 @@ const MaterialSpecView = ({
   const [numb, setNumb] = useState(0);
   const { dark, colors } = useTheme();
   const [loading, setLoading] = useState(true);
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [itemInfo, setItemInfo] = useState({ type, item });
   const formVal: EstimateFormValues = useSelector(selectEstimate);
 

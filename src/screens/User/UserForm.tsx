@@ -10,8 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './User.style';
 import {
   // PROFESSIONNUMBER,
-  USERTYPE_USER,
-  USERTYPE_SHOP,
+  USERTYPE,
   USERFORM_BOTSHEET_SNAPMAX,
   USERFORM_BOTSHEET_SNAPMID,
   USERFORM_BOTSHEET_SNAPMIN,
@@ -32,7 +31,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
   const [name, setName] = useState('');
   const [pincode, setPincode] = useState('');
   const [place, setPlace] = useState('');
-  const [userType, setUserType] = useState(USERTYPE_USER);
+  const [userType, setUserType] = useState(USERTYPE.USER);
   const [image, setImage] = useState<Image | null>(null);
   // const [selectedItems, setSelectedItems] = useState<ItemList[]>([]);
   const [saveDisabled, setSaveDisabled] = useState(true);
@@ -45,7 +44,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
   const windowWidth = useWindowDimensions().width;
   const { appColors } = useTheme();
   const dispatchAction = useDispatch();
-  const user = AsyncStorage.getItem('chooseitem');
+  const user = AsyncStorage.getItem('usertype');
 
   const snapPoints = useMemo(
     () => [USERFORM_BOTSHEET_SNAPMIN, USERFORM_BOTSHEET_SNAPMID, USERFORM_BOTSHEET_SNAPMAX],

@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Pressable, Text } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
 
 import styles from './Plumber.style';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const Plumber = () => {
   const { colors } = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const findHardwareShop = () => {};
   const findPlumber = () => {};
