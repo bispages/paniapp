@@ -12,10 +12,23 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
       },
       invalidatesTags: ['User'],
     }),
+
+    updateEstimate: builder.mutation<User, User>({
+      query: function (data) {
+        return { url: 'estimates/update', method: 'PUT', body: { ...data } };
+      },
+      invalidatesTags: ['User'],
+    }),
+
   }),
   overrideExisting: true,
 });
 
-export const { useGetUsersQuery, useUpdateUserProfileMutation } = IdentityApiSlice;
+export const { 
+  useGetUsersQuery, 
+  useUpdateUserProfileMutation, 
+  useUpdateEstimateMutation } = IdentityApiSlice;
 
 export const { getUsers, updateUserProfile } = IdentityApiSlice.endpoints;
+
+
