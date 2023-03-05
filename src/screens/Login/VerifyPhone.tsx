@@ -47,7 +47,7 @@ function reducer(state: CodeObject | any, action: Action) {
 type routeParams = {
   route: { params: { phone: string } };
 };
-
+ 
 const VerifyPhone = ({ route: { params } }: routeParams) => {
   const INITIAL_SCALE = 1;
   const INITIAL_OFFSET = 0;
@@ -147,6 +147,7 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
       dispatchAction(logInUser(user));
     }
   };
+
 
   return (
     <View style={styless.login}>

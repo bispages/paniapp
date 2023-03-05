@@ -18,6 +18,7 @@ import ShopProfile from '../screens/Shop/ShopProfile';
 import Promotions from '../screens/Shop/Promotions';
 // import Details from '../screens/Details';
 import EstimateNavigationStack from '../navigations/EstimateNavigationStack';
+import Orderdet from '../screens/MyOrder/Orderdet';
 
 const AppDrawer = createDrawerNavigator();
 // const SearchStack = createStackNavigator();
@@ -104,6 +105,13 @@ const AppNavigationDrawer = () => {
         component={MyOrder}
         options={{
           headerShown: true,
+        }}
+      />
+      <AppDrawer.Screen
+        name="Orderdet"
+        component={Orderdet}
+        options={{
+          headerShown: false,
         }}
       />
       <AppDrawer.Screen

@@ -3,7 +3,8 @@ import { View,StyleSheet, Image, Text, TouchableOpacity, TextInput,ScrollView } 
 import Colors from "../../assets/colors";
 import { useNavigation } from '@react-navigation/native';
 import Product from '../../assets/img/productz.png';
-// import {colors} from '../../assets/colors'
+import { useGetMaterialsQuery } from '../../store/slices/IdentityApiSlice'
+// import {colors} from '../../assets/colors'  
 
 const arr =[
   {
@@ -138,6 +139,9 @@ const MaterialItems =()=> {
     const [load, setLoad] = useState(true)
     const [click, setClick] = useState({ id: 0, count: 0 })
   const navigation = useNavigation();
+
+  const { data: users } = useGetMaterialsQuery();
+  console.log(users,"Material Items")
 
 
   const popup=()=>{

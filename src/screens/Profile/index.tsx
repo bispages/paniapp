@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
     height:200,
     alignItems:'center',
     justifyContent:'center'
-
   },
   profile:{
     width:140,
@@ -62,7 +61,6 @@ const styles = StyleSheet.create({
     borderWidth:3.5,
     borderColor:colors.profileborder,
     borderRadius:70
-
   },
   profiletag:{
     fontSize:16,
@@ -70,8 +68,7 @@ const styles = StyleSheet.create({
     lineHeight:19,
     letterSpacing:-0.2,
     color:'rgba(0,0,0,0.7)',
-    marginVertical:20
-    
+    marginVertical:20    
   },
   details:{
     display:'flex',
@@ -80,7 +77,6 @@ const styles = StyleSheet.create({
     width:'100%',
     alignItems:'center',
     justifyContent:'center'
-
   },
   inputdetails:{
     width:319,
@@ -89,8 +85,6 @@ const styles = StyleSheet.create({
     borderColor:colors.inputborder,
     borderRadius:7,
     marginVertical:10
-
-
   },
   savebtn:{
     width:'100%',
@@ -98,7 +92,6 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     marginTop:30,
     marginBottom:10
-
   },
   save:{
     width:109,
@@ -107,8 +100,7 @@ const styles = StyleSheet.create({
     borderRadius:30,
     backgroundColor:colors.btncolor,
     alignItems:'center',
-    justifyContent:'center'
-    
+    justifyContent:'center'   
   },
   savetxt:{
     fontSize:20,

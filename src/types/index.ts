@@ -18,6 +18,7 @@ export type User = {
   userType?: string;
   image?: Image | null;
   category?: ItemList[];
+  userId?: string;
 };
 
 export type MapView = {

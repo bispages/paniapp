@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TextInput, Image, TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors';
+import { useNavigation } from '@react-navigation/native';
 
 const info =[
     {
@@ -41,13 +42,17 @@ const info =[
 
 
 const Profile = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.ordercontainer}>
          <View style={styles.container}>
         {
             info?.map((item,i)=>{
                 return (
-                    <View style={styles.cardcontainer} key={i}>
+                    <TouchableOpacity style={styles.cardcontainer} key={i} 
+                    onPress={()=>navigation.navigate('Orderdet')
+
+                    }>
                     <View style={styles.imagecard}>
                         <Image style={styles.img} source={item?.image}/>
         
@@ -64,7 +69,7 @@ const Profile = () => {
         
                      </View>
         
-                </View>
+                </TouchableOpacity>
 
                     )
 
@@ -85,13 +90,15 @@ const styles = StyleSheet.create({
         width:'100%',
         height:'auto',
         alignItems:'center',
-        justifyContent:'center'
+        justifyContent:'center',
+       
     
       },
       container:{
         display:'flex',
         flexDirection:"column",
         marginTop:20,
+        
       },
       cardcontainer:{
         width:372,

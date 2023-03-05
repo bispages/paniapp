@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput } from 'react-native';
 import Colors from '../../assets/colors';
 import { useNavigation } from '@react-navigation/native';
-import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
+import { useGetUsersQuery, useGetNearUsersQuery, useGetFavUsersQuery } from '../../store/slices/IdentityApiSlice';
 
 const data = [
   {
@@ -52,10 +52,12 @@ const Select = () => {
   };
 
   const { data: users } = useGetUsersQuery();
+  const { data: nearusers } = useGetNearUsersQuery();
+  const { data: favusers } = useGetFavUsersQuery();
   console.log(users,"getUsers");
+  console.log(nearusers,"Nearusers");
+  console.log(favusers,"Favusers");
 
-  
-  
 
 
   return (
