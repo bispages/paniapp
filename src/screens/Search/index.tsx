@@ -1,13 +1,14 @@
 import React, { ComponentProps, FC, useRef, useState } from 'react';
 import { View, FlatList } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
 
 import styles from './Search.style';
 import { ItemList } from '../../types';
 import SearchBar from '../../components/SearchBar';
 import SectionCards from '../../components/SectionCards';
 import WelcomeText from '../../components/WelcomeText';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 // Cards List to show in order.
 const cardsList = [
@@ -34,7 +35,7 @@ const cardsList = [
 ];
 
 const Search = (props: ComponentProps<FC>) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const { dark, colors } = useTheme();
   const searchRef = useRef<FlatList>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -57,13 +58,7 @@ const Search = (props: ComponentProps<FC>) => {
   };
 
   // Functin to renderSearch Screen Items.
-  const renderSearchScreenItems = ({
-    item,
-    index,
-  }: {
-    item: ItemList;
-    index: number;
-  }) => {
+  const renderSearchScreenItems = ({ item, index }: { item: ItemList; index: number }) => {
     if (index < 2) {
       return index > 0 ? (
         <SearchBar searchFunc={search} goToSection={goToSection} {...props} />

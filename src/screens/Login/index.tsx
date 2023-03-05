@@ -273,10 +273,10 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Image, Text } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import colors from '../../assets/colors';
-import { useNavigation } from '@react-navigation/native';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { loginstep } from '../../Const/Api';
 import axios from 'axios';
+import { StackNavigationProp } from '@react-navigation/stack';
 const array = [
   {
     ids: 1,
@@ -295,7 +295,7 @@ const idea = [
 const Login = () => {
   const [click, setClick] = useState(false);
   const [phone, setPhone] = useState('');
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [select, setSelect] = useState(false);
 
   const togglecheck = () => {

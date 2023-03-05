@@ -55,15 +55,15 @@ const AppNavigationDrawer = () => {
 
   return (
     <AppDrawer.Navigator
-      drawerType="front"
       initialRouteName="Searchstack"
-      sceneContainerStyle={{ flex: 1 }}
-      drawerStyle={{ flex: 1 }}
       screenOptions={{
         headerShown: false,
         headerStatusBarHeight: 0,
+        drawerType: 'front',
         headerTintColor: colors.text,
-        headerPressColorAndroid: colors.accent,
+        headerPressColor: colors.accent,
+        drawerStyle: { flex: 1 },
+        sceneContainerStyle: { flex: 1 },
         headerStyle: {
           elevation: 0,
           shadowOpacity: 0,
@@ -79,10 +79,7 @@ const AppNavigationDrawer = () => {
           ...getDrawerHeaderConfig(route, navigation),
         })}
       /> */}
-      <AppDrawer.Screen
-        name="EstimateStack"
-        component={EstimateNavigationStack}
-      />
+      <AppDrawer.Screen name="EstimateStack" component={EstimateNavigationStack} />
       <AppDrawer.Screen
         name="Profile"
         component={Profile}
@@ -113,21 +110,21 @@ const AppNavigationDrawer = () => {
           headerShown: false,
         }}
       />
-       <AppDrawer.Screen
+      <AppDrawer.Screen
         name="ShopProfile"
         component={ShopProfile}
         options={{
           headerShown: false,
         }}
       />
-        <AppDrawer.Screen
+      <AppDrawer.Screen
         name="Promotions"
         component={Promotions}
         options={{
           headerShown: false,
         }}
       />
-    </AppDrawer.Navigator>  
+    </AppDrawer.Navigator>
   );
 };
 

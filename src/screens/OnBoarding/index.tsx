@@ -14,13 +14,14 @@ import {
 import { useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/native';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import useBackHandler from '../../hooks/useBackHandler';
 import styles from './OnBoarding.style';
 import { setIsOnBoarded } from '../../store/slices/AppStateSlice';
 import { selectIsOnBoarded } from '../../store/selectors';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 type Item = {
   key: string;
@@ -61,19 +62,19 @@ const slides = [
   },
 ];
 
-const Square = ({ scrollX, width }: { scrollX: RefObject<Animated.Value>; width: number }) => {
-  const sqRotValue = Animated.modulo(
-    Animated.divide(Animated.modulo(scrollX.current || 0, width), new Animated.Value(width)),
-    1,
-  );
+// const Square = ({ scrollX, width }: { scrollX: RefObject<Animated.Value>; width: number }) => {
+//   const sqRotValue = Animated.modulo(
+//     Animated.divide(Animated.modulo(scrollX.current || 0, width), new Animated.Value(width)),
+//     1,
+//   );
 
-  const rotate = sqRotValue.interpolate({
-    inputRange: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
-    outputRange: ['45deg', '36deg', '27deg', '18deg', '9deg', '0deg', '-9deg', '-18deg', '-27deg', '-36deg', '-45deg'],
-  });
+//   const rotate = sqRotValue.interpolate({
+//     inputRange: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+//     outputRange: ['45deg', '36deg', '27deg', '18deg', '9deg', '0deg', '-9deg', '-18deg', '-27deg', '-36deg', '-45deg'],
+//   });
 
-  return <Animated.View />;
-};
+//   return <Animated.View />;
+// };
 
 const BackGround = ({ scrollX, inputRange }: { scrollX: RefObject<Animated.Value>; inputRange: number[] }) => {
   const backgroundColor = scrollX.current?.interpolate({
@@ -150,7 +151,7 @@ const DoneButton = ({
 };
 
 const OnBoarding = (): ReactElement => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const dispatch = useDispatch();
   const onBoarded = useSelector(selectIsOnBoarded);
   const { width } = useWindowDimensions();
@@ -199,7 +200,7 @@ const OnBoarding = (): ReactElement => {
   ) : (
     <SafeAreaView style={styles.container}>
       <BackGround scrollX={scrollX} inputRange={inputRange} />
-      <Square scrollX={scrollX} width={width} />
+      {/* <Square scrollX={scrollX} width={width} /> */}
       <Animated.FlatList
         data={slides}
         horizontal

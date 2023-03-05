@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { TextInput, Button, useTheme, Text } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectEstimate } from '../../store/selectors';
@@ -9,11 +9,12 @@ import { EstimateFormValues } from '../../types';
 import { addCustomer } from '../../store/slices/EstimateStateSlice';
 import styles from './Estimate.style';
 import colors from '../../assets/colors';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const EstimateForm = () => {
   const dispatch = useDispatch();
   const { dark, colors } = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [name, setName] = useState('');
   const [area, setArea] = useState('');
   const [mobile, setMobile] = useState('');

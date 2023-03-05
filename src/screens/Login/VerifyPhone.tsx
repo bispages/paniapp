@@ -3,12 +3,13 @@ import { View, TextInput, Keyboard, TouchableOpacity, useWindowDimensions, Style
 import { Text, TextInput as PaperTextInput, Button, useTheme } from 'react-native-paper';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { useDispatch } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
 
 import { logInUser } from '../../store/slices/AppStateSlice';
 import useIsLoggedIn from '../../hooks/useIsLoggedIn';
 import styles from './Login.style';
 import Verifyphone from '../../assets/img/verifyphone.svg';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const initialState = {
   code1: '',
@@ -52,7 +53,7 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
   const INITIAL_SCALE = 1;
   const INITIAL_OFFSET = 0;
   const { phone } = params;
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
   const scale = useSharedValue(INITIAL_SCALE);
