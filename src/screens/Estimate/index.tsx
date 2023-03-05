@@ -41,7 +41,7 @@ const Estimate = () => {
 
   const [mode, setMode] = useState<string | null>('');
 
-  AsyncStorage.getItem('chooseitem').then(value => {
+  AsyncStorage.getItem('usertype').then(value => {
     setMode(value);
   });
 

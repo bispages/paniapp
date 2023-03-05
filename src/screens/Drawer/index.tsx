@@ -22,7 +22,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
   const [mode, setMode] = useState('');
 
-  AsyncStorage.getItem('chooseitem').then(value => {
+  AsyncStorage.getItem('usertype').then(value => {
     setMode(value || '');
   });
 
