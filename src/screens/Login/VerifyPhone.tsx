@@ -4,12 +4,11 @@ import { Text, TextInput as PaperTextInput, Button, useTheme } from 'react-nativ
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { useDispatch } from 'react-redux';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 import { logInUser } from '../../store/slices/AppStateSlice';
-import useIsLoggedIn from '../../hooks/useIsLoggedIn';
 import styles from './Login.style';
-import Verifyphone from '../../assets/img/verifyphone.svg';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { useOtpVerifyMutation } from '../../store/slices/LoginApiSlice';
 
 const initialState = {
   code1: '',
@@ -46,13 +45,13 @@ function reducer(state: CodeObject | any, action: Action) {
 }
 
 type routeParams = {
-  route: { params: { phone: string } };
+  route: { params: { sessionId: string; userPhone: string } };
 };
- 
+
 const VerifyPhone = ({ route: { params } }: routeParams) => {
   const INITIAL_SCALE = 1;
   const INITIAL_OFFSET = 0;
-  const { phone } = params;
+  const { userPhone } = params;
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
@@ -64,7 +63,7 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
   const refs: RefObject<TextInput>[] = [];
   const { appColors } = useTheme();
   const dispatchAction = useDispatch();
-  const { user } = useIsLoggedIn();
+  const [otpVerify, { isLoading: otpVerifyLoader }] = useOtpVerifyMutation();
 
   // For image scaling
   const animatedScaleStyles = useAnimatedStyle(() => {
@@ -138,17 +137,22 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
 
   const resend = () => null;
 
-  const verify = () => {
-    const user = { phone };
-    // TODO - Here we need to check user is already there or not by calling api.
-    // Remove user check from hook and call api.
-    if (user === null) {
-      navigation.navigate('userform', { phone });
-    } else {
-      dispatchAction(logInUser(user));
+  const verify = async () => {
+    try {
+      const otp = Object.keys(initialState)
+        .map(key => state[key])
+        .join('');
+      const data = await otpVerify({ ...params, otp }).unwrap();
+
+      if (data) {
+        const { userId, userPhone } = data;
+        dispatchAction(logInUser(data));
+        navigation.navigate('userform', { userId, userPhone });
+      }
+    } catch (error) {
+      console.error('OTP verification failed', error);
     }
   };
-
 
   return (
     <View style={styless.login}>
@@ -183,7 +187,7 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
               style={[styles.phonenum]}
               theme={{
                 colors: { text: appColors.primary },
-              }}>{`+91 ${phone}`}</Text>
+              }}>{`+91 ${userPhone}`}</Text>
           </View>
         </View>
         <View style={styles.inputsetContainer}>
@@ -231,7 +235,7 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
         <View style={styles.btnContainer}>
           <Button
             dark
-            loading={false}
+            loading={otpVerifyLoader}
             mode="contained"
             disabled={verifyActionDisabled}
             onPress={verify}

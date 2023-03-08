@@ -277,6 +277,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { USERTYPE } from '../../utils/constants';
 import { Text, TextInput, Button, useTheme } from 'react-native-paper';
+import { useOtpLoginMutation } from '../../store/slices/LoginApiSlice';
 
 const userOptions = [
   {
@@ -293,23 +294,30 @@ const userOptions = [
 
 const Login = () => {
   const [agreeTerms, setAgreeTerms] = useState(false);
-  const [phone, setPhone] = useState('');
+  const [userPhone, setUserPhone] = useState('');
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [userType, setUserType] = useState(USERTYPE.USER);
   const { appColors } = useTheme();
+  const [otpLogin, { isLoading: otpLoader }] = useOtpLoginMutation();
 
   const togglecheck = () => {
     setAgreeTerms(prevAgreeTerms => !prevAgreeTerms);
   };
 
-  const submit = () => {
-    if (phone.length < 10 || !agreeTerms) return;
-    navigation.navigate('verifyphone', { phone });
+  const submit = async () => {
+    if (userPhone.length < 10 || !agreeTerms) return;
+
+    try {
+      const data = await otpLogin({ userPhone }).unwrap();
+      navigation.navigate('verifyphone', data);
+    } catch (error) {
+      console.error('rejected', error);
+    }
   };
 
   const onTextChange = (phoneNumber: string) => {
     phoneNumber = phoneNumber.replace(/[^\d]/g, '');
-    setPhone(phoneNumber);
+    setUserPhone(phoneNumber);
   };
 
   return (
@@ -337,7 +345,7 @@ const Login = () => {
           textAlign="center"
           textContentType="oneTimeCode"
           style={styles.inputfield}
-          value={phone}
+          value={userPhone}
           onChangeText={onTextChange}></TextInput>
 
         <View style={styles.logocontainer}>
@@ -368,9 +376,9 @@ const Login = () => {
           </View>
           <Button
             dark
-            loading={false}
+            loading={otpLoader}
             mode="contained"
-            disabled={!(phone.length >= 10 && agreeTerms)}
+            disabled={!(userPhone.length >= 10 && agreeTerms)}
             onPress={submit}
             style={styles.button}
             theme={{

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo, RefObject } from 'react';
 import { Text, View, Keyboard, Pressable, ImageBackground, StyleSheet, useWindowDimensions } from 'react-native';
-import { TextInput, Button, Chip, useTheme, Snackbar } from 'react-native-paper';
+import { TextInput, Button, useTheme, Snackbar } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BottomSheet, { BottomSheetBackdrop, BottomSheetScrollView } from '@gorhom/bottom-sheet';
@@ -15,19 +15,18 @@ import {
   USERFORM_BOTSHEET_SNAPMID,
   USERFORM_BOTSHEET_SNAPMIN,
 } from '../../utils/constants';
-import { ItemList } from '../../types';
-import { logInUser, saveUser } from '../../store/slices/AppStateSlice';
 import useBackHandler from '../../hooks/useBackHandler';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import { saveUser } from '../../store/slices/AppStateSlice';
 // import { professionList } from '../../utils/professionList';
 // import { categoryList } from '../../utils/categoryList';
 
 type routeParams = {
-  route: { params: { phone: string } };
+  route: { params: { userPhone: string } };
 };
 
 const UserForm = ({ route: { params } }: routeParams) => {
-  const { phone } = params;
+  const { userPhone } = params;
   const [name, setName] = useState('');
   const [pincode, setPincode] = useState('');
   const [place, setPlace] = useState('');
@@ -122,7 +121,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
 
   const saveDetails = () => {
     const userDetails = {
-      phone,
+      userPhone,
       name,
       pincode,
       userType,
@@ -133,7 +132,6 @@ const UserForm = ({ route: { params } }: routeParams) => {
     };
     AsyncStorage.setItem('user', JSON.stringify(userDetails)).then(() => {
       dispatchAction(saveUser(userDetails));
-      dispatchAction(logInUser({ phone }));
     });
   };
 

@@ -10,16 +10,15 @@ import AppNavigationDrawer from './AppNavigationDrawer';
 import OnBoardingNavigationStack, { LoginNavigationStack } from './OnBoardingNavigationStack';
 import Colors from '../assets/colors';
 import { setIsOnBoarded } from '../store/slices/AppStateSlice';
-import { selectIsOnBoarded, selectIsLoggedIn } from '../store/selectors';
+import { selectIsLoading, selectIsOnBoarded, selectUser } from '../store/selectors';
 
 const RootStack = createStackNavigator();
 
 const RootNavigationContainer = ({ theme }: { theme: Theme }) => {
   const dispatch = useDispatch();
+  const loading = useSelector(selectIsLoading);
   const onBoarded = useSelector(selectIsOnBoarded);
-  const login = useSelector(selectIsLoggedIn);
-
-  const { loading, user } = useIsLoggedIn();
+  const user = useSelector(selectUser);
 
   useEffect(() => {
     AsyncStorage.getItem('onboarded').then(value => {
@@ -39,7 +38,7 @@ const RootNavigationContainer = ({ theme }: { theme: Theme }) => {
     <Splash />
   ) : (
     <NavigationContainer theme={theme}>
-      {user || login ? (
+      {user ? (
         <AppNavigationDrawer />
       ) : (
         <RootStack.Navigator screenOptions={{ ...screenOptions }}>

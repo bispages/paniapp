@@ -7,6 +7,9 @@ type AppStateType = {
   onBoarded: boolean;
   user: User | null;
   login: boolean;
+  userId: string;
+  accessToken: string;
+  userPhone: string;
 };
 
 const initialState: AppStateType = {
@@ -14,6 +17,9 @@ const initialState: AppStateType = {
   user: null,
   onBoarded: false,
   login: false,
+  userId: '',
+  accessToken: '',
+  userPhone: '',
 };
 
 const appStateSlice = createSlice({
@@ -26,16 +32,25 @@ const appStateSlice = createSlice({
     setIsOnBoarded: (state, action: PayloadAction<boolean>) => {
       state.onBoarded = action.payload;
     },
-    setIsLoggedIn: (state, action: PayloadAction<boolean>) => {
-      state.login = action.payload;
-    },
-    logInUser: (state, action: PayloadAction<User>) => {
+    logInUser: (
+      state,
+      action: PayloadAction<{
+        accessToken: string;
+        userPhone: string;
+        userId: string;
+      }>,
+    ) => {
       state.login = true;
-      state.user = action.payload;
+      state.userId = action.payload.userId;
+      state.accessToken = action.payload.accessToken;
+      state.userPhone = action.payload.userPhone;
     },
     logOutUser: (state, action: PayloadAction<void>) => {
       state.login = false;
       state.user = null;
+      state.userId = '';
+      state.accessToken = '';
+      state.userPhone = '';
     },
     resetAppState: () => {
       return initialState;
@@ -43,7 +58,7 @@ const appStateSlice = createSlice({
   },
 });
 
-export const { saveUser, setIsOnBoarded, setIsLoggedIn, logInUser, logOutUser, resetAppState } = appStateSlice.actions;
+export const { saveUser, setIsOnBoarded, logInUser, logOutUser, resetAppState } = appStateSlice.actions;
 
 export const selectAppState = (state: RootState) => state.appState;
 

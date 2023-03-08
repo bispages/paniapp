@@ -12,7 +12,7 @@ export type ItemList = {
 };
 
 export type User = {
-  phone: string;
+  userPhone: string;
   name?: string;
   pincode?: string;
   userType?: number;

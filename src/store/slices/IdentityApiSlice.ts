@@ -3,7 +3,7 @@ import { ApiSlice } from './ApiSlice';
 
 export const IdentityApiSlice = ApiSlice.injectEndpoints({
   endpoints: builder => ({
-    getUsers: builder.query<User[], void>({
+    getUsers: builder.query<User[], void | string>({
       query: () => `users`,
     }),
     getNearUsers: builder.query<User[], string>({
@@ -23,19 +23,6 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
     }),
     getEstimateDet: builder.query<User[], string>({
       query: estimateId => `estimates/${estimateId}`,
-    }),
-    
-    Logindet: builder.mutation<User, User>({
-      query: function (data) {
-        return { url: 'login/otp', method: 'PUT', body: { ...data } };
-      },
-      invalidatesTags: ['User'],
-    }),
-    Verifydet: builder.mutation<User, User>({
-      query: function (data) {
-        return { url: 'login/verify', method: 'PUT', body: { ...data } };
-      },
-      invalidatesTags: ['User'],
     }),
     updateUserProfile: builder.mutation<User, User>({
       query: function (data) {
@@ -73,44 +60,38 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
       },
       invalidatesTags: ['User'],
     }),
-
   }),
-  overrideExisting: true,  
+  overrideExisting: true,
 });
 
-export const { 
-useGetUsersQuery, 
-useUpdateUserProfileMutation, 
-useUpdateEstimateMutation,
-useGetNearUsersQuery,
-useGetMaterialsQuery, 
-useGetFavUsersQuery,
-useGetMyOrderListQuery,
-useGetShopOrderListQuery,
-useGetEstimateDetQuery,
-useSendEstimateMutation,
-useSetFavUserMutation,
-useAddEstimateMutation,
-useLogindetMutation,
-useUpdateProfilePhotoMutation,
-useVerifydetMutation } = IdentityApiSlice;
+export const {
+  useGetUsersQuery,
+  useUpdateUserProfileMutation,
+  useUpdateEstimateMutation,
+  useGetNearUsersQuery,
+  useGetMaterialsQuery,
+  useGetFavUsersQuery,
+  useGetMyOrderListQuery,
+  useGetShopOrderListQuery,
+  useGetEstimateDetQuery,
+  useSendEstimateMutation,
+  useSetFavUserMutation,
+  useAddEstimateMutation,
+  useUpdateProfilePhotoMutation,
+} = IdentityApiSlice;
 
-export const { 
-   getUsers,
-   updateUserProfile,
-    getNearUsers,
-     getMaterials,
-      getFavUsers,
-       getShopOrderList,
-       getMyOrderList,
-        getEstimateDet,
-        setFavUser,
-        sendEstimate,
-        updateEstimate,
-        addEstimate,
-        updateProfilePhoto,
-        Verifydet,
-        Logindet
-       } = IdentityApiSlice.endpoints;
-
-
+export const {
+  getUsers,
+  updateUserProfile,
+  getNearUsers,
+  getMaterials,
+  getFavUsers,
+  getShopOrderList,
+  getMyOrderList,
+  getEstimateDet,
+  setFavUser,
+  sendEstimate,
+  updateEstimate,
+  addEstimate,
+  updateProfilePhoto,
+} = IdentityApiSlice.endpoints;
