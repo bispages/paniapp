@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useSelector } from 'react-redux';
 import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput } from 'react-native';
 import Colors from '../../assets/colors';
 // import { useNavigation } from '@react-navigation/native';
-import {  useGetNearUsersQuery, useGetFavUsersQuery } from '../../store/slices/IdentityApiSlice';
+import { useGetNearUsersQuery, useGetFavUsersQuery } from '../../store/slices/IdentityApiSlice';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { selectUserId } from '../../store/selectors';
 
 const data = [
   {
@@ -52,15 +54,13 @@ const Select = () => {
   const toggleTabs = () => {
     setToggleState(true);
   };
-
-  const { data: users } = useGetUsersQuery();
-  const { data: nearusers } = useGetNearUsersQuery();
-  const { data: favusers } = useGetFavUsersQuery();
-  console.log(users,"getUsers");
-  console.log(nearusers,"Nearusers");
-  console.log(favusers,"Favusers");
-
-
+  const userId = useSelector(selectUserId);
+  const { data: users } = useGetUsersQuery(userId);
+  const { data: nearusers } = useGetNearUsersQuery(userId);
+  const { data: favusers } = useGetFavUsersQuery(userId);
+  console.log(users, 'getUsers');
+  console.log(nearusers, 'Nearusers');
+  console.log(favusers, 'Favusers');
 
   return (
     <View style={styles.container}>

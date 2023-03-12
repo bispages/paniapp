@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo, RefObject } from 'react';
 import { Text, View, Keyboard, Pressable, ImageBackground, StyleSheet, useWindowDimensions } from 'react-native';
 import { TextInput, Button, useTheme, Snackbar } from 'react-native-paper';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BottomSheet, { BottomSheetBackdrop, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import ImagePicker, { Image } from 'react-native-image-crop-picker';
@@ -18,6 +18,8 @@ import {
 import useBackHandler from '../../hooks/useBackHandler';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { saveUser } from '../../store/slices/AppStateSlice';
+import { useUpdateUserProfileMutation } from '../../store/slices/IdentityApiSlice';
+import { selectUserId } from '../../store/selectors';
 // import { professionList } from '../../utils/professionList';
 // import { categoryList } from '../../utils/categoryList';
 
@@ -27,7 +29,8 @@ type routeParams = {
 
 const UserForm = ({ route: { params } }: routeParams) => {
   const { userPhone } = params;
-  const [name, setName] = useState('');
+  const userId = useSelector(selectUserId);
+  const [userName, setUserName] = useState('');
   const [pincode, setPincode] = useState('');
   const [place, setPlace] = useState('');
   const [userType, setUserType] = useState(USERTYPE.USER);
@@ -44,6 +47,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
   const { appColors } = useTheme();
   const dispatchAction = useDispatch();
   const user = AsyncStorage.getItem('usertype');
+  const [updateUserProfile, { isLoading: updateUserProfileLoader }] = useUpdateUserProfileMutation();
 
   const snapPoints = useMemo(
     () => [USERFORM_BOTSHEET_SNAPMIN, USERFORM_BOTSHEET_SNAPMID, USERFORM_BOTSHEET_SNAPMAX],
@@ -114,15 +118,16 @@ const UserForm = ({ route: { params } }: routeParams) => {
 
   useEffect(() => {
     if (pincode.length >= 6) Keyboard.dismiss();
-    // setSaveDisabled(!(name && pincode && selectedItems.length > 0));
-    setSaveDisabled(!(name && pincode && place));
-  }, [name, pincode, place]);
-  // }, [name, pincode, selectedItems]);
+    // setSaveDisabled(!(userName && pincode && selectedItems.length > 0));
+    setSaveDisabled(!(userName && pincode && place));
+  }, [userName, pincode, place]);
+  // }, [userName, pincode, selectedItems]);
 
-  const saveDetails = () => {
+  const saveDetails = async () => {
     const userDetails = {
       userPhone,
-      name,
+      userName,
+      userId,
       pincode,
       userType,
       image,
@@ -130,6 +135,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
       // category: selectedItems,
       category: [],
     };
+    await updateUserProfile(userDetails);
     AsyncStorage.setItem('user', JSON.stringify(userDetails)).then(() => {
       dispatchAction(saveUser(userDetails));
     });
@@ -207,7 +213,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
   //             selected={item?.selected ?? false}
   //             selectedColor={item.selected ? colors.text : colors.primary}
   //             onPress={() => updateSelectedItems({ ...item }, index)}>
-  //             {item.name}
+  //             {item.userName}
   //           </Chip>
   //         );
   //       })}
@@ -394,9 +400,9 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 style={[styles.textInput]}
                 keyboardType="default"
                 maxLength={40}
-                onChangeText={(text: string) => setName(text)}
-                defaultValue={name}
-                value={name}
+                onChangeText={(text: string) => setUserName(text)}
+                defaultValue={userName}
+                value={userName}
                 autoCorrect={false}
                 autoComplete="name"
                 returnKeyType="next"

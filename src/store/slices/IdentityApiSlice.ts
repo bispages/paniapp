@@ -4,7 +4,7 @@ import { ApiSlice } from './ApiSlice';
 export const IdentityApiSlice = ApiSlice.injectEndpoints({
   endpoints: builder => ({
     getUsers: builder.query<User[], void | string>({
-      query: () => `users`,
+      query: userId => `users/${userId}`,
     }),
     getNearUsers: builder.query<User[], string>({
       query: userId => `users/nearby/${userId}`,
