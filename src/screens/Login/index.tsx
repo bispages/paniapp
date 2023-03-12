@@ -349,7 +349,7 @@ const Login = () => {
           onChangeText={onTextChange}></TextInput>
 
         <View style={styles.logocontainer}>
-          <Text style={styles.optiontag}>Select your need</Text>
+          <Text style={styles.optiontag}>Select your role</Text>
           <View style={styles.select}>
             {userOptions.map(item => {
               return (
