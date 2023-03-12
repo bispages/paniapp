@@ -1,10 +1,25 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import Colors from '../../assets/colors';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 const data = [
+  {
+    id: 1,
+    title: 'Kings Elecrricals',
+    tag: 'Rice bazar, Thrissur',
+  },
+  {
+    id: 2,
+    title: 'CT Electricals ',
+    tag: 'Junction, Marathakkara',
+  },
+  {
+    id: 3,
+    title: "Poppy's Elctricals",
+    tag: 'Main road, Ollur',
+  },
   {
     id: 1,
     title: 'Kings Elecrricals',
@@ -32,6 +47,21 @@ const datas = [
     id: 2,
     title: 'Space Electricals ',
     tag: 'Junction, Marathakkara',
+  },
+  {
+    id: 1,
+    title: 'Kings Elecrricals',
+    tag: 'Rice bazar, Thrissur',
+  },
+  {
+    id: 2,
+    title: 'CT Electricals ',
+    tag: 'Junction, Marathakkara',
+  },
+  {
+    id: 3,
+    title: "Poppy's Elctricals",
+    tag: 'Main road, Ollur',
   },
 ];
 
@@ -89,7 +119,9 @@ const Select = () => {
       </View>
 
       {toggleState === false ? (
-        <View style={styles.filter}>
+        <ScrollView showsVerticalScrollIndicator={false}
+        style={styles.filter}
+        >
           {datas.map(item => {
             return (
               <View style={styles.card}>
@@ -108,9 +140,11 @@ const Select = () => {
               </View>
             );
           })}
-        </View>
+        </ScrollView>
       ) : (
-        <View style={styles.filter}>
+        <ScrollView showsVerticalScrollIndicator={false}
+        style={styles.filter}
+        >
           {data.map(item => {
             return (
               <View style={styles.card}>
@@ -129,7 +163,7 @@ const Select = () => {
               </View>
             );
           })}
-        </View>
+        </ScrollView>
       )}
     </View>
   );

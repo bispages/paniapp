@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import Colors from '../../assets/colors';
 // import { useNavigation } from '@react-navigation/native';
 import {  useGetNearUsersQuery, useGetFavUsersQuery } from '../../store/slices/IdentityApiSlice';
@@ -7,26 +7,32 @@ import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-const data = [
+const dataq = [
   {
     id: 1,
-    title: 'Anand krish',
-    tag: '680301',
+    userName: 'Anand krish',
+    pincode: '680301',
   },
   {
     id: 2,
-    title: 'Alphy benny ',
-    tag: '680301',
+    userName: 'Alphy benny ',
+    pincode: '680301',
   },
   {
     id: 3,
-    title: 'Alwin John',
-    tag: '680302',
+    userName: 'Alwin John',
+    pincode: '680302',
+  },
+  
+  {
+    id: 3,
+    userName: 'Alwin John',
+    pincode: '680302',
   },
   {
     id: 4,
-    title: 'Hari Krishnan',
-    tag: '680302',
+    userName: 'Hari Krishnan',
+    pincode: '680302',
   },
 ];
 
@@ -105,7 +111,9 @@ const Select = () => {
       </View>
 
       {toggleState === false ? (
-        <View style={styles.filter}>
+        <ScrollView showsVerticalScrollIndicator={false}
+        style={styles.filter}
+        >
           {users?.users?.favoriteUsers?.map((item, i) => {
             return (
               <View style={styles.card} key={i}>
@@ -124,9 +132,11 @@ const Select = () => {
               </View>
             );
           })}
-        </View>
+        </ScrollView>
       ) : (
-        <View style={styles.filter}>
+        <ScrollView showsVerticalScrollIndicator={false}
+        style={styles.filter}
+        >   
           {users?.users?.map((item, i) => {
             return (
               <View style={styles.card} key={i}>
@@ -145,7 +155,7 @@ const Select = () => {
               </View>
             );
           })}
-        </View>
+        </ScrollView>
       )}
     </View>
   );

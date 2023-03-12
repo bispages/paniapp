@@ -16,7 +16,10 @@ export const ApiSlice = createApi({
       headers.set('Content-Type', 'application/json');
       try {
         if (!headers.has('Authorization')) {
-          // headers.set('Authorization', await getJWTToken());
+          headers.set(
+            'Authorization',
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyUGhvbmUiOjk5NDc3NjU3ODgsInVzZXJJZCI6ImI2NzdhZTAwLTkwODgtNDBiMi04MDY0LWU1NjJhNGY2NTUxYiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTY3ODUzMDIxMH0.a3vmqy464p_NtBtuorF1NN4RtVLBawuNqCXmErijjQk',
+          );
         }
       } catch (error) {}
 
