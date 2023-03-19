@@ -1,14 +1,13 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from '@react-navigation/stack';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 
 import OnBoarding from '../screens/OnBoarding';
 import Login from '../screens/Login';
 import VerifyPhone from '../screens/Login/VerifyPhone';
 import UserForm from '../screens/User/UserForm';
 import Colors from '../assets/colors';
+import Selectlan from '../screens/Languageselection/Selectlan';
+import Accept from '../screens/Languageselection/Accept';
 
 const OnBoardStack = createStackNavigator();
 const LoginStack = createStackNavigator();
@@ -30,6 +29,8 @@ export const LoginNavigationStack = () => (
 const OnBoardingNavigationStack = () => (
   <OnBoardStack.Navigator screenOptions={{ ...screenOptions }}>
     <OnBoardStack.Screen name="onboard" component={OnBoarding} />
+    <OnBoardStack.Screen name="selectlan" component={Selectlan} />
+    <OnBoardStack.Screen name="accept" component={Accept} />
     <OnBoardStack.Screen name="loginstack" component={LoginNavigationStack} />
   </OnBoardStack.Navigator>
 );

@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor:'#fff'
   },
   sectionTitle: {
     fontSize: 28,

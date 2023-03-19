@@ -8,9 +8,23 @@ import {
 } from 'react-native';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setIsOnBoarded } from '../../store/slices/AppStateSlice';
+import { selectIsOnBoarded } from '../../store/selectors';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Accept = () => {
     const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+    const dispatch = useDispatch();
+
+    const onDone = () => {
+        // User finished the introduction. Save this and show login.
+        dispatch(setIsOnBoarded(true));
+        AsyncStorage.setItem('onboarded', '1').then(() => {
+          navigateToLogin();
+        });
+      };
+
   return (
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionTitle}>
@@ -51,14 +65,14 @@ const Accept = () => {
           </View>
    
       </View>
-      <TouchableOpacity style={{width:'80%'}}>
+      <TouchableOpacity style={{width:'80%'}} onPress={onDone}>
       <View style={{ borderWidth:2.5, borderRadius:8, borderColor:'#6B7887',alignItems:'center',justifyContent:'center', marginVertical:20}}>
           <Text style={styles.sectionTitle}>Yes</Text>
           <Text style={styles.sectionTitletag}>I am an electrician or shop owner</Text>
 
           </View>
           </TouchableOpacity>
-          <TouchableOpacity  style={{width:'80%'}}>
+          <TouchableOpacity  style={{width:'80%'}} onPress={onDone}>
           <View style={{borderWidth:2.5, borderRadius:8, borderColor:'#6B7887',alignItems:'center',justifyContent:'center'}}>
           <Text style={styles.sectionTitle}>No</Text>
           <Text style={styles.sectionTitletag}>I am an user</Text>
@@ -74,6 +88,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor:'#fff',
+    flex:1
   },
   sectionTitle: {
     fontSize: 28,
