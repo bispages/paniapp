@@ -24,7 +24,7 @@ const EstimateForm = () => {
 
   const createEstimate = () => {
     dispatch(addCustomer({ name, area, mobile, pincode }));
-    navigation.navigate('MaterialTypes');
+    navigation.navigate('MaterialTypes'); 
   };
 
   return (

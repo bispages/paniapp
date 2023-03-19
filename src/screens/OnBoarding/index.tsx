@@ -147,8 +147,12 @@ const OnBoarding = (): ReactElement => {
   const scrollX = useRef(new Animated.Value(0));
   const inputRange = slides.map((_, index) => index * width);
 
-  // Adds BackHandler hook.
+  // Adds BackHandler hook. 
   useBackHandler();
+
+  // const navigateToLogin = useCallback(() => {
+  //   navigation.navigate('selectlan');
+  // }, [navigation]);
 
   const navigateToLogin = useCallback(() => {
     navigation.navigate('loginstack');
@@ -156,7 +160,8 @@ const OnBoarding = (): ReactElement => {
 
   useEffect(() => {
     // If user already onBoarded navigate to login.
-    if (onBoarded) navigateToLogin();
+    // if (onBoarded) navigateToLogin();
+    navigateToLogin();
   }, []);
 
   const renderScreens = ({ item }: { item: Item }) => {
