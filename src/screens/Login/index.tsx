@@ -373,7 +373,7 @@ Lorem ipsum is typically a corrupted version of De finibus bonorum et malorum, a
           onChangeText={onTextChange}></TextInput>
 
         <View style={styles.logocontainer}>
-          <Text style={styles.optiontag}>Select your need</Text>
+          <Text style={styles.optiontag}>Select your role</Text>
           <View style={styles.select}>
             {userOptions.map(item => {
               return (

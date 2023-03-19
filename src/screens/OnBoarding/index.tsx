@@ -11,9 +11,7 @@ import {
   Pressable,
   ImageRequireSource,
 } from 'react-native';
-import { useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -62,20 +60,6 @@ const slides = [
   },
 ];
 
-// const Square = ({ scrollX, width }: { scrollX: RefObject<Animated.Value>; width: number }) => {
-//   const sqRotValue = Animated.modulo(
-//     Animated.divide(Animated.modulo(scrollX.current || 0, width), new Animated.Value(width)),
-//     1,
-//   );
-
-//   const rotate = sqRotValue.interpolate({
-//     inputRange: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
-//     outputRange: ['45deg', '36deg', '27deg', '18deg', '9deg', '0deg', '-9deg', '-18deg', '-27deg', '-36deg', '-45deg'],
-//   });
-
-//   return <Animated.View />;
-// };
-
 const BackGround = ({ scrollX, inputRange }: { scrollX: RefObject<Animated.Value>; inputRange: number[] }) => {
   const backgroundColor = scrollX.current?.interpolate({
     inputRange: inputRange,
@@ -84,38 +68,52 @@ const BackGround = ({ scrollX, inputRange }: { scrollX: RefObject<Animated.Value
   return <Animated.View style={[StyleSheet.absoluteFillObject, { backgroundColor }]} />;
 };
 
-const Circles = ({ scrollX, width }: { scrollX: RefObject<Animated.Value>; width: number }) => (
-  <View style={styles.circleContainer}>
-    {slides.map((_, index) => {
-      const scale = scrollX.current?.interpolate({
-        inputRange: [(index - 1) * width, index * width, (index + 1) * width],
-        outputRange: [1, 1.5, 1],
-        extrapolate: 'clamp',
-      });
-      const opacity = scrollX.current?.interpolate({
-        inputRange: [(index - 1) * width, index * width, (index + 1) * width],
-        outputRange: [0.4, 1, 0.4],
-        extrapolate: 'clamp',
-      });
-      return (
-        <Animated.View
-          key={`circle-${index}`}
-          style={[
-            styles.circle,
-            { opacity },
-            {
-              transform: [
-                {
-                  scale: scale ? scale : 1,
-                },
-              ],
-            },
-          ]}
-        />
-      );
-    })}
-  </View>
-);
+const Circles = ({
+  scrollX,
+  width,
+  inputRange,
+}: {
+  scrollX: RefObject<Animated.Value>;
+  width: number;
+  inputRange: number[];
+}) => {
+  const translateY = scrollX.current?.interpolate({
+    inputRange: inputRange,
+    outputRange: slides.map((_, index) => (index === slides.length - 1 ? width : 0)),
+  });
+  return (
+    <Animated.View style={[styles.circleContainer, { transform: [{ translateY: translateY ? translateY : 0 }] }]}>
+      {slides.map((_, index) => {
+        const scale = scrollX.current?.interpolate({
+          inputRange: [(index - 1) * width, index * width, (index + 1) * width],
+          outputRange: [1, 1.5, 1],
+          extrapolate: 'clamp',
+        });
+        const opacity = scrollX.current?.interpolate({
+          inputRange: [(index - 1) * width, index * width, (index + 1) * width],
+          outputRange: [0.4, 1, 0.4],
+          extrapolate: 'clamp',
+        });
+        return (
+          <Animated.View
+            key={`circle-${index}`}
+            style={[
+              styles.circle,
+              { opacity },
+              {
+                transform: [
+                  {
+                    scale: scale ? scale : 1,
+                  },
+                ],
+              },
+            ]}
+          />
+        );
+      })}
+    </Animated.View>
+  );
+};
 
 const DoneButton = ({
   scrollX,
@@ -128,23 +126,14 @@ const DoneButton = ({
   onDone: any;
   inputRange: number[];
 }) => {
-  const { colors, appColors } = useTheme();
   const translateY = scrollX.current?.interpolate({
     inputRange: inputRange,
     outputRange: slides.map((_, index) => (index === slides.length - 1 ? 0 : width)),
   });
   return (
-    <Animated.View style={[styles.buttonCircleContainer, { transform: [{ translateY: translateY ? translateY : 0 }] }]}>
-      <Pressable
-        onPress={onDone}
-        style={[
-          styles.buttonCircle,
-          {
-            backgroundColor: appColors.success,
-          },
-        ]}
-        android_ripple={{ color: '#000', radius: width }}>
-        <Icon name="check" color={colors.text} size={24} />
+    <Animated.View style={[styles.buttonContainer, { transform: [{ translateY: translateY ? translateY : 0 }] }]}>
+      <Pressable onPress={onDone} style={styles.buttonCircle} android_ripple={{ color: '#FFF', radius: width }}>
+        <Text style={styles.getStarted}>{`Get Started`}</Text>
       </Pressable>
     </Animated.View>
   );
@@ -200,7 +189,6 @@ const OnBoarding = (): ReactElement => {
   ) : (
     <SafeAreaView style={styles.container}>
       <BackGround scrollX={scrollX} inputRange={inputRange} />
-      {/* <Square scrollX={scrollX} width={width} /> */}
       <Animated.FlatList
         data={slides}
         horizontal
@@ -209,12 +197,11 @@ const OnBoarding = (): ReactElement => {
           useNativeDriver: false,
         })}
         scrollEventThrottle={32}
-        contentContainerStyle={styles.contentContainer}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         renderItem={renderScreens}
       />
-      <Circles scrollX={scrollX} width={width} />
+      <Circles scrollX={scrollX} width={width} inputRange={inputRange} />
       <DoneButton scrollX={scrollX} width={width} onDone={onDone} inputRange={inputRange} />
     </SafeAreaView>
   );
