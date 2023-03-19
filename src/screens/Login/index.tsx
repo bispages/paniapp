@@ -310,7 +310,7 @@ const Login = () => {
     if (userPhone.length < 10 || !agreeTerms) return;
 
     try {
-      const data = await otpLogin({ userPhone }).unwrap();
+      const data = await otpLogin({ userPhone, userType, agreeTerms }).unwrap();
       navigation.navigate('verifyphone', data);
     } catch (error) {
       console.error('rejected', error);

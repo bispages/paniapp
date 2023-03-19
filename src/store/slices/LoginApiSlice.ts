@@ -3,14 +3,14 @@ import { ApiSlice } from './ApiSlice';
 
 export const LoginApiSlice = ApiSlice.injectEndpoints({
   endpoints: builder => ({
-    otpLogin: builder.mutation<User, { userPhone: string }>({
+    otpLogin: builder.mutation<User, { userPhone: string; userType: number; agreeTerms: boolean }>({
       query: function (data) {
         return { url: 'login/otp', method: 'POST', body: { ...data } };
       },
       invalidatesTags: ['User'],
     }),
     otpVerify: builder.mutation<
-      { accessToken: string; userPhone: string; userId: string },
+      { accessToken: string; userPhone: string; userId: string; isNewUser: boolean },
       { userPhone: string; sessionId: string; otp: string }
     >({
       query: function (data) {

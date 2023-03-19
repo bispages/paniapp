@@ -13,12 +13,13 @@ export type ItemList = {
 
 export type User = {
   userPhone: string;
-  name?: string;
+  userName?: string;
   pincode?: string;
   userType?: number;
   image?: Image | null;
   category?: ItemList[];
   userId?: string;
+  place?: string;
 };
 
 export type MapView = {

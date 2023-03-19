@@ -48,7 +48,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
               alignItems: 'center',
               marginTop: 20,
             }}>
-            <Title style={styles.title}>{user?.name ?? 'Name'}</Title>
+            <Title style={styles.title}>{user?.userName ?? 'Name'}</Title>
             <Caption style={styles.caption}>{`${user?.pincode ?? ''}`}</Caption>
           </View>
         </View>
@@ -68,7 +68,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
                 navigation.navigate('EstimateStack');
               }}
             /> */}
-            {mode === '1' ? (
+            {mode === '0' ? (
               <>
                 <DrawerItem
                   icon={({ color, size }) => <Icon name="account-outline" color={color} size={size} />}
