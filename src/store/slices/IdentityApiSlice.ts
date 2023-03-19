@@ -3,7 +3,7 @@ import { ApiSlice } from './ApiSlice';
 
 export const IdentityApiSlice = ApiSlice.injectEndpoints({
   endpoints: builder => ({
-    getUsers: builder.query<User[], void | string>({
+    getUsers: builder.query<User[] | User, void | string>({
       query: userId => `users/${userId}`,
     }),
     getNearUsers: builder.query<User[], string>({
@@ -66,6 +66,7 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
 
 export const {
   useGetUsersQuery,
+  useLazyGetUsersQuery,
   useUpdateUserProfileMutation,
   useUpdateEstimateMutation,
   useGetNearUsersQuery,

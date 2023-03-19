@@ -5,10 +5,13 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from '
 import { useDispatch } from 'react-redux';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { logInUser } from '../../store/slices/AppStateSlice';
+import { logInUser, saveUser } from '../../store/slices/AppStateSlice';
 import styles from './Login.style';
 import { useOtpVerifyMutation } from '../../store/slices/LoginApiSlice';
+import { useLazyGetUsersQuery } from '../../store/slices/IdentityApiSlice';
+import { User } from 'types';
 
 const initialState = {
   code1: '',
@@ -64,6 +67,7 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
   const { appColors } = useTheme();
   const dispatchAction = useDispatch();
   const [otpVerify, { isLoading: otpVerifyLoader }] = useOtpVerifyMutation();
+  const [triggerGetUser] = useLazyGetUsersQuery();
 
   // For image scaling
   const animatedScaleStyles = useAnimatedStyle(() => {
@@ -145,9 +149,15 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
       const data = await otpVerify({ ...params, otp }).unwrap();
 
       if (data) {
-        const { userId, userPhone } = data;
+        const { userId, userPhone, isNewUser } = data;
         dispatchAction(logInUser(data));
-        navigation.navigate('userform', { userId, userPhone });
+        if (isNewUser) navigation.navigate('userform', { userId, userPhone });
+        else {
+          const userDetails = (await triggerGetUser(userId).unwrap()) as User;
+          AsyncStorage.setItem('user', JSON.stringify(userDetails)).then(() => {
+            dispatchAction(saveUser(userDetails));
+          });
+        }
       }
     } catch (error) {
       console.error('OTP verification failed', error);
