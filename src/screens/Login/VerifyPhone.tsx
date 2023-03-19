@@ -67,7 +67,7 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
   const { appColors } = useTheme();
   const dispatchAction = useDispatch();
   const [otpVerify, { isLoading: otpVerifyLoader }] = useOtpVerifyMutation();
-  const [triggerGetUser] = useLazyGetUsersQuery();
+  const [triggerGetUser, { isFetching: getUserLoader }] = useLazyGetUsersQuery();
 
   // For image scaling
   const animatedScaleStyles = useAnimatedStyle(() => {
@@ -245,7 +245,7 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
         <View style={styles.btnContainer}>
           <Button
             dark
-            loading={otpVerifyLoader}
+            loading={otpVerifyLoader || getUserLoader}
             mode="contained"
             disabled={verifyActionDisabled}
             onPress={verify}
