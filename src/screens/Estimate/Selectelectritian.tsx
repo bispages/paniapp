@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useSelector } from 'react-redux';
 import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import Colors from '../../assets/colors';
 // import { useNavigation } from '@react-navigation/native';
-import {  useGetNearUsersQuery, useGetFavUsersQuery } from '../../store/slices/IdentityApiSlice';
+import { useGetNearUsersQuery, useGetFavUsersQuery } from '../../store/slices/IdentityApiSlice';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { selectUserId } from '../../store/selectors';
 
 const dataq = [
   {
@@ -58,15 +60,13 @@ const Select = () => {
   const toggleTabs = () => {
     setToggleState(true);
   };
-
-  const { data: users } = useGetUsersQuery();
-  const { data: nearusers } = useGetNearUsersQuery();
-  const { data: favusers } = useGetFavUsersQuery();
-  console.log(users,"getUsers");
-  console.log(nearusers,"Nearusers");
-  console.log(favusers,"Favusers");
-
-
+  const userId = useSelector(selectUserId);
+  const { data: users } = useGetUsersQuery(userId);
+  const { data: nearusers } = useGetNearUsersQuery(userId);
+  const { data: favusers } = useGetFavUsersQuery(userId);
+  console.log(users, 'getUsers');
+  console.log(nearusers, 'Nearusers');
+  console.log(favusers, 'Favusers');
 
   return (
     <View style={styles.container}>
@@ -74,7 +74,7 @@ const Select = () => {
         <Image style={styles.locicon} source={require('../../assets/img/locationtab.png')} />
         <TextInput style={styles.input} placeholder="608 301"></TextInput>
         <TouchableOpacity style={styles.pinbtn}>
-          <Text style={styles.pintitle}> Change pincode</Text>
+          <Text style={styles.pintitle}> Change pincode </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.headbar}>
@@ -114,9 +114,10 @@ const Select = () => {
         <ScrollView showsVerticalScrollIndicator={false}
         style={styles.filter}
         >
-          {users?.users?.favoriteUsers?.map((item, i) => {
+          {favusers?.map((item, i) => {
             return (
               <View style={styles.card} key={i}>
+                
                 <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
                 <View style={styles.subcard}>
                   <Text style={styles.name}>{item?.userName}</Text>
@@ -137,7 +138,7 @@ const Select = () => {
         <ScrollView showsVerticalScrollIndicator={false}
         style={styles.filter}
         >   
-          {users?.users?.map((item, i) => {
+          {nearusers?.map((item, i) => {
             return (
               <View style={styles.card} key={i}>
                 <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />

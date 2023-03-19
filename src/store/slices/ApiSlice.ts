@@ -1,6 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { API_BASE_URL } from '../../utils/constants';
+import { store } from '../';
+import { selectUserToken } from '../selectors';
+
+export const getJWTToken = () => selectUserToken(store.getState());
 
 /**
  * @description - API Slice of the global store "paniappApiStates".
@@ -16,10 +20,7 @@ export const ApiSlice = createApi({
       headers.set('Content-Type', 'application/json');
       try {
         if (!headers.has('Authorization')) {
-          headers.set(
-            'Authorization',
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyUGhvbmUiOjk5NDc3NjU3ODgsInVzZXJJZCI6ImI2NzdhZTAwLTkwODgtNDBiMi04MDY0LWU1NjJhNGY2NTUxYiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTY3ODUzMDIxMH0.a3vmqy464p_NtBtuorF1NN4RtVLBawuNqCXmErijjQk',
-          );
+          headers.set('Authorization', `Bearer ${getJWTToken()}`);
         }
       } catch (error) {}
 

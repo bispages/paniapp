@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import Colors from '../../assets/colors';
+import { useSelector } from 'react-redux';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
+import { useGetNearUsersQuery, useGetFavUsersQuery } from '../../store/slices/IdentityApiSlice';
+import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
+import { selectUserId } from '../../store/selectors';
+// import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
 const data = [
   {
     id: 1,
@@ -67,7 +71,12 @@ const datas = [
 
 const Select = () => {
   const [toggleState, setToggleState] = useState(true);
+  const userId = useSelector(selectUserId);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const { data: nearusers } = useGetNearUsersQuery(userId);
+  const { data: favusers } = useGetFavUsersQuery(userId);
+  console.log(nearusers, 'Nearusers');
+  console.log(favusers, 'Favusers');
 
   const toggleTab = () => {
     setToggleState(false);
