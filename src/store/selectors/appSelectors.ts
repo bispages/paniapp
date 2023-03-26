@@ -14,3 +14,5 @@ export const selectUserId = (state: RootState) => state.appState.userId;
 export const selectUserToken = (state: RootState) => state.appState.accessToken;
 
 export const selectUserPhone = (state: RootState) => state.appState.userPhone;
+
+export const selectUserLanguage = (state: RootState) => state.appState.userLanguage;

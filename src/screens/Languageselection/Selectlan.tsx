@@ -2,51 +2,29 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { useDispatch } from 'react-redux';
 
-data = [
-  {
-    id: 1,
-    lantxt: 'മലയാളം',
-  },
-  {
-    id: 2,
-    lantxt: 'English',
-  },
-  {
-    id: 3,
-    lantxt: 'हिंदी',
-  },
-  {
-    id: 4,
-    lantxt: 'తెలుగు',
-  },
-  {
-    id: 5,
-    lantxt: 'ಕನ್ನಡ',
-  },
-  {
-    id: 6,
-    lantxt: 'ತಮಿಳು',
-  },
-  {
-    id: 7,
-    lantxt: 'বাংলা',
-  },
-];
+import { dict } from '../../utils/intl';
+import { setLanguage } from '../../store/slices/AppStateSlice';
 
 const Selectlan = () => {
-    const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const dispatch = useDispatch();
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   return (
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionTitle}>Select Language</Text>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.languageContainer}>
-        {data?.map((item, i) => {
+        {Object.values(dict)?.map((item, i) => {
+          const { language } = item;
           return (
-            <TouchableOpacity 
-            key={i} 
-            style={styles.sectionDescription}
-            onPress={()=>navigation.navigate('accept')}>
-              <Text style={styles.language}>{item?.lantxt}</Text>
+            <TouchableOpacity
+              key={language}
+              style={styles.sectionDescription}
+              onPress={() => {
+                dispatch(setLanguage(i));
+                navigation.navigate('accept');
+              }}>
+              <Text style={styles.language}>{language}</Text>
             </TouchableOpacity>
           );
         })}
@@ -60,7 +38,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor:'#fff'
+    backgroundColor: '#fff',
   },
   sectionTitle: {
     fontSize: 28,
