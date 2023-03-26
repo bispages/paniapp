@@ -366,11 +366,13 @@ Lorem ipsum is typically a corrupted version of De finibus bonorum et malorum, a
           keyboardType="numeric"
           maxLength={10}
           autoCorrect={false}
-          textAlign="center"
+          // textAlign="center"
           textContentType="oneTimeCode"
           style={styles.inputfield}
           value={userPhone}
-          onChangeText={onTextChange}></TextInput>
+          onChangeText={onTextChange}>
+            {/* <Text>+91</Text> */}
+          </TextInput>
 
         <View style={styles.logocontainer}>
           <Text style={styles.optiontag}>Select your role</Text>

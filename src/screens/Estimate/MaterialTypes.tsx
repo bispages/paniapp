@@ -20,9 +20,9 @@ const MaterialTypes = () => {
   const changestate = () => {
     setVisit(!vist);
   };
-  const movetocart = () => {
-    navigation.navigate('Cart');
-  };
+  // const movetocart = () => {
+  //   navigation.navigate('Cart');
+  // };
 
   const moveToMaterialItemSelect = (type: MaterialType) => {
     setTimeout(() => {
@@ -47,22 +47,6 @@ const MaterialTypes = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styless.headscontainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../../assets/img/backarrow.png')} style={styless.backimg} />
-        </TouchableOpacity>
-        <Text style={styless.headtxt}>Select Material</Text>
-      </View>
-
-      <View style={styles.headingContainer}>
-        <View style={styless.headContainer}>
-          <Text style={styless.heading}>Estimate for</Text>
-          <Text style={styless.name}>Alphy Benny</Text>
-        </View>
-        <TouchableOpacity onPress={() => movetocart()}>
-          <Image source={require('../../assets/img/cart.png')} style={styless.cartimage} />
-        </TouchableOpacity>
-      </View>
       <View style={styles.itemsContainer}>
         {materialTypesList ? (
           <View style={{ flex: 1 }}>
@@ -117,7 +101,7 @@ const styless = StyleSheet.create({
   backimg: {
     width: 45,
     height: 45,
-    marginHorizontal: 20,
+    marginLeft: 20,
   },
 
   headtxt: {

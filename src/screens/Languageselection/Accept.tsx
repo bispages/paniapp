@@ -68,7 +68,7 @@ const Accept = () => {
             justifyContent: 'center',
             marginVertical: 20,
           }}>
-          {/* <Text style={styles.sectionTitle}>Yes</Text> */}
+          <Text style={styles.sectionTitle}>Yes</Text>
           <Text style={styles.sectionTitletag}> {language ? dict[language]?.question : dict[LANGUAGES.ENGLISH]?.buttonyes}</Text>
         </View>
       </TouchableOpacity>
@@ -81,7 +81,7 @@ const Accept = () => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          {/* <Text style={styles.sectionTitle}>No</Text> */}
+          <Text style={styles.sectionTitle}>No</Text>
           <Text style={styles.sectionTitletag}>{language ? dict[language]?.question : dict[LANGUAGES.ENGLISH]?.buttonno}</Text>
         </View>
       </TouchableOpacity>
