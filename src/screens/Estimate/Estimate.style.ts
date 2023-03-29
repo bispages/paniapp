@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   itemsContainer: {
     flex: 0.8,
     // backgroundColor:'red',
-   marginTop:-20,
+  //  marginTop:-20,
     width: '100%',
     backgroundColor:colors.white
   },
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
   block: {
     width: '45%',
-    height: 110,
+    height: 120,
     margin: 5,
     borderRadius: 11,
     alignItems: 'center',

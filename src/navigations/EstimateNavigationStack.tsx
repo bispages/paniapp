@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/stack';
 import { DrawerActions } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, Text } from 'react-native';
 import Estimate from '../screens/Estimate';
 import MaterialTypes from '../screens/Estimate/MaterialTypes';
 import MaterialItems from '../screens/Estimate/MaterialItems';
@@ -27,10 +27,15 @@ const EstimateNavigationStack = () => {
     headerShown: true,
     headerTintColor: colors.text,
     headerPressColorAndroid: colors.accent,
+    
     headerStyle: {
       elevation: 0,
       shadowOpacity: 0,
       borderBottomWidth: 0,
+      
+    },
+    headerTitleStyle: {
+      fontSize: 18,
     },
     ...TransitionPresets.SlideFromRightIOS,
   });
@@ -82,19 +87,31 @@ const EstimateNavigationStack = () => {
             />
             </TouchableOpacity>
           ),
+
         })}
       />
       <EstimateStack.Screen
         name="MaterialTypes"
         component={MaterialTypes}
         options={({ navigation }) => ({
-          headerTitle: '',
+          headerTitle: 'Select Materials',
+          headerTitleAlign: 'center',
+         
           headerLeft: () => (
-          
+        
             <TouchableOpacity
-            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-            
+            onPress={() => navigation.goBack()}>
+            <Image source={require('../../src/assets/img/backarrow.png')} style={styles.backimg} />
             </TouchableOpacity>
+           
+          ),
+          headerRight: () => (
+        
+            <TouchableOpacity
+            onPress={() => navigation.navigate('Cart')}>
+            <Image source={require('../../src/assets/img/cart.png')} style={styles.cartimg} />
+            </TouchableOpacity>
+           
           ),
         })}
       />
@@ -171,5 +188,17 @@ const styles = StyleSheet.create({
     marginLeft:20,
     marginTop:10,
     borderRadius:2
+  },
+  backimg: {
+    width: 40,
+    height: 40,
+    marginLeft: 20,
+    marginTop:10
+  },
+  cartimg: {
+    width: 47,
+    height: 45,
+    marginRight:20,
+    marginTop:10
   }
 })
