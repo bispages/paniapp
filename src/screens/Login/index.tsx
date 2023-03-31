@@ -354,6 +354,8 @@ Lorem ipsum is typically a corrupted version of De finibus bonorum et malorum, a
       </View>
       <View style={styles.subcontainers}>
         <Text style={styles.txt}>Enter your phone number</Text>
+        <View style={styles.boxfield}> 
+        <Text style={styles.code}>+91 |</Text> 
         <TextInput
           mode="outlined"
           theme={{
@@ -366,18 +368,19 @@ Lorem ipsum is typically a corrupted version of De finibus bonorum et malorum, a
           keyboardType="numeric"
           maxLength={10}
           autoCorrect={false}
-          // textAlign="center"
+          // textAlign="flex-start"
           textContentType="oneTimeCode"
           style={styles.inputfield}
           value={userPhone}
           onChangeText={onTextChange}>
-            {/* <Text>+91</Text> */}
+            {/* <Text style={styles.count}>+91</Text> */}
           </TextInput>
+          </View>
 
         <View style={styles.logocontainer}>
           <Text style={styles.optiontag}>Select your role</Text>
           <View style={styles.select}>
-            {userOptions.map(item => {
+            {userOptions?.map(item => {
               return (
                 <TouchableOpacity
                   style={userType === item.ids ? styles.selecticons : styles.selecticon}
@@ -438,6 +441,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     // backgroundColor:'red'
+  },
+  code:{
+    position: 'absolute',
+    zIndex:1,
+    alignSelf:'center',
+    marginHorizontal:5,
+    fontSize: 20,
+    color:'rgba(0, 0, 0, 0.36)'
+  },
+  boxfield: {
+    // marginVertical: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    border: 'none',
+    outline: 'none',
   },
   termstag:{
     display:'flex',
@@ -511,9 +529,10 @@ const styles = StyleSheet.create({
     width: '70%',
     height: 50,
     borderColor: colors.logintag,
-    textAlign: 'center',
     textAlignVertical: 'center',
-    fontSize: 28,
+    fontSize: 20,
+    textAlign:'left',
+    paddingLeft:40
   },
   optiontag: {
     fontSize: 16,

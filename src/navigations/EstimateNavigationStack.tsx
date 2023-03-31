@@ -13,6 +13,7 @@ import EstimateTableView from '../screens/Estimate/EstimateTableView';
 import EstimateForm from '../screens/Estimate/EstimateForm';
 import MenuButton from '../components/MenuButton';
 import Selectelectritian from '../screens/Estimate/Selectelectritian';
+import ChooseShop from '../screens/Estimate/ChooseShop';
 import Select from '../screens/Estimate/Select';
 import Cart from '../screens/Estimate/Cart';
 import { TouchableOpacity } from 'react-native';
@@ -68,7 +69,22 @@ const EstimateNavigationStack = () => {
           headerLeft: () => (
           
             <TouchableOpacity
-            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+            onPress={() => navigation.goBack()}>
+            <Image source={require('../../src/assets/img/backarrow.png')} style={styles.backimg} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <EstimateStack.Screen
+        name="ChooseShop"
+        component={ChooseShop}
+        options={({ navigation }) => ({
+          headerTitle: '',
+          headerLeft: () => (
+          
+            <TouchableOpacity
+            onPress={() => navigation.goBack()}>
+            <Image source={require('../../src/assets/img/backarrow.png')} style={styles.backimg} />
             
             </TouchableOpacity>
           ),
@@ -118,7 +134,19 @@ const EstimateNavigationStack = () => {
          <EstimateStack.Screen
         name="Cart"
         component={Cart}
-        options={{ title: '' }}
+        options={({ navigation }) =>({ 
+          headerTitle: 'Cart View',
+          headerTitleAlign: 'center', 
+
+          headerLeft: () => (
+        
+            <TouchableOpacity
+            onPress={() => navigation.goBack()}>
+            <Image source={require('../../src/assets/img/backarrow.png')} style={styles.backimgs} />
+            </TouchableOpacity>
+           
+          ),
+        })}
       />
         <EstimateStack.Screen
         name="OrderDet"
@@ -130,11 +158,13 @@ const EstimateNavigationStack = () => {
         name="MaterialItems"
         component={MaterialItems}
         options={({ navigation }) => ({
-          headerTitle: '',
+          headerTitle: 'Material Items',
+          headerTitleAlign: 'center', 
           headerLeft: () => (
           
             <TouchableOpacity
-            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+            onPress={() => navigation.goBack()}>
+              <Image source={require('../../src/assets/img/backarrow.png')} style={styles.backimgs} />
             
             </TouchableOpacity>
           ),
@@ -199,6 +229,12 @@ const styles = StyleSheet.create({
     width: 47,
     height: 45,
     marginRight:20,
+    marginTop:10
+  },
+  backimgs:{
+    width: 35,
+    height: 35,
+    marginLeft: 20,
     marginTop:10
   }
 })

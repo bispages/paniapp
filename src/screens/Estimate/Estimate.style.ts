@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   itemsContainer: {
-    flex: 0.8,
+    flex: 1,
     // backgroundColor:'red',
   //  marginTop:-20,
     width: '100%',

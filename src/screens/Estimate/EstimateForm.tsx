@@ -31,14 +31,15 @@ const EstimateForm = () => {
     <View style={[styles.panelButtonContainer]}>
       <View style={[styles.panelTextContainer]}></View>
 
-      <View style={styless.btnfield}>
+      {/* <View style={styless.btnfield}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image style={styless.backbtn} source={require('../../assets/img/backarrow.png')} />
         </TouchableOpacity>
-      </View>
+      </View> */}
       <View style={styless.headfield}>
         <Text style={styless.head}> Customer Information </Text>
       </View>
+    
       <View style={styless.boxfield}>
         <Image style={styless.icon} source={require('../../assets/img/addr.png')} />
 

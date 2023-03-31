@@ -406,7 +406,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
             <View style={[styles.textContainer]}>
               <TextInput
                 mode="outlined"
-                label="Pincode"
+                label="Place or Pincode"
                 theme={{
                   colors: {
                     primary: appColors.secondary,
@@ -416,7 +416,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 }}
                 style={[styles.textInput]}
                 keyboardType="numeric"
-                maxLength={6}
+                // maxLength={6}
                 onChangeText={(text: string) => setPincode(text)}
                 defaultValue={pincode}
                 value={pincode}
@@ -445,12 +445,11 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 defaultValue={place}
                 value={place}
                 autoCorrect={false}
-                // autoCompleteType="place"
-                // returnKeyType="next"
+                
                 textAlign="left"
                 textContentType="name"
               />
-            </View>
+            </View> 
             {console.log(user)}
 
             <View style={styles.savebtnContainer}>
