@@ -264,7 +264,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
         contentContainerStyle={[styles.listContainer]}
         persistentScrollbar
         removeClippedSubviews>
-        <View style={{ alignItems: 'center', paddingTop: 10 }}>
+        <View style={{ alignItems: 'center', paddingTop: 10, }}>
           <Text style={styles.panelTitle}>Upload Photo</Text>
           <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
         </View>
@@ -278,7 +278,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
               contentStyle={styles.panelButton}
               theme={{
                 colors: {
-                  primary: appColors.secondary,
+                  primary: appColors.btncolor,
                 },
               }}>
               TAKE PHOTO
@@ -293,10 +293,10 @@ const UserForm = ({ route: { params } }: routeParams) => {
               contentStyle={styles.panelButton}
               theme={{
                 colors: {
-                  primary: appColors.secondary,
+                  primary: appColors.btncolor,
                 },
               }}>
-              CHOOSE FROM LIBRARY
+              SELECT FROM GALLERY
             </Button>
           </View>
           <View style={[styles.panelButtonView]}>
@@ -308,7 +308,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
               contentStyle={styles.panelButton}
               theme={{
                 colors: {
-                  primary: appColors.secondary,
+                  primary: appColors.btncolor,
                 },
               }}>
               CANCEL
@@ -323,10 +323,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
     <View style={styless.container}>
       <View style={[styles.container, { backgroundColor: appColors.userpagetopback }]}>
         {/* <View style={styless.logocontainer}> */}
-        {/* <Image source={require('../../assets/img/panilogo.png')}
-        style={styless.logo}
-        /> */}
-
+       
         {/* </View> */}
         <View style={[styles.userBannerContainer]}>
           {image ? (
@@ -406,7 +403,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
             <View style={[styles.textContainer]}>
               <TextInput
                 mode="outlined"
-                label="Pincode"
+                label="Place or Pincode"
                 theme={{
                   colors: {
                     primary: appColors.secondary,
@@ -416,7 +413,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 }}
                 style={[styles.textInput]}
                 keyboardType="numeric"
-                maxLength={6}
+                // maxLength={6}
                 onChangeText={(text: string) => setPincode(text)}
                 defaultValue={pincode}
                 value={pincode}
@@ -427,7 +424,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 textContentType="postalCode"
               />
             </View>
-            <View style={[styles.textContainer]}>
+            {/* <View style={[styles.textContainer]}>
               <TextInput
                 mode="outlined"
                 label="Place"
@@ -445,12 +442,11 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 defaultValue={place}
                 value={place}
                 autoCorrect={false}
-                // autoCompleteType="place"
-                // returnKeyType="next"
+                
                 textAlign="left"
                 textContentType="name"
               />
-            </View>
+            </View>  */}
             {console.log(user)}
 
             <View style={styles.savebtnContainer}>

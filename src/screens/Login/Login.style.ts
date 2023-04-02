@@ -132,6 +132,7 @@ export default StyleSheet.create({
   resendBtn: {
     padding: 4,
     marginLeft: 8,
+    
   },
   resendBtnTxt: {
     fontWeight: '700',

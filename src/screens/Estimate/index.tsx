@@ -55,7 +55,7 @@ const Estimate = () => {
           {/* <Image style={styles.icon} source={require('../../assets/img/locationtab.png')}/>  */}
         </TextInput>
         <TouchableOpacity style={styles.pinbtn}>
-          <Text style={styles.pintitle}> Change pincode</Text>
+          <Text style={styles.pintitle}>Location</Text>
         </TouchableOpacity>
       </View>
       {/* {console.log("selectmode",mode)} */}

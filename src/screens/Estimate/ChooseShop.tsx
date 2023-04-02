@@ -87,19 +87,18 @@ const Select = () => {
 
   return (
     <View style={styles.container}>
+        <View style={styles.headbar}>
+        
+        <Text style={styles.head}>Select a shop to place order</Text>
+      </View>
       <View style={styles.background}>
         <Image style={styles.locicon} source={require('../../assets/img/locationtab.png')} />
         <TextInput style={styles.input} placeholder="608 301"></TextInput>
         <TouchableOpacity style={styles.pinbtn}>
-          <Text style={styles.pintitle}>Location</Text>
+          <Text style={styles.pintitle}> Location</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.headbar}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image style={styles.arrow} source={require('../../assets/img/Group63.png')} />
-        </TouchableOpacity>
-        <Text style={styles.head}>Find Electrical Shops</Text>
-      </View>
+      
 
       <View style={styles.toggle}>
         {toggleState === true ? (
@@ -173,6 +172,7 @@ const Select = () => {
             );
           })}
         </ScrollView>
+        
       )}
     </View>
   );
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   headbar: {
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     marginVertical: 20,
     display: 'flex',
     flexDirection: 'row',
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   callicon: {
     width: 34,
     height: 34,
-    marginRight: 3,
+    marginRight: 2,
     marginVertical: 5,
   },
   card: {
@@ -236,7 +236,6 @@ const styles = StyleSheet.create({
     height: 110,
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
-    
   },
   toggletxt: {
     fontSize: 19,
@@ -324,11 +323,11 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   head: {
-    fontSize: 27,
+    fontSize: 22,
     fontWeight: '400',
     lineHeight: 32,
     alignItems: 'center',
-    color: Colors.title,
+    color: "#515253",
   },
   shopimg: {
     width: 90,

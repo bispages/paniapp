@@ -74,7 +74,7 @@ const Select = () => {
         <Image style={styles.locicon} source={require('../../assets/img/locationtab.png')} />
         <TextInput style={styles.input} placeholder="608 301"></TextInput>
         <TouchableOpacity style={styles.pinbtn}>
-          <Text style={styles.pintitle}> Change pincode </Text>
+          <Text style={styles.pintitle}> Location </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.headbar}>

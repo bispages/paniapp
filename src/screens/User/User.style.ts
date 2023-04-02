@@ -11,7 +11,7 @@ export default StyleSheet.create({
   userBannerContainer: {
     flex: 0.5,
     width: '100%',
-    overflow: 'hidden',
+    overflow: 'hidden',top:80,zIndex:1
   },
   imgContainer: {
     width: 140,
@@ -98,6 +98,7 @@ export default StyleSheet.create({
     width: '100%',
     height: 52,
     borderRadius:30,
+    
   },
   listContainer: {
     flexWrap: 'wrap',
@@ -106,6 +107,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingTop: 20,
     justifyContent: 'center',
+    backgroundColor:'#DADADA' 
   },
   dataListChip: {
     margin: 2,
@@ -125,25 +127,28 @@ export default StyleSheet.create({
     paddingHorizontal: 4,
   },
   panelTitle: {
-    height: 30,
+    // height: 30,
     fontWeight: '700',
     fontSize: 22,
   },
   panelSubtitle: {
     color: 'gray',
     height: 30,
-    fontWeight: '300',
-    fontSize: 12,
+    fontWeight: '400',
+    fontSize: 15,
+    lineHeight:29
   },
   panelButtonContainer: {
     width: '100%',
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    
   },
   panelButtonView: {
     width: '90%',
     marginBottom: 20,
+    
   },
   panelButton: {
     width: '100%',
