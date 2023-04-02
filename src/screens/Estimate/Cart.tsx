@@ -91,10 +91,10 @@ const Estimate = () => {
                 }
             </View>
         </View>
-        <View style={styles.headcontainers}>
+        {/* <View style={styles.headcontainers}>
             <Text style={styles.pricetag}>Total Price</Text>
             <Text style={styles.price}>10,000 Price</Text>
-        </View>
+        </View> */}
     </View>
    
   );

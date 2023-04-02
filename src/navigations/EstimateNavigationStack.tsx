@@ -96,7 +96,6 @@ const EstimateNavigationStack = () => {
         options={({ navigation }) => ({
           headerTitle: 'Select Materials',
           headerTitleAlign: 'center',
-         
           headerLeft: () => (
         
             <TouchableOpacity
@@ -118,7 +117,13 @@ const EstimateNavigationStack = () => {
          <EstimateStack.Screen
         name="Cart"
         component={Cart}
-        options={{ title: '' }}
+        options={({ navigation }) => ({
+          headerTitle: '',
+          // headerTitle: 'Cart',
+          // headerTitleAlign: 'center',
+        })}
+          
+         
       />
         <EstimateStack.Screen
         name="OrderDet"
