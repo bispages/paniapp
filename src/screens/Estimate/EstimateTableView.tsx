@@ -14,7 +14,7 @@ const EstimateTableView = () => {
   );
 
   const getCustomerView = () => {
-    const { customer } = formVal;
+    // const { customer } = formVal;
     const dateStr = format(new Date(), 'dd-MM-yyyy');
 
     return (

@@ -11,6 +11,7 @@ import MaterialTypes from '../screens/Estimate/MaterialTypes';
 import MaterialItems from '../screens/Estimate/MaterialItems';
 import EstimateTableView from '../screens/Estimate/EstimateTableView';
 import EstimateForm from '../screens/Estimate/EstimateForm';
+import FinalEstimate from '../screens/Estimate/FinalEstimate';
 import MenuButton from '../components/MenuButton';
 import Selectelectritian from '../screens/Estimate/Selectelectritian';
 import ChooseShop from '../screens/Estimate/ChooseShop';
@@ -169,10 +170,27 @@ const EstimateNavigationStack = () => {
           ),
         })}
       />
-      <EstimateStack.Screen
+      {/* <EstimateStack.Screen
         name="EstimateTableView"
         component={EstimateTableView}
         options={{ title: 'Final Estimate' }}
+      /> */}
+      <EstimateStack.Screen
+        name="FinalEstimate"
+        component={FinalEstimate}
+      
+        options={({ navigation }) => ({
+          headerTitle: 'Final Estimate',
+          headerTitleAlign: 'center', 
+          headerLeft: () => (
+          
+            <TouchableOpacity
+            onPress={() => navigation.goBack()}>
+              <Image source={require('../../src/assets/img/backarrow.png')} style={styles.backimgs} />
+            
+            </TouchableOpacity>
+          ),
+        })}
       />
        <EstimateStack.Screen
         name="Select"

@@ -19,7 +19,9 @@ const MaterialTypes = () => {
 
   const changestate = () => {
     setVisit(!vist);
-    navigation.navigate("ChooseShop")
+    // navigation.navigate("ChooseShop")
+    navigation.navigate("FinalEstimate")
+    
   };
   // const movetocart = () => {
   //   navigation.navigate('Cart');

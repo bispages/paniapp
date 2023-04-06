@@ -24,21 +24,9 @@ const data = [
     title: "Poppy's Elctricals",
     tag: 'Main road, Ollur',
   },
-  {
-    id: 1,
-    title: 'Kings Elecrricals',
-    tag: 'Rice bazar, Thrissur',
-  },
-  {
-    id: 2,
-    title: 'CT Electricals ',
-    tag: 'Junction, Marathakkara',
-  },
-  {
-    id: 3,
-    title: "Poppy's Elctricals",
-    tag: 'Main road, Ollur',
-  },
+ 
+  
+  
 ];
 
 const datas = [
@@ -52,25 +40,12 @@ const datas = [
     title: 'Space Electricals ',
     tag: 'Junction, Marathakkara',
   },
-  {
-    id: 1,
-    title: 'Kings Elecrricals',
-    tag: 'Rice bazar, Thrissur',
-  },
-  {
-    id: 2,
-    title: 'CT Electricals ',
-    tag: 'Junction, Marathakkara',
-  },
-  {
-    id: 3,
-    title: "Poppy's Elctricals",
-    tag: 'Main road, Ollur',
-  },
+  
 ];
 
 const Select = () => {
   const [toggleState, setToggleState] = useState(true);
+  const [confirmation, setConfirmation] = useState(false);
   const userId = useSelector(selectUserId);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const { data: nearusers } = useGetNearUsersQuery(userId);
@@ -84,9 +59,43 @@ const Select = () => {
   const toggleTabs = () => {
     setToggleState(true);
   };
-
+  const closeconfirm = () => {
+    setConfirmation(false);
+  };
+  const openconfirm = () => {
+    setConfirmation(true);
+  };
+ 
   return (
-    <View style={styles.container}>
+    <>
+    {
+        confirmation === true ? 
+        <View style={{width:'100%', alignItems:'center', justifyContent:'center', position:'absolute',backgroundColor:'rgba(80, 80, 80, 0.8)', height:'100%',zIndex:1,}}>
+          <View style={{width:'80%',paddingVertical:20, borderRadius:5, backgroundColor:'#fff', height:"auto",display:'flex', alignItems:'center', justifyContent:'center'}}>
+          <Text style={{fontSize:18, lineHeight:25,color:'#454545',fontWeight:'500'}}>Are you sure,</Text>
+          <Text style={{fontSize:18, lineHeight:25,color:'#454545',fontWeight:'500'}}>you want to place order to</Text>
+          <Text style={{fontSize:19, lineHeight:26,color:'#454545',fontWeight:'600'}}>Kings Electricals ?</Text>
+          
+            
+            <View style={{width:'100%',display:'flex',flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
+              <TouchableOpacity
+              onPress={()=>closeconfirm()}
+               style={{width:98, height:50, margin:10, borderRadius:26, backgroundColor:'#979797',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <Text style={{color:'#fff',lineHeight:18,fontSize:18,fontWeight:'400'}}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+              onPress={()=>closeconfirm()}
+               style={{width:98, height:50,margin:10, borderRadius:26, backgroundColor:'#656A72',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <Text style={{color:'#fff',lineHeight:18,fontSize:18,fontWeight:'400'}}>Yes</Text>
+              </TouchableOpacity>
+            </View>
+            </View>
+          
+          </View>
+          :("")
+      }
+    <View style={styles.container} >
+      
         <View style={styles.headbar}>
         
         <Text style={styles.head}>Select a shop to place order</Text>
@@ -132,7 +141,9 @@ const Select = () => {
         >
           {datas.map(item => {
             return (
-              <View style={styles.card}>
+              <TouchableOpacity 
+              onPress={()=>openconfirm()}
+              style={styles.card}>
                 <Image source={require('../../assets/img/shopimg.png')} style={styles.shopimg} />
                 <View style={styles.subcard}>
                   <Text style={styles.name}>{item?.title}</Text>
@@ -143,11 +154,12 @@ const Select = () => {
                   </View>
                 </View>
                 <View style={styles.call}>
-                  <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} />
+                  {/* <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} /> */}
                 </View>
-              </View>
+              </TouchableOpacity>
             );
           })}
+          
         </ScrollView>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}
@@ -155,7 +167,8 @@ const Select = () => {
         >
           {data.map(item => {
             return (
-              <View style={styles.card}>
+              <TouchableOpacity  onPress={()=>openconfirm()}
+               style={styles.card}>
                 <Image source={require('../../assets/img/shopimg.png')} style={styles.shopimg} />
                 <View style={styles.subcard}>
                   <Text style={styles.name}>{item?.title}</Text>
@@ -165,16 +178,34 @@ const Select = () => {
                     <Text style={styles.det}>{item?.tag}</Text>
                   </View>
                 </View>
-                <View style={styles.call}>
-                  <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} />
-                </View>
-              </View>
+                 <View style={styles.call}>
+                  {/* <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} /> */}
+                </View> 
+              </TouchableOpacity>
             );
           })}
+
+<TouchableOpacity style={styles.card}>
+            <View style={{width:95,  height: 96, backgroundColor:'#548B67', borderRadius:8, alignItems:'center', justifyContent:'center', display:'flex', marginHorizontal:6}}>
+          <Image source={require('../../assets/img/watsvector.png')} style={{height:54, width:54}} />
+          </View>
+           <View style={styles.subcard}>
+                  <Text style={styles.name}>Place Order Via</Text>
+
+                  <View style={styles.detcard}>
+                    
+                    <Text style={styles.name}>Whatsapp</Text>
+                  </View>
+                </View>
+                <View style={styles.call}></View>
+                
+
+          </TouchableOpacity>
         </ScrollView>
         
       )}
     </View>
+    </>
   );
 };
 export default Select;
@@ -182,7 +213,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingHorizontal: 15,
+    paddingHorizontal:15
+    
   },
   headbar: {
     width: '100%',
