@@ -55,11 +55,12 @@ const Estimate = () => {
           {/* <Image style={styles.icon} source={require('../../assets/img/locationtab.png')}/>  */}
         </TextInput>
         <TouchableOpacity style={styles.pinbtn}>
-          <Text style={styles.pintitle}> Change pincode</Text>
+          <Text style={styles.pintitle}>Location</Text>
         </TouchableOpacity>
       </View>
+      {/* {console.log("selectmode",mode)} */}
       {/* <Text style={styles.title}>Electrician</Text> */}
-      {mode === '1' ? <Text style={styles.title}>Electrician</Text> : <Text style={styles.title}>Shop</Text>}
+      {mode === '0' ? <Text style={styles.title}>Electrician</Text> : <Text style={styles.title}>Shop</Text>}
 
       <View
         style={{
@@ -69,7 +70,7 @@ const Estimate = () => {
           alignItems: 'center',
         }}></View>
 
-      {mode === '2' ? (
+      {mode === '1' ? (
         <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate('Order')}>
           <View style={styles.LeftContainer}>
             <Image style={styles.iconimg} source={require('../../assets/img/shopcart.png')} />
@@ -97,7 +98,7 @@ const Estimate = () => {
           <Text style={styles.Righttag}>Find a Elecrical Shop </Text>
         </View>
       </TouchableOpacity>
-      {mode === '2' ? (
+      {mode === '1' ? (
         <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate('Selectelectritian')}>
           <View style={styles.LeftContainer}>
             <Image style={styles.iconimg} source={require('../../assets/img/electrician.png')} />

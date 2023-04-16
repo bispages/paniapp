@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
-import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import Colors from '../../assets/colors';
 // import { useNavigation } from '@react-navigation/native';
 import { useGetNearUsersQuery, useGetFavUsersQuery } from '../../store/slices/IdentityApiSlice';
@@ -9,26 +9,32 @@ import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
 import { selectUserId } from '../../store/selectors';
 
-const data = [
+const dataq = [
   {
     id: 1,
-    title: 'Anand krish',
-    tag: '680301',
+    userName: 'Anand krish',
+    pincode: '680301',
   },
   {
     id: 2,
-    title: 'Alphy benny ',
-    tag: '680301',
+    userName: 'Alphy benny ',
+    pincode: '680301',
   },
   {
     id: 3,
-    title: 'Alwin John',
-    tag: '680302',
+    userName: 'Alwin John',
+    pincode: '680302',
+  },
+  
+  {
+    id: 3,
+    userName: 'Alwin John',
+    pincode: '680302',
   },
   {
     id: 4,
-    title: 'Hari Krishnan',
-    tag: '680302',
+    userName: 'Hari Krishnan',
+    pincode: '680302',
   },
 ];
 
@@ -68,7 +74,7 @@ const Select = () => {
         <Image style={styles.locicon} source={require('../../assets/img/locationtab.png')} />
         <TextInput style={styles.input} placeholder="608 301"></TextInput>
         <TouchableOpacity style={styles.pinbtn}>
-          <Text style={styles.pintitle}> Change pincode</Text>
+          <Text style={styles.pintitle}> Location </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.headbar}>
@@ -105,10 +111,13 @@ const Select = () => {
       </View>
 
       {toggleState === false ? (
-        <View style={styles.filter}>
-          {users?.users?.favoriteUsers?.map((item, i) => {
+        <ScrollView showsVerticalScrollIndicator={false}
+        style={styles.filter}
+        >
+          {favusers?.map((item, i) => {
             return (
               <View style={styles.card} key={i}>
+                
                 <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
                 <View style={styles.subcard}>
                   <Text style={styles.name}>{item?.userName}</Text>
@@ -124,10 +133,12 @@ const Select = () => {
               </View>
             );
           })}
-        </View>
+        </ScrollView>
       ) : (
-        <View style={styles.filter}>
-          {users?.users?.map((item, i) => {
+        <ScrollView showsVerticalScrollIndicator={false}
+        style={styles.filter}
+        >   
+          {nearusers?.map((item, i) => {
             return (
               <View style={styles.card} key={i}>
                 <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
@@ -145,7 +156,7 @@ const Select = () => {
               </View>
             );
           })}
-        </View>
+        </ScrollView>
       )}
     </View>
   );

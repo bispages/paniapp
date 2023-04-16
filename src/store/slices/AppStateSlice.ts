@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { User } from '../../types';
+import { LANGUAGES } from 'utils/constants';
 
 type AppStateType = {
   loading: boolean;
@@ -10,6 +11,7 @@ type AppStateType = {
   userId: string;
   accessToken: string;
   userPhone: string;
+  userLanguage: null | LANGUAGES;
 };
 
 const initialState: AppStateType = {
@@ -20,6 +22,7 @@ const initialState: AppStateType = {
   userId: '',
   accessToken: '',
   userPhone: '',
+  userLanguage: null,
 };
 
 const appStateSlice = createSlice({
@@ -45,12 +48,15 @@ const appStateSlice = createSlice({
       state.accessToken = action.payload.accessToken;
       state.userPhone = action.payload.userPhone;
     },
-    logOutUser: (state, action: PayloadAction<void>) => {
+    logOutUser: state => {
       state.login = false;
       state.user = null;
       state.userId = '';
       state.accessToken = '';
       state.userPhone = '';
+    },
+    setLanguage: (state, action: PayloadAction<number>) => {
+      state.userLanguage = action.payload;
     },
     resetAppState: () => {
       return initialState;
@@ -58,7 +64,7 @@ const appStateSlice = createSlice({
   },
 });
 
-export const { saveUser, setIsOnBoarded, logInUser, logOutUser, resetAppState } = appStateSlice.actions;
+export const { saveUser, setIsOnBoarded, logInUser, logOutUser, setLanguage, resetAppState } = appStateSlice.actions;
 
 export const selectAppState = (state: RootState) => state.appState;
 

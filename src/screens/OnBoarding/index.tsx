@@ -147,8 +147,12 @@ const OnBoarding = (): ReactElement => {
   const scrollX = useRef(new Animated.Value(0));
   const inputRange = slides.map((_, index) => index * width);
 
-  // Adds BackHandler hook.
+  // Adds BackHandler hook. 
   useBackHandler();
+
+  const navigateToLanguageSelection = useCallback(() => {
+    navigation.navigate('selectlan');
+  }, [navigation]);
 
   const navigateToLogin = useCallback(() => {
     navigation.navigate('loginstack');
@@ -156,7 +160,7 @@ const OnBoarding = (): ReactElement => {
 
   useEffect(() => {
     // If user already onBoarded navigate to login.
-    if (onBoarded) navigateToLogin();
+     if (onBoarded) navigateToLogin();
   }, []);
 
   const renderScreens = ({ item }: { item: Item }) => {
@@ -176,13 +180,13 @@ const OnBoarding = (): ReactElement => {
     );
   };
 
-  const onDone = () => {
-    // User finished the introduction. Save this and show login.
-    dispatch(setIsOnBoarded(true));
-    AsyncStorage.setItem('onboarded', '1').then(() => {
-      navigateToLogin();
-    });
-  };
+  // const onDone = () => {
+  //   // User finished the introduction. Save this and show login.
+  //   dispatch(setIsOnBoarded(true));
+  //   AsyncStorage.setItem('onboarded', '1').then(() => {
+  //     navigateToLogin();
+  //   });
+  // };
 
   return onBoarded ? (
     <View style={styles.slide} />
@@ -202,7 +206,7 @@ const OnBoarding = (): ReactElement => {
         renderItem={renderScreens}
       />
       <Circles scrollX={scrollX} width={width} inputRange={inputRange} />
-      <DoneButton scrollX={scrollX} width={width} onDone={onDone} inputRange={inputRange} />
+      <DoneButton scrollX={scrollX} width={width} onDone={navigateToLanguageSelection} inputRange={inputRange} />
     </SafeAreaView>
   );
 };

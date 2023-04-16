@@ -268,10 +268,10 @@ const MaterialItems = () => {
       ) : (
         ''
       )}
-      <View style={styles.headcontainer}>
+      {/* <View style={styles.headcontainer}>
         <Image style={styles.back} source={require('../../assets/img/backarrow.png')} />
         <Text style={styles.head}>Material Items</Text>
-      </View>
+      </View> */}
       <ScrollView style={styles.cardcontainer}>
         <View style={styles.cardboxcontainer}>
           {arr?.map((item, i) => {
@@ -383,6 +383,8 @@ const styles = StyleSheet.create({
     // flexDirection:'row',
     // flexWrap:'wrap',
     width: '100%',
+    borderTopWidth:2,
+    borderTopColor:"rgba(216, 214, 214, 0.8)"
   },
   card: {
     width: 110,

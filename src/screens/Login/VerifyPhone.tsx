@@ -68,6 +68,9 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
   const dispatchAction = useDispatch();
   const [otpVerify, { isLoading: otpVerifyLoader }] = useOtpVerifyMutation();
   const [triggerGetUser, { isFetching: getUserLoader }] = useLazyGetUsersQuery();
+  const [seconds, setSeconds] = useState(30);
+  const [minutes, setMinutes] = useState(0);
+  const [show, setShow] = useState(false);
 
   // For image scaling
   const animatedScaleStyles = useAnimatedStyle(() => {
@@ -82,6 +85,14 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
       transform: [{ translateY: offsetView.value }],
     };
   });
+  const settime =()=> {
+    setShow(true)
+    
+    setSeconds(30);
+    setMinutes(0);
+  }
+
+  var timer;
 
   // For transform input element to top of keyboard
   // const animatedImageTranslateStyles = useAnimatedStyle(() => {
@@ -119,6 +130,17 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
       Keyboard.removeAllListeners('keyboardDidShow');
     };
   }, []);
+
+  useEffect(() => {
+    timer = setInterval(() => {
+      setSeconds(seconds - 1);
+      if (seconds === 0){
+        clearInterval(timer);
+        setShow(false)
+      }
+    },1000);
+    return () => clearInterval(timer)
+  });
 
   const keyboardDidHide = () => scaleImage(INITIAL_SCALE, INITIAL_OFFSET, INITIAL_OFFSET);
 
@@ -236,10 +258,27 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
               Didn't received OTP?
             </Text>
             <View style={styles.resendBtn}>
-              <TouchableOpacity onPress={resend}>
+            {
+          show === false ?
+              <TouchableOpacity onPress={()=>settime()}>
+            
                 <Text style={styless.resendBtnTxt}>Resent Code</Text>
               </TouchableOpacity>
+             
+                :
+                <Text style={styless.resendBtnTxt2}>Resent Code</Text>
+              }
+             
+              
+              
             </View>
+            {
+          show === true &&
+          <Text style={styless.counter}>{minutes}:{seconds < 10 ? "0" + seconds : seconds }</Text>
+          // :
+          // ("")
+
+        }
           </View>
         </View>
         <View style={styles.btnContainer}>
@@ -304,6 +343,18 @@ const styless = StyleSheet.create({
     fontSize: 13,
     marginTop: -5,
     color: '#4D4D4D',
+  },
+  resendBtnTxt2: {
+    fontWeight: '600',
+    fontSize: 13,
+    marginTop: -5,
+    color: '#878787'
+  },
+  counter:{
+    fontWeight: '600',
+    fontSize: 13,
+    color: '#4D4D4D',
+    marginHorizontal:5
   },
 
   button: {
