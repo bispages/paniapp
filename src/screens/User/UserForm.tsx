@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useRef, useCallback, useMemo, RefObject } from 'react';
-import { Text, View, Keyboard, Pressable, ImageBackground, StyleSheet, useWindowDimensions } from 'react-native';
+import React, { useEffect, useState, useRef, useCallback, useMemo, RefObject,} from 'react';
+import { Text, View, Keyboard, Pressable, ImageBackground, StyleSheet, useWindowDimensions, Alert, TouchableOpacity, NativeEventEmitter } from 'react-native';
 import { TextInput, Button, useTheme, Snackbar } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BottomSheet, { BottomSheetBackdrop, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import ImagePicker, { Image } from 'react-native-image-crop-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { ParamListBase, useNavigation } from '@react-navigation/native';
 import styles from './User.style';
 import {
   // PROFESSIONNUMBER,
@@ -20,6 +20,7 @@ import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typesc
 import { saveUser } from '../../store/slices/AppStateSlice';
 import { useUpdateUserProfileMutation } from '../../store/slices/IdentityApiSlice';
 import { selectUserId } from '../../store/selectors';
+import { StackNavigationProp } from '@react-navigation/stack';
 // import { professionList } from '../../utils/professionList';
 // import { categoryList } from '../../utils/categoryList';
 
@@ -47,6 +48,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
   const { appColors } = useTheme();
   const dispatchAction = useDispatch();
   const user = AsyncStorage.getItem('usertype');
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [updateUserProfile, { isLoading: updateUserProfileLoader }] = useUpdateUserProfileMutation();
 
   const snapPoints = useMemo(
@@ -119,8 +121,8 @@ const UserForm = ({ route: { params } }: routeParams) => {
   useEffect(() => {
     if (pincode.length >= 6) Keyboard.dismiss();
     // setSaveDisabled(!(userName && pincode && selectedItems.length > 0));
-    setSaveDisabled(!(userName && pincode && place));
-  }, [userName, pincode, place]);
+    setSaveDisabled(!(userName && pincode));
+  }, [userName, pincode]);
   // }, [userName, pincode, selectedItems]);
 
   const saveDetails = async () => {
@@ -370,7 +372,6 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 {
                   width: windowWidth,
                   height: windowWidth * 2,
-
                   backgroundColor: '#ffffff',
                   transform: [{ translateY: -windowWidth * 0.01 }],
                 },
@@ -400,54 +401,17 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 textContentType="name"
               />
             </View>
-            <View style={[styles.textContainer]}>
-              <TextInput
-                mode="outlined"
-                label="Place or Pincode"
-                theme={{
-                  colors: {
-                    primary: appColors.secondary,
-                    text: appColors.primary,
-                    background: appColors.white,
-                  },
-                }}
-                style={[styles.textInput]}
-                keyboardType="numeric"
-                // maxLength={6}
-                onChangeText={(text: string) => setPincode(text)}
-                defaultValue={pincode}
-                value={pincode}
-                autoCorrect={false}
-                autoComplete="postal-code"
-                // returnKeyType="next"
-                textAlign="left"
-                textContentType="postalCode"
-              />
-            </View>
-            {/* <View style={[styles.textContainer]}>
-              <TextInput
-                mode="outlined"
-                label="Place"
-                theme={{
-                  colors: {
-                    primary: appColors.secondary,
-                    text: appColors.primary,
-                    background: appColors.white,
-                  },
-                }}
-                style={[styles.textInput]}
-                keyboardType="default"
-                maxLength={80}
-                onChangeText={(text: string) => setPlace(text)}
-                defaultValue={place}
-                value={place}
-                autoCorrect={false}
+            <TouchableOpacity style={{borderColor:'grey', width:'70%',  height:50, borderWidth:1, borderRadius:4,display:'flex',justifyContent:'center',marginHorizontal:10,}} 
+            // onPress={navigation.navigate('placeselection')}
+            >
+              
+              {/* <View style={[styles.textInput]}> */}
+                <Text>dub</Text>
                 
-                textAlign="left"
-                textContentType="name"
-              />
-            </View>  */}
-            {console.log(user)}
+              {/* <View/> */}
+              </TouchableOpacity>
+           
+            
 
             <View style={styles.savebtnContainer}>
               <Button
@@ -503,4 +467,14 @@ const styless = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  textInputtouch: {
+    width: '70%',
+    height:50,
+    borderWidth:1,
+    alignItems:'flex-start',
+    display:'flex',
+    justifyContent:'flex-start',
+    backgroundColor:'red'
+
+  }
 });

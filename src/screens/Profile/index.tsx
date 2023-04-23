@@ -1,17 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors';
-
 import styless from './Profile.style';
 import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Profile = () => {
 
   const { data: users } = useGetUsersQuery();
   console.log(users,"getUsersiooio");
+
+  const[mode,setMode] = useState('');
+
+  AsyncStorage.getItem('user').then(value => {
+    setMode(value || '');
+  });
+
+  // console.log(JSON.stringify(mode?.userId),"12345678hjjgh");
 
   return (
     <View style={styless.container}>
@@ -24,14 +31,13 @@ const Profile = () => {
       {
         users?.users?.map((item, i) => {
             return (
+
               <View style={styles.details}>
-        <TextInput  style={styles.inputdetails}>{item?.userName}</TextInput>
-        <TextInput  style={styles.inputdetails}>{item?.place}</TextInput>
-        <TextInput  style={styles.inputdetails}>{item?.pincode}</TextInput>
-        <TextInput  style={styles.inputdetails}>{item?.userPhone}</TextInput>
-
-
-      </View>
+              <TextInput  style={styles.inputdetails}>{item?.userName}</TextInput>
+              <TextInput  style={styles.inputdetails}>{item?.place}</TextInput>
+              <TextInput  style={styles.inputdetails}>{item?.pincode}</TextInput>
+              <TextInput  style={styles.inputdetails}>{item?.userPhone}</TextInput>
+              </View>
 
             )})
       }

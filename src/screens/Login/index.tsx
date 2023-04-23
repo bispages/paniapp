@@ -320,6 +320,7 @@ const Login = () => {
   const onTextChange = (phoneNumber: string) => {
     phoneNumber = phoneNumber.replace(/[^\d]/g, '');
     setUserPhone(phoneNumber);
+    console.log(userPhone,"21212112122");
   };
 
   return (

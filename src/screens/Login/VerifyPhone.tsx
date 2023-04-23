@@ -78,7 +78,7 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
       transform: [{ scale: scale.value }],
     };
   });
-
+console.log(userPhone,"123abc")
   // For transform input element to top of keyboard
   const animatedTranslateStyles = useAnimatedStyle(() => {
     return {

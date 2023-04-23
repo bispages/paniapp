@@ -1,7 +1,11 @@
 import { User } from 'types';
 import { ApiSlice } from './ApiSlice';
+import { selectUserId } from '../../store/selectors';
+import { useSelector } from 'react-redux';
 
+// export const userId = useSelector(selectUserId);
 export const IdentityApiSlice = ApiSlice.injectEndpoints({
+ 
   endpoints: builder => ({
     getUsers: builder.query<User[] | User, void | string>({
       query: userId => `users/${userId}`,
