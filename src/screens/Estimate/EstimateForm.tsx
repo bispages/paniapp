@@ -26,7 +26,7 @@ const EstimateForm = () => {
     dispatch(addCustomer({ name, area, mobile, pincode }));
     navigation.navigate('MaterialTypes');
   };
-
+  const { appColors } = useTheme();
   return (
     <View style={[styles.panelButtonContainer]}>
       <View style={[styles.panelTextContainer]}></View>
@@ -43,16 +43,85 @@ const EstimateForm = () => {
       <View style={styless.boxfield}>
         <Image style={styless.icon} source={require('../../assets/img/addr.png')} />
 
-        <TextInput style={styless.textbox1} placeholder=" Name"></TextInput>
+        
+        <TextInput
+                mode="outlined"
+                label="Name"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={styless.textbox1}
+               
+                keyboardType="default"
+                maxLength={40}
+              
+                
+                // value={users?.userPhone}
+                autoCorrect={false}
+                // autoComplete="phone"
+                returnKeyType="next"
+                textAlign="left"
+                textContentType="name"
+              />
       </View>
       <View style={styless.boxfield}>
         <Image style={styless.icons} source={require('../../assets/img/home.png')} />
-        <TextInput multiline style={styless.textbox2} placeholder="Address"></TextInput>
+        {/* <TextInput multiline style={styless.textbox2} placeholder="Address"></TextInput> */}
+        <TextInput
+                mode="outlined"
+                label="Address"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={styless.textbox2}
+               
+                keyboardType="default"
+                maxLength={40}
+              
+                
+                // value={users?.userPhone}
+                autoCorrect={false}
+                // autoComplete="phone"
+                returnKeyType="next"
+                textAlign="left"
+                textContentType="address"
+              />
       </View>
+     
       <View style={styless.boxfield}>
-        <Image style={styless.icon} source={require('../../assets/img/phonecall.png')} />
-        <TextInput keyboardType="numeric" style={styless.textbox3} placeholder="Mobile Number"></TextInput>
-      </View>
+      <Image style={styless.icon} source={require('../../assets/img/phonecall.png')} />
+      <TextInput
+                mode="outlined"
+                label="Mobile Number"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={styless.textbox3}
+               
+                keyboardType="numeric"
+                maxLength={10}
+              
+                
+                // value={users?.userPhone}
+                autoCorrect={false}
+                // autoComplete="phone"
+                returnKeyType="next"
+                textAlign="left"
+                textContentType="phone"
+              />
+              </View>
 
       <Button style={styless.btn} onPress={() => createEstimate()}>
         Estimate
@@ -84,7 +153,7 @@ const styless = StyleSheet.create({
     width: '98%',
     height: 55,
     paddingLeft: 15,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: 'lightgrey',
     borderRadius: 8,
     backgroundColor: colors.white,
@@ -95,6 +164,7 @@ const styless = StyleSheet.create({
     flexDirection: 'row',
     border: 'none',
     outline: 'none',
+    alignItems:'center'
   },
   textbox2: {
     width: '98%',
@@ -102,7 +172,7 @@ const styless = StyleSheet.create({
     minHeight: 55,
     maxHeight: 110,
     backgroundColor: colors.white,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: 'lightgrey',
     borderRadius: 8,
     paddingLeft: 15,
@@ -114,7 +184,7 @@ const styless = StyleSheet.create({
   textbox3: {
     width: '98%',
     height: 55,
-    borderWidth: 1,
+    // borderWidth: 1,
     paddingLeft: 15,
     borderColor: 'lightgrey',
     borderRadius: 10,

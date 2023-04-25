@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, StyleSheet, Image, Text, TouchableOpacity, ScrollView } from 'react-native';
 import Colors from '../../assets/colors';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { selectUserId } from '../../store/selectors';
+import { useSelector } from 'react-redux';
+import { useGetShopOrderListQuery } from '../../store/slices/IdentityApiSlice';
 
 const data = [
   {
@@ -41,25 +44,20 @@ const data = [
 const OrdersHistory = () => {
   const [toggleState, setToggleState] = useState(true);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const userId = useSelector(selectUserId);
+  const { data: users } = useGetShopOrderListQuery(userId);
+  console.log(users,"getshoporderhistory")
 
-  //     const toggleTab = () => {
-  //       setToggleState(false);
 
-  //   }
-  //   const toggleTabs = () => {
-
-  //     navigation.navigate('OrderDet')
-
-  // }
 
   return (
     <View style={styles.container}>
-      <View style={styles.headbar}>
+      {/* <View style={styles.headbar}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image style={styles.arrow} source={require('../../assets/img/Group63.png')} />
         </TouchableOpacity>
-        <Text style={styles.head}>Orders History</Text>
-      </View>
+        <Text style={styles.head}>Orders Received</Text>
+      </View> */}
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.filter}>
         {data.map((item, i) => {
@@ -235,8 +233,8 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   head: {
-    fontSize: 30,
-    fontWeight: '600',
+    fontSize: 26,
+    fontWeight: '400',
     lineHeight: 36,
     color: Colors.title,
   },

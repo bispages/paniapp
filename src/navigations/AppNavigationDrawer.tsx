@@ -108,28 +108,30 @@ const AppNavigationDrawer = () => {
         name="Orderdet"
         component={Orderdet}
         options={{
-          headerShown: false,
+          headerShown: true,
         }}
       />
       <AppDrawer.Screen
         name="OrdersHistory"
         component={OrdersHistory}
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle:'Order History'
         }}
       />
       <AppDrawer.Screen
         name="ShopProfile"
         component={ShopProfile}
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle:'Shop Profile'
         }}
       />
       <AppDrawer.Screen
         name="Promotions"
         component={Promotions}
         options={{
-          headerShown: false,
+          headerShown: true,
         }}
       />
     </AppDrawer.Navigator>

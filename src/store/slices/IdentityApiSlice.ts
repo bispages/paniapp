@@ -1,9 +1,6 @@
 import { User } from 'types';
 import { ApiSlice } from './ApiSlice';
-import { selectUserId } from '../../store/selectors';
-import { useSelector } from 'react-redux';
 
-// export const userId = useSelector(selectUserId);
 export const IdentityApiSlice = ApiSlice.injectEndpoints({
  
   endpoints: builder => ({
@@ -19,9 +16,9 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
     getMaterials: builder.query<User[], void>({
       query: () => `materials`,
     }),
-    getMyOrderList: builder.query<User[], string>({
-      query: userId => `estimates?userId=${userId}`,
-    }),
+    // getMyOrderList: builder.query<User[], string>({
+    //   query: userId => `estimates?userId=${userId}`,
+    // }),
     getShopOrderList: builder.query<User[], string>({
       query: userId => `estimates?userId=${userId}`,
     }),
@@ -76,7 +73,7 @@ export const {
   useGetNearUsersQuery,
   useGetMaterialsQuery,
   useGetFavUsersQuery,
-  useGetMyOrderListQuery,
+  // useGetMyOrderListQuery,
   useGetShopOrderListQuery,
   useGetEstimateDetQuery,
   useSendEstimateMutation,
@@ -92,7 +89,7 @@ export const {
   getMaterials,
   getFavUsers,
   getShopOrderList,
-  getMyOrderList,
+  // getMyOrderList,
   getEstimateDet,
   setFavUser,
   sendEstimate,

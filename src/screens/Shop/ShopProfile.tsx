@@ -1,13 +1,23 @@
 import React from 'react';
-import { View, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
-import { Text } from 'react-native-paper';
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+// import { Text } from 'react-native-paper';
+import { TextInput, useTheme, Text } from 'react-native-paper';
 import colors from '../../assets/colors';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import styless from '../Profile/Profile.style';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { selectUserId } from '../../store/selectors';
+import { useSelector } from 'react-redux';
+import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
 
 const ShopProfile = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const userId = useSelector(selectUserId);
+ 
+
+  const { data: users } = useGetUsersQuery(userId);
+  console.log(users,"getUsersiooio");
+  const { appColors } = useTheme();
   return (
     <View style={styless.container}>
       <View style={styles.headcontainer}>
@@ -21,10 +31,100 @@ const ShopProfile = () => {
         <Text style={styles.profiletag}>Add Profile Picture</Text>
       </View>
       <View style={styles.details}>
-        <TextInput style={styles.inputdetails} placeholder="Enter Name"></TextInput>
-        <TextInput style={styles.inputdetails} placeholder="Pin code"></TextInput>
-        <TextInput style={styles.inputdetails} placeholder="Place"></TextInput>
-        <TextInput style={styles.inputdetails} placeholder="Phone"></TextInput>
+      <TextInput
+                mode="outlined"
+                label="Name"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput]}
+               
+                keyboardType="default"
+                maxLength={40}
+              
+                // defaultValue={userName}
+                value={users?.userName}
+                autoCorrect={false}
+                autoComplete="name"
+                // returnKeyType="next"
+                textAlign="left"
+                textContentType="name"
+              />
+           
+              <TextInput
+                mode="outlined"
+                label="Place"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput]}
+               
+                keyboardType="default"
+                maxLength={40}
+              
+                // defaultValue={userName}
+                value={users?.place}
+                autoCorrect={false}
+                autoComplete="name"
+                // returnKeyType="next"
+                textAlign="left"
+                textContentType="name"
+              />
+              <TextInput
+                mode="outlined"
+                label="Pincode"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput]}
+               
+                keyboardType="default"
+                maxLength={6}
+              
+                defaultValue={Number}
+                value={users?.pincode}
+                autoCorrect={false}
+                autoComplete="name"
+                // returnKeyType="next"
+                textAlign="left"
+                textContentType="name"
+              />
+              <TextInput
+                mode="outlined"
+                label="User Phone"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={styles.textInput}
+               
+                keyboardType="numeric"
+                maxLength={10}
+              
+                
+                value={users?.userPhone}
+                autoCorrect={false}
+                // autoComplete="phone"
+                returnKeyType="next"
+                textAlign="left"
+                textContentType="phone"
+              />
+       
       </View>
 
       <View style={styles.savebtn}>
@@ -43,6 +143,10 @@ const styles = StyleSheet.create({
     height: 200,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  textInput:{
+    width: '70%',
+    marginVertical:3
   },
   profiletxt: {
     fontSize: 30,

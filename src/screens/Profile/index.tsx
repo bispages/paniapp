@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { TextInput, useTheme } from 'react-native-paper';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors';
 import styless from './Profile.style';
 import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { selectUserId } from '../../store/selectors';
+import { useSelector } from 'react-redux';
 
 const Profile = () => {
 
-  const { data: users } = useGetUsersQuery();
+  const userId = useSelector(selectUserId);
+  // const { data: userdet } = useGetNearUsersQuery(userId);
+
+  const { data: users } = useGetUsersQuery(userId);
   console.log(users,"getUsersiooio");
 
   const[mode,setMode] = useState('');
@@ -19,7 +24,7 @@ const Profile = () => {
   });
 
   // console.log(JSON.stringify(mode?.userId),"12345678hjjgh");
-
+  const { appColors } = useTheme();
   return (
     <View style={styless.container}>
       <View  style={styles.profilecontainer}>
@@ -28,20 +33,104 @@ const Profile = () => {
         </View>
         <Text  style={styles.profiletag}>Add Profile Picture</Text>
       </View>
-      {
-        users?.users?.map((item, i) => {
-            return (
-
+     
               <View style={styles.details}>
-              <TextInput  style={styles.inputdetails}>{item?.userName}</TextInput>
-              <TextInput  style={styles.inputdetails}>{item?.place}</TextInput>
-              <TextInput  style={styles.inputdetails}>{item?.pincode}</TextInput>
-              <TextInput  style={styles.inputdetails}>{item?.userPhone}</TextInput>
+              <TextInput
+                mode="outlined"
+                label="Name"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput]}
+               
+                keyboardType="default"
+                maxLength={40}
+              
+                // defaultValue={userName}
+                value={users?.userName}
+                autoCorrect={false}
+                autoComplete="name"
+                // returnKeyType="next"
+                textAlign="left"
+                textContentType="name"
+              />
+           
+              <TextInput
+                mode="outlined"
+                label="Place"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput]}
+               
+                keyboardType="default"
+                maxLength={40}
+              
+                // defaultValue={userName}
+                value={users?.place}
+                autoCorrect={false}
+                autoComplete="name"
+                // returnKeyType="next"
+                textAlign="left"
+                textContentType="name"
+              />
+              <TextInput
+                mode="outlined"
+                label="Pincode"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput]}
+               
+                keyboardType="default"
+                maxLength={6}
+              
+                defaultValue={Number}
+                value={users?.pincode}
+                autoCorrect={false}
+                autoComplete="name"
+                // returnKeyType="next"
+                textAlign="left"
+                textContentType="name"
+              />
+              <TextInput
+                mode="outlined"
+                label="User Phone"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={styles.textInput}
+               
+                keyboardType="numeric"
+                maxLength={10}
+              
+                
+                value={users?.userPhone}
+                autoCorrect={false}
+                // autoComplete="phone"
+                returnKeyType="next"
+                textAlign="left"
+                textContentType="phone"
+              />
+         {/* <Text>{users?.userPhone}</Text> */}
+              
               </View>
-
-            )})
-      }
-      
 
       <View style={styles.savebtn}>
         <TouchableOpacity style={styles.save}>
@@ -55,6 +144,11 @@ const Profile = () => {
 
 export default Profile;
 const styles = StyleSheet.create({
+  textInput:{
+    width: '70%',
+    marginVertical:3
+  },
+
   profilecontainer:{
     width:'100%',
     height:200,
