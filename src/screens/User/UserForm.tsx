@@ -401,7 +401,12 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 textContentType="name"
               />
             </View>
-            <TouchableOpacity style={{borderColor:'grey', width:'70%',  height:50, borderWidth:1, borderRadius:4,display:'flex',justifyContent:'center',marginHorizontal:10,}} 
+            <TouchableOpacity 
+            style={{borderColor:'grey', 
+            width:'70%', height:50, 
+            borderWidth:1, borderRadius:4, 
+            display:'flex', justifyContent:'center', 
+            marginHorizontal:10,}} 
             // onPress={navigation.navigate('placeselection')}
             >
               

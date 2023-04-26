@@ -23,7 +23,7 @@ const EstimateForm = () => {
   const { customer } = formVal;
 
   const createEstimate = () => {
-    dispatch(addCustomer({ name, area, mobile, pincode }));
+    dispatch(addCustomer({ name, area, mobile, }));
     navigation.navigate('MaterialTypes');
   };
   const { appColors } = useTheme();
@@ -82,10 +82,10 @@ const EstimateForm = () => {
                   },
                 }}
                 style={styless.textbox2}
-               
+                multiline={true}
                 keyboardType="default"
-                maxLength={40}
-              
+                maxLength={80}
+               
                 
                 // value={users?.userPhone}
                 autoCorrect={false}
@@ -119,7 +119,7 @@ const EstimateForm = () => {
                 // autoComplete="phone"
                 returnKeyType="next"
                 textAlign="left"
-                textContentType="phone"
+                textContentType="mobile"
               />
               </View>
 
@@ -169,6 +169,7 @@ const styless = StyleSheet.create({
   textbox2: {
     width: '98%',
     outline: 'none',
+    
     minHeight: 55,
     maxHeight: 110,
     backgroundColor: colors.white,

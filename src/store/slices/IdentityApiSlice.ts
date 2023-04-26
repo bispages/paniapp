@@ -16,9 +16,9 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
     getMaterials: builder.query<User[], void>({
       query: () => `materials`,
     }),
-    // getMyOrderList: builder.query<User[], string>({
-    //   query: userId => `estimates?userId=${userId}`,
-    // }),
+    getMyOrderList: builder.query<User[], string>({  
+      query: userId => `estimates?userId=${userId}`,
+    }),
     getShopOrderList: builder.query<User[], string>({
       query: userId => `estimates?userId=${userId}`,
     }),
@@ -73,7 +73,7 @@ export const {
   useGetNearUsersQuery,
   useGetMaterialsQuery,
   useGetFavUsersQuery,
-  // useGetMyOrderListQuery,
+  useGetMyOrderListQuery,
   useGetShopOrderListQuery,
   useGetEstimateDetQuery,
   useSendEstimateMutation,
@@ -89,7 +89,7 @@ export const {
   getMaterials,
   getFavUsers,
   getShopOrderList,
-  // getMyOrderList,
+  getMyOrderList,
   getEstimateDet,
   setFavUser,
   sendEstimate,

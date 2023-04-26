@@ -3,6 +3,7 @@ import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput, ScrollView 
 import Colors from '../../assets/colors';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import {useGetMaterialsQuery} from '../../store/slices/IdentityApiSlice'
 // import {colors} from '../../assets/colors'
 
 const arr = [
@@ -128,11 +129,16 @@ const countitem = [
 const MaterialItems = () => {
   const [visible, setVisible] = useState(false);
   const [num, setNum] = useState(false);
-  const [productDetails, setProductDetails] = useState([]);
+  const [productDetails, setProductDetails] = useState([]);  
+  const [matType, setMatType] = useState();
+  const [matItemName, setMatItemName] = useState();
   const [data, setData] = useState(countitem);
   const [load, setLoad] = useState(true);
   const [click, setClick] = useState({ id: 0, count: 0 });
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+
+  const { data: matItems } = useGetMaterialsQuery();
+  console.log(matItems,"matItems123456")
 
   const popup = () => {
     setNum(true);
@@ -217,7 +223,7 @@ const MaterialItems = () => {
           <View style={styles.contentdiv}>
             <View style={styles.contentdivtap}></View>
             <View style={styles.contentbar}>
-              <Text style={styles.producttxt}>PVC - Elbow Holder</Text>
+              <Text style={styles.producttxt}>{matType} - {matItemName}</Text>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.below}>
               {countitem?.map((item, index) => {
@@ -274,11 +280,11 @@ const MaterialItems = () => {
       </View> */}
       <ScrollView style={styles.cardcontainer}>
         <View style={styles.cardboxcontainer}>
-          {arr?.map((item, i) => {
+          {matItems?.map((item, i) => {
             return (
-              <TouchableOpacity style={styles.card} onPress={() => setVisible(!visible)} key={i}>
-                <Image style={styles.productimg} source={item?.img} />
-                <Text style={styles.txt}>{item?.title}</Text>
+              <TouchableOpacity style={styles.card} onPress={() => [setVisible(!visible),setMatType(item?.materialType),setMatItemName(item?.materialName)]} key={i}>
+                <Image style={styles.productimg} source={item?.image} />
+                <Text style={styles.txt}>{item?.materialName}</Text>  
               </TouchableOpacity>
             );
           })}
@@ -378,7 +384,7 @@ const styles = StyleSheet.create({
     color: '#515253',
   },
   cardcontainer: {
-    // marginHorizontal:10,
+    marginVertical:10,
     display: 'flex',
     // flexDirection:'row',
     // flexWrap:'wrap',

@@ -48,7 +48,9 @@ const OrdersHistory = () => {
   const { data: users } = useGetShopOrderListQuery(userId);
   console.log(users,"getshoporderhistory")
 
-
+  const toggleTabs = () => {
+    navigation.navigate('OrderDet');
+  };
 
   return (
     <View style={styles.container}>
@@ -65,7 +67,7 @@ const OrdersHistory = () => {
             <TouchableOpacity
               style={styles.card}
               key={i}
-              // onPress={()=>toggleTabs()}
+              onPress={()=>toggleTabs()}
             >
               <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
               <View style={styles.subcard}>
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 110,
     borderRadius: 8,
-    backgroundColor: '#D2D8DB',
+    backgroundColor: '#E5E5E5',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginVertical: 10,

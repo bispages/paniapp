@@ -5,7 +5,8 @@ import { useTheme } from 'react-native-paper';
 //   TransitionPresets,
 // } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
+import { TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { DrawerActions } from '@react-navigation/native';
 // import Search from '../screens/Search';
 import Profile from '../screens/Profile';
 import MyOrder from '../screens/MyOrder';
@@ -19,6 +20,7 @@ import Promotions from '../screens/Shop/Promotions';
 // import Details from '../screens/Details';
 import EstimateNavigationStack from '../navigations/EstimateNavigationStack';
 import Orderdet from '../screens/MyOrder/Orderdet';
+import styles from 'screens/Estimate/Estimate.style';
 
 const AppDrawer = createDrawerNavigator();
 // const SearchStack = createStackNavigator();
@@ -84,9 +86,30 @@ const AppNavigationDrawer = () => {
       <AppDrawer.Screen
         name="Profile"
         component={Profile}
-        options={{
+        options={({ navigation }) => ({
           headerShown: true,
-        }}
+          headerTitle:'My Profile', 
+
+          headerTitleAlign: 'center', 
+          headerTitleStyle: {
+            fontSize: 24,
+            color:'#455A64',
+            fontWeight:'400'
+          },
+          
+
+          headerLeft: () => (
+        
+            <TouchableOpacity
+            
+          onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+             <Image source={require('../../src/assets/img/menu.png')} style={styless.menudes}
+            />
+            </TouchableOpacity>
+           
+          ),
+
+        })}
       />
       {/* <AppDrawer.Screen name="Bookmarks" component={Bookmarks} /> */}
       {/* <AppDrawer.Screen name="Settings" component={Settings} /> */}
@@ -95,47 +118,159 @@ const AppNavigationDrawer = () => {
         component={Support}
         options={{
           headerShown: true,
+       
         }}
       />
       <AppDrawer.Screen
         name="MyOrder"
         component={MyOrder}
-        options={{
+        options={({ navigation }) => ({
           headerShown: true,
-        }}
+          headerTitle:'My Order', 
+
+          headerTitleAlign: 'center', 
+          headerTitleStyle: {
+            fontSize: 24,
+            color:'#455A64',
+            fontWeight:'400'
+          },
+          
+
+          headerLeft: () => (
+        
+            <TouchableOpacity
+            
+          onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+             <Image source={require('../../src/assets/img/menu.png')} style={styless.menudes}
+            />
+            </TouchableOpacity>
+           
+          ),
+
+        })}
       />
       <AppDrawer.Screen
         name="Orderdet"
         component={Orderdet}
-        options={{
+        options={({ navigation }) => ({
           headerShown: true,
-        }}
+          headerTitle:'Order Details',
+          headerTitleAlign: 'center', 
+          headerTitleStyle: {
+            fontSize: 24,
+            color:'#455A64',
+            fontWeight:'400'
+          },
+          
+
+          headerLeft: () => (
+        
+            <TouchableOpacity
+            onPress={() => navigation.goBack()}>
+            <Image source={require('../../src/assets/img/backarrow.png')} 
+            style={styless.backimg}
+            />
+            </TouchableOpacity>
+           
+          ),
+        })}
       />
       <AppDrawer.Screen
         name="OrdersHistory"
         component={OrdersHistory}
-        options={{
+        options={({ navigation }) => ({
           headerShown: true,
-          headerTitle:'Order History'
-        }}
+          headerTitle:'Order History', 
+
+          headerTitleAlign: 'center', 
+          headerTitleStyle: {
+            fontSize: 24,
+            color:'#455A64',
+            fontWeight:'400'
+          },
+          
+
+          headerLeft: () => (
+        
+            <TouchableOpacity
+            
+          onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+             <Image source={require('../../src/assets/img/menu.png')} style={styless.menudes}
+            />
+            </TouchableOpacity>
+           
+          ),
+
+        })}
       />
       <AppDrawer.Screen
         name="ShopProfile"
         component={ShopProfile}
-        options={{
+        options={({ navigation }) => ({
           headerShown: true,
-          headerTitle:'Shop Profile'
-        }}
+          headerTitle:'Shop Profile',
+          headerTitleAlign: 'center', 
+          headerTitleStyle: {
+            fontSize: 24,
+            color:'#455A64',
+            fontWeight:'400'
+          },
+          
+
+          headerLeft: () => (
+        
+            <TouchableOpacity
+            onPress={() => navigation.goBack()}>
+            <Image source={require('../../src/assets/img/backarrow.png')} 
+            style={styless.backimg}
+            />
+            </TouchableOpacity>
+           
+          ),
+        })}
       />
       <AppDrawer.Screen
         name="Promotions"
         component={Promotions}
-        options={{
+        options={({ navigation }) => ({
           headerShown: true,
-        }}
+          headerTitle:'Promotions',
+          headerTitleAlign: 'center', 
+          headerTitleStyle: {
+            fontSize: 24,
+            color:'#455A64',
+            fontWeight:'400'
+          },
+          
+
+          headerLeft: () => (
+        
+            <TouchableOpacity
+            onPress={() => navigation.goBack()}>
+            <Image source={require('../../src/assets/img/backarrow.png')} 
+            style={styless.backimg}
+            />
+            </TouchableOpacity>
+           
+          ),
+        })}
       />
     </AppDrawer.Navigator>
   );
 };
 
 export default AppNavigationDrawer;
+const styless = StyleSheet.create({
+backimg: {
+  width: 40,
+  height: 40,
+  marginLeft: 10,
+  marginTop:10
+},
+menudes:{
+  width: 35,
+  height: 28,
+  marginLeft: 15,
+  marginTop:10
+}
+})

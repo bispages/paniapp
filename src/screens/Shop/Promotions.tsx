@@ -11,10 +11,10 @@ const Promotions = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headbar}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        {/* <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image style={styles.arrow} source={require('../../assets/img/backarrow.png')} />
         </TouchableOpacity>
-        <Text style={styles.head}>Promotions</Text>
+        <Text style={styles.head}>Promotions</Text> */}
       </View>
       <View style={styles.promohead}>
         <Image source={require('../../assets/img/whatsapp2.png')} />
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginVertical: 30,
+    marginVertical: 10,
     display: 'flex',
     flexDirection: 'row',
     marginHorizontal: 8,
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   },
   head: {
     fontSize: 30,
-    fontWeight: '600',
+    fontWeight: '400',
     lineHeight: 36,
     color: Colors.title,
   },

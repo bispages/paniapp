@@ -20,12 +20,12 @@ const ShopProfile = () => {
   const { appColors } = useTheme();
   return (
     <View style={styless.container}>
-      <View style={styles.headcontainer}>
+      {/* <View style={styles.headcontainer}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={require('../../assets/img/backarrow.png')} style={styles.imgback} />
         </TouchableOpacity>
         <Text style={styles.profiletxt}>Shop Profile</Text>
-      </View>
+      </View> */}
       <View style={styles.profilecontainer}>
         <View style={styles.profile}></View>
         <Text style={styles.profiletag}>Add Profile Picture</Text>
@@ -156,8 +156,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   imgback: {
-    width: 45,
-    height: 45,
+    width: 40,
+    height: 40,
     marginHorizontal: 20,
   },
   profile: {
@@ -183,7 +183,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     marginBottom: 12,
-    // backgroundColor:'red'
+    // backgroundColor:'red',
+    marginTop:-50
   },
   details: {
     display: 'flex',

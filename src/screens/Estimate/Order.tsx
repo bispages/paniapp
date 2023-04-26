@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, StyleSheet, Image, Text, TouchableOpacity, ScrollView } from 'react-native';
 import Colors from '../../assets/colors';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { selectUserId } from '../../store/selectors';
+import { useSelector } from 'react-redux';
+import { useGetShopOrderListQuery } from '../../store/slices/IdentityApiSlice';
 
 const data = [
   {
@@ -46,6 +49,11 @@ const Order = () => {
   //       setToggleState(false);
 
   //   }
+
+  const userId = useSelector(selectUserId);
+  const { data: ordersget } = useGetShopOrderListQuery(userId);
+
+  console.log("OrdersList123", ordersget)
   const toggleTabs = () => {
     navigation.navigate('OrderDet');
   };
@@ -53,10 +61,10 @@ const Order = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headbar}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        {/* <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image style={styles.arrow} source={require('../../assets/img/Group63.png')} />
         </TouchableOpacity>
-        <Text style={styles.head}>Order Received</Text>
+        <Text style={styles.head}>Order Received</Text> */}
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.filter}>
@@ -95,7 +103,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginVertical: 20,
+    marginVertical: 5,
     display: 'flex',
     flexDirection: 'row',
     marginHorizontal: 8,

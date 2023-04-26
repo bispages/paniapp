@@ -33,16 +33,18 @@ const product = [
 const OrderDet = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   return (
+    
     <View style={styles.container}>
-      <View style={styles.ordercontainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+      {/* <View style={styles.ordercontainer}> */}
+        
+        {/* <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={require('../../assets/img/backarrow.png')} style={styles.imgcontainer} />
         </TouchableOpacity>
         <Text style={styles.orderdiv}>Order Details</Text>
         <TouchableOpacity>
           <Image source={require('../../assets/img/print.png')} style={styles.imgcontainer} />
-        </TouchableOpacity>
-      </View>
+        </TouchableOpacity> */}
+      {/* </View> */}
       <View style={styles.topcontainer}>
         <View style={styles.card}>
           <View style={styles.carddet}>
@@ -94,12 +96,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    paddingHorizontal: 10,
+    paddingVertical: 10,
+    
+    backgroundColor:'#fff'
   },
   topcontainer: {
-    flex: 0.48,
+    flex: 0.49,
     flexDirection: 'column',
     backgroundColor: '#F9F7F7',
+    justifyContent:'center'
+    // backgroundColor: 'red',
+
   },
   ordercontainer: {
     display: 'flex',
@@ -107,6 +114,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginVertical: 8,
+    backgroundColor:'#fff'
   },
   bottomcontainer: {
     flex: 0.65,
@@ -114,18 +122,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   phonecontainer: {
-    width: 40,
-    height: 40,
+    width: 35,
+    height: 35,
     marginHorizontal: 5,
   },
   card: {
-    width: '100%',
+    width: '96%',
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf:'center',
     justifyContent: 'space-between',
     height: 80,
     borderRadius: 4,
-    backgroundColor: '#E7E7E7',
+    backgroundColor:'rgba(217, 217, 217, 0.4)',
     marginVertical: 5,
   },
   carddet: {

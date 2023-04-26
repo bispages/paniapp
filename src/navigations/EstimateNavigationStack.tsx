@@ -50,6 +50,7 @@ const EstimateNavigationStack = () => {
         component={Estimate}
         options={({ navigation }) => ({
           headerTitle: '',
+          
           headerLeft: () => (
             <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
@@ -95,12 +96,18 @@ const EstimateNavigationStack = () => {
         name="Order"
         component={Order}
         options={({ navigation }) => ({
-          headerTitle: '',
+          headerTitle: 'Orders Received',
+          headerTitleAlign: 'center', 
+          headerTitleStyle: {
+            fontSize: 24,
+            color:'#455A64',
+            fontWeight:'400'
+          },
           headerLeft: () => (
             // <Image source={require('../../src/assets/img/Group 54.png')}/>
             <TouchableOpacity
-            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-            <Image source={require('../../src/assets/img/menu.png')} style={styles.menudes}
+            onPress={() => navigation.goBack()}>
+            <Image source={require('../../src/assets/img/backarrow.png')} style={styles.backimg}
             />
             </TouchableOpacity>
           ),
@@ -113,6 +120,12 @@ const EstimateNavigationStack = () => {
         options={({ navigation }) => ({
           headerTitle: 'Select Materials',
           headerTitleAlign: 'center',
+         
+          headerTitleStyle: {
+            fontSize: 24,
+            color:'#455A64',
+            fontWeight:'400'
+          },
           headerLeft: () => (
         
             <TouchableOpacity
@@ -121,6 +134,7 @@ const EstimateNavigationStack = () => {
             </TouchableOpacity>
            
           ),
+          
           headerRight: () => (
         
             <TouchableOpacity
@@ -137,6 +151,12 @@ const EstimateNavigationStack = () => {
         options={({ navigation }) =>({ 
           headerTitle: 'Cart View',
           headerTitleAlign: 'center', 
+          headerTitleStyle: {
+            fontSize: 24,
+            color:'#455A64',
+            fontWeight:'400'
+          },
+          
 
           headerLeft: () => (
         
@@ -151,24 +171,65 @@ const EstimateNavigationStack = () => {
         <EstimateStack.Screen
         name="OrderDet"
         component={OrderDet}
-        options={{ title: '' }}
+        options={({ navigation }) =>({ 
+          headerTitle: 'Order Details',
+          headerTitleAlign: 'center', 
+          headerTitleStyle: {
+            fontSize: 24,
+            color:'#455A64',
+            fontWeight:'400'
+          },
+
+          headerLeft: () => (
+        
+            <TouchableOpacity
+            onPress={() => navigation.goBack()}>
+            <Image source={require('../../src/assets/img/backarrow.png')} style={styles.backimgs} />
+            </TouchableOpacity>
+           
+          ),
+          headerRight: () => (
+        
+            <TouchableOpacity
+            onPress={() => navigation.navigate('Cart')}>
+            <Image source={require('../../src/assets/img/print.png')} style={styles.printimg} />
+            </TouchableOpacity>
+           
+          ),
+        })}
       />
       <EstimateStack.Screen
       
         name="MaterialItems"
         component={MaterialItems}
-        options={({ navigation }) => ({
-          headerTitle: 'Material Items',
-          headerTitleAlign: 'center', 
-          headerLeft: () => (
+       
+          options={({ navigation }) => ({
+            headerTitle: 'Material Items',
+            headerTitleAlign: 'center',
+           
+            headerTitleStyle: {
+              fontSize: 24,
+              color:'#455A64',
+              fontWeight:'400'
+            },
+            headerLeft: () => (
           
-            <TouchableOpacity
-            onPress={() => navigation.goBack()}>
-              <Image source={require('../../src/assets/img/backarrow.png')} style={styles.backimgs} />
+              <TouchableOpacity
+              onPress={() => navigation.goBack()}>
+              <Image source={require('../../src/assets/img/backarrow.png')} style={styles.backimg} />
+              </TouchableOpacity>
+             
+            ),
             
-            </TouchableOpacity>
-          ),
-        })}
+            headerRight: () => (
+          
+              <TouchableOpacity
+              onPress={() => navigation.navigate('Cart')}>
+              <Image source={require('../../src/assets/img/cart.png')} style={styles.cartimg} />
+              </TouchableOpacity>
+             
+            ),
+          })}
       />
       {/* <EstimateStack.Screen
         name="EstimateTableView"
@@ -182,6 +243,12 @@ const EstimateNavigationStack = () => {
         options={({ navigation }) => ({
           headerTitle: 'Final Estimate',
           headerTitleAlign: 'center', 
+          
+          headerTitleStyle: {
+            fontSize: 24,
+            color:'#455A64',
+            fontWeight:'400'
+          },
           headerLeft: () => (
           
             <TouchableOpacity
@@ -239,7 +306,7 @@ const styles = StyleSheet.create({
   backimg: {
     width: 40,
     height: 40,
-    marginLeft: 20,
+    marginLeft: 10,
     marginTop:10
   },
   cartimg: {
@@ -248,10 +315,16 @@ const styles = StyleSheet.create({
     marginRight:20,
     marginTop:10
   },
+  printimg:{
+    width: 40,
+    height: 40,
+    marginRight:10,
+    marginTop:10
+  },
   backimgs:{
     width: 35,
     height: 35,
-    marginLeft: 20,
+    marginLeft: 10,
     marginTop:10
   }
 })
