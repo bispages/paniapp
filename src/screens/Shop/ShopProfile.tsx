@@ -8,16 +8,18 @@ import styless from '../Profile/Profile.style';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { selectUserId } from '../../store/selectors';
 import { useSelector } from 'react-redux';
-import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
+import { useGetUsersQuery, useUpdateUserProfileMutation } from '../../store/slices/IdentityApiSlice';
+import { selectUser } from '../../store/selectors';
 
 const ShopProfile = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const userId = useSelector(selectUserId);
  
-
+  // const { data: users } = useUpdateUserProfileMutation();
   const { data: users } = useGetUsersQuery(userId);
   console.log(users,"getUsersiooio");
   const { appColors } = useTheme();
+  const user = useSelector(selectUser);
   return (
     <View style={styless.container}>
       {/* <View style={styles.headcontainer}>
@@ -27,7 +29,15 @@ const ShopProfile = () => {
         <Text style={styles.profiletxt}>Shop Profile</Text>
       </View> */}
       <View style={styles.profilecontainer}>
-        <View style={styles.profile}></View>
+        <View style={styles.profile}>
+        {user?.image?.path ? (
+              <Avatar.Image source={{ uri: user?.image?.path }} size={200} />
+            ) : (
+              // <Avatar.Icon size={200} icon="account-circle" /> 
+              <Image source={require('../../assets/img/mdi_shop.png')} style={{resizeMode:'contain',width:140, height:140}}/>
+            
+            )}
+        </View>
         <Text style={styles.profiletag}>Add Profile Picture</Text>
       </View>
       <View style={styles.details}>
@@ -167,6 +177,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderColor: colors.profileborder,
     borderRadius: 10,
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'center'
   },
   profiletag: {
     fontSize: 16,

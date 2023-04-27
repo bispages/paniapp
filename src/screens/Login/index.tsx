@@ -503,7 +503,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex:1,
+    zIndex:2,
     backgroundColor: 'rgba(80, 80, 80, 0.3)',
     display:'flex',
     alignItems:'center',

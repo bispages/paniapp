@@ -5,7 +5,7 @@ export default StyleSheet.create({
     flex: 1,
   },
   userInfoSection: {
-    paddingLeft: 20,
+    paddingLeft: 20, 
   },
   title: {
     fontSize: 22,
