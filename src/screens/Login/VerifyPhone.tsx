@@ -86,7 +86,7 @@ console.log(userPhone,"123abc")
     };
   });
   const settime =()=> {
-    setShow(true);  
+    setShow(true);        
     setSeconds(30);
     setMinutes(0);
   }

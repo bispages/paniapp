@@ -185,7 +185,7 @@ const Profile = () => {
       <View style={styles.profilecontainer}>
         <View style={styles.profile}>
         
-              <ImageBackground
+              {/* <ImageBackground
                 source={{
                   uri: image.path,
                 }}
@@ -196,7 +196,7 @@ const Profile = () => {
                     backgroundColor: appColors.dimwhite,
                   },
                 ]}
-              />
+              /> */}
               
 
         </View>

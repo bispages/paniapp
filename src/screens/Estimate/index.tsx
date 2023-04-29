@@ -11,6 +11,7 @@ import EmptyList from '../../assets/img/empty_list.svg';
 import colors from '../../assets/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { useGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
 
 const data = [
   {
@@ -44,6 +45,15 @@ const Estimate = () => {
   AsyncStorage.getItem('usertype').then(value => {
     setMode(value);
   });
+
+  const { data: matItems, isLoading, isError } = useGetMaterialsQuery();
+  let matlist;
+
+  const callestimate = () => {
+    matlist = matItems;
+    navigation.navigate('EstimateForm');
+  }
+
 
   return (
     <View style={[styless.panelButtonContainer]}>
@@ -108,7 +118,7 @@ const Estimate = () => {
           </View>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate('EstimateForm')}>
+        <TouchableOpacity style={styles.cardcontainer} onPress={() => callestimate()}>
           <View style={styles.LeftContainer}>
             <Image style={styles.iconimg} source={require('../../assets/img/estimate.png')} />
           </View>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, ScrollView, Pressable, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
-
 import { MaterialType } from '../../types';
 // import { materialTypesList } from '../../utils/materialTypesList';
 import styles from './Estimate.style';
@@ -17,17 +16,21 @@ const MaterialTypes = () => {
   const { dark, colors } = useTheme();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [vist, setVisit] = useState(false);
-  const { data: matItems } = useGetMaterialsQuery();
-  console.log(Object.keys(matItems),matItems['PVC'],"matItems123456");
- 
+  const { data: matItems, isFetching, isError } = useGetMaterialsQuery();
+
+  if (isFetching) {
+    return null;
+  }
+
+  console.log(matItems, 'matItems123456');
+
   const matypes = Object.keys(matItems);
 
-  console.log(matypes,"WWWmatItems123456");
+  // console.log(matypes,"WWWmatItems123456");
   const changestate = () => {
     setVisit(!vist);
     // navigation.navigate("ChooseShop")
-    navigation.navigate("FinalEstimate")
-    
+    navigation.navigate('FinalEstimate');
   };
   // const movetocart = () => {
   //   navigation.navigate('Cart');
@@ -61,7 +64,7 @@ const MaterialTypes = () => {
           <View style={{ flex: 1 }}>
             <ScrollView>
               <View style={styles.listContainer}>{matypes.map(renderMaterialTypesList)}</View>
-{/* <Text>{matypes[0]}</Text> */}
+              {/* <Text>{matypes[0]}</Text> */}
             </ScrollView>
           </View>
         ) : null}
@@ -151,7 +154,6 @@ const styless = StyleSheet.create({
     justifyContent: 'flex-end',
     backgroundColor: colors.white,
     marginRight: '27%',
-    // position:'absolute',
     marginTop: 20,
   },
   btncontainers: {
