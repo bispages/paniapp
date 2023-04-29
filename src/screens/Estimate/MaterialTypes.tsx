@@ -4,11 +4,12 @@ import { Text, useTheme } from 'react-native-paper';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 
 import { MaterialType } from '../../types';
-import { materialTypesList } from '../../utils/materialTypesList';
+// import { materialTypesList } from '../../utils/materialTypesList';
 import styles from './Estimate.style';
 import colorss from '../../assets/colors';
 import colors from '../../assets/colors';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { useGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
 // import Cart from '../Estimate/Cart/Cart'
 // import { Image } from 'react-native-paper/lib/typescript/components/Avatar/Avatar';
 
@@ -16,7 +17,12 @@ const MaterialTypes = () => {
   const { dark, colors } = useTheme();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [vist, setVisit] = useState(false);
+  const { data: matItems } = useGetMaterialsQuery();
+  console.log(Object.keys(matItems),matItems['PVC'],"matItems123456");
+ 
+  const matypes = Object.keys(matItems);
 
+  console.log(matypes,"WWWmatItems123456");
   const changestate = () => {
     setVisit(!vist);
     // navigation.navigate("ChooseShop")
@@ -27,14 +33,14 @@ const MaterialTypes = () => {
   //   navigation.navigate('Cart');
   // };
 
-  const moveToMaterialItemSelect = (type: MaterialType) => {
+  const moveToMaterialItemSelect = (type: matypes) => {
     setTimeout(() => {
       navigation.navigate('MaterialItems', { type });
     }, 20);
   };
 
   // Function to render material Types List.
-  const renderMaterialTypesList = (item: MaterialType) => {
+  const renderMaterialTypesList = (item: matypes) => {
     return (
       <Pressable
         key={item.id}
@@ -42,7 +48,7 @@ const MaterialTypes = () => {
         style={[styles.block, { backgroundColor: colorss.materialbackground }]}
         android_ripple={{ color: colors.background, radius: 200 }}>
         <Text style={styless.txt} theme={{ colors: { text: colorss.background } }}>
-          {item.name}
+          {item}
         </Text>
       </Pressable>
     );
@@ -51,10 +57,11 @@ const MaterialTypes = () => {
   return (
     <View style={styles.container}>
       <View style={styles.itemsContainer}>
-        {materialTypesList ? (
+        {matypes ? (
           <View style={{ flex: 1 }}>
             <ScrollView>
-              <View style={styles.listContainer}>{materialTypesList.map(renderMaterialTypesList)}</View>
+              <View style={styles.listContainer}>{matypes.map(renderMaterialTypesList)}</View>
+{/* <Text>{matypes[0]}</Text> */}
             </ScrollView>
           </View>
         ) : null}
