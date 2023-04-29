@@ -41,12 +41,12 @@ const data = [
   },
 ];
 
-  const OrdersHistory = () => {
+const OrdersHistory = () => {
   const [toggleState, setToggleState] = useState(true);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const userId = useSelector(selectUserId);
-  const { data: users } = useGetShopOrderListQuery(userId);
-  console.log(userId,"getshoporderhistory")
+  const { data: users } = useGetShopOrderListQuery({ userId });
+  console.log(users, 'getshoporderhistory');
 
   const toggleTabs = () => {
     navigation.navigate('OrderDet');
@@ -54,7 +54,6 @@ const data = [
 
   return (
     <View style={styles.container}>
-
       {/* <View style={styles.headbar}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image style={styles.arrow} source={require('../../assets/img/Group63.png')} />
@@ -65,11 +64,7 @@ const data = [
       <ScrollView showsVerticalScrollIndicator={false} style={styles.filter}>
         {data.map((item, i) => {
           return (
-            <TouchableOpacity
-              style={styles.card}
-              key={i}
-              onPress={()=>toggleTabs()}
-            >
+            <TouchableOpacity style={styles.card} key={i} onPress={() => toggleTabs()}>
               <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
               <View style={styles.subcard}>
                 <Text style={styles.det}>{item?.date}</Text>
