@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor:colors.white
+    backgroundColor:colors.white,
   },
   headingContainer: {
     flex: 0.27,
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     flexDirection:'row',
     justifyContent: 'space-between',
-    backgroundColor:colors.white
+    backgroundColor:colors.white,
     // backgroundColor:'red'
   },
   heading: {
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     // backgroundColor:'red',
   //  marginTop:-20,
     width: '100%',
-    backgroundColor:colors.white
+    backgroundColor:colors.white,
   },
   listContainer: {
     flex: 1,
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     
-    backgroundColor:colors.materialbackground
+    backgroundColor:colors.materialbackground,
   },
   panelButtonContainer: {
     width: '100%',
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor:'white'
+    backgroundColor:colors.white
   },
   panelButtonView: {
     width: '90%',
