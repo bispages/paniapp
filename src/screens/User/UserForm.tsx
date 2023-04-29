@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback, useMemo, RefObject,} from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo, RefObject} from 'react';
 import { Text, View, Keyboard, Pressable, ImageBackground, StyleSheet, useWindowDimensions, Alert, TouchableOpacity, NativeEventEmitter } from 'react-native';
 import { TextInput, Button, useTheme, Snackbar } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -323,6 +323,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
 
   return (
     <View style={styless.container}>
+      {console.log("cfghj",image)}
       <View style={[styles.container, { backgroundColor: appColors.userpagetopback }]}>
         {/* <View style={styless.logocontainer}> */}
        
@@ -481,5 +482,17 @@ const styless = StyleSheet.create({
     justifyContent:'flex-start',
     backgroundColor:'red'
 
-  }
+  },
+  imgContainer: {
+    width: 140,
+    borderWidth: 4,
+    borderRadius: 120,
+    height: 140,
+    bottom: 30,
+    alignSelf: 'center',
+    position: 'absolute',
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

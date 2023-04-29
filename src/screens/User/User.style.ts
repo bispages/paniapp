@@ -8,11 +8,15 @@ export default StyleSheet.create({
     justifyContent: 'center',
     backgroundColor:"#ffffff"
   },
+
   userBannerContainer: {
     flex: 0.5,
     width: '100%',
-    overflow: 'hidden',top:80,zIndex:1
-  },
+    overflow: 'hidden',
+    top:80,
+    zIndex:1
+    },
+
   imgContainer: {
     width: 140,
     borderWidth: 4,
@@ -24,11 +28,12 @@ export default StyleSheet.create({
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    
   },
+
   icon: {
     opacity: 0.5,
   },
+
   editPic: {
     position: 'absolute',
     bottom: 15,
@@ -39,25 +44,30 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   formContainer: {
     flex: 0.7,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   textContainer: {
     width: '100%',
     marginBottom: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   preText: {
     paddingHorizontal: 8,
     marginRight: 8,
   },
+
   textInput: {
     width: '70%',
   },
+
   radioContainer: {
     width: '70%',
     display: 'flex',
@@ -66,6 +76,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   radioCmp: {
     width: '50%',
     display: 'flex',
@@ -73,6 +84,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  
   radioChip: {
     marginLeft: '12%',
     borderWidth: 1,

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { TextInput, useTheme } from 'react-native-paper';
+import React, { useState, useCallback, useRef, useEffect, useMemo, RefObject } from 'react';
+import { View, StyleSheet, TouchableOpacity, Pressable, Keyboard, ImageBackground } from 'react-native';
+import { TextInput, useTheme, Button  } from 'react-native-paper';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors';
 import styless from './Profile.style';
@@ -8,30 +8,207 @@ import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { selectUserId } from '../../store/selectors';
 import { useSelector } from 'react-redux';
-
+// import { Button } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import ImagePicker, { Image } from 'react-native-image-crop-picker';
+import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import BottomSheet, { BottomSheetBackdrop, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import {
+  // PROFESSIONNUMBER,
+  USERTYPE,
+  USERFORM_BOTSHEET_SNAPMAX,
+  USERFORM_BOTSHEET_SNAPMID,
+  USERFORM_BOTSHEET_SNAPMIN,
+} from '../../utils/constants';
 const Profile = () => {
 
   const userId = useSelector(selectUserId);
   // const { data: userdet } = useGetNearUsersQuery(userId);
-
+  const [isBotSheetActive, setIsBotSheetActive] = useState(false);
+  const [image, setImage] = useState<Image | null>(null);
+  const bottomSheet = useRef<BottomSheet>(null);
+  const photoBottomSheet = useRef<BottomSheet>(null);
   const { data: users } = useGetUsersQuery(userId);
   console.log(users,"getUsersiooio");
+  console.log(image,"ImageUpload");
+  console.log(Image,"ImageUpload12334");
 
   const[mode,setMode] = useState('');
 
   AsyncStorage.getItem('user').then(value => {
     setMode(value || '');
   });
+  const snapPoints = useMemo(
+    () => [USERFORM_BOTSHEET_SNAPMIN, USERFORM_BOTSHEET_SNAPMID, USERFORM_BOTSHEET_SNAPMAX],
+    [],
+  );
+  const renderBackdrop = useCallback(
+    (props: JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps) => (
+      <BottomSheetBackdrop {...props} disappearsOnIndex={0} appearsOnIndex={1} />
+    ),
+    [],
+  );
+   
+  const showBotSheet = useCallback((sheet: RefObject<BottomSheet>) => {
+    keyboardDidHide();
+    console.log("Hai")
+    sheet.current?.snapToIndex(1);
+  }, []);
+  const handleSheetChanges = useCallback(
+    (index: number, sheet: RefObject<BottomSheet>) => {
+      if (index <= 0) {
+        sheet.current?.close();
+        setIsBotSheetActive(false);
+      } else {
+        setIsBotSheetActive(true);
+      }
+    },
+    [isBotSheetActive],
+  );
+  const choosePhotoFromLibrary = () => {
+    ImagePicker.openPicker({
+      width: 120,
+      height: 120,
+      cropping: true,
+      mediaType: 'photo',
+      cropperCircleOverlay: true,
+      cropperActiveWidgetColor: appColors.secondary,
+    })
+      .then((image: Image) => {
+        closeBotSheet(photoBottomSheet);
+        if ('path' in image) setImage(image);
+      })
+      .catch(err => console.log(err));
+  };
+  const takePhotoFromCamera = () => {
+    ImagePicker.openCamera({
+      compressImageMaxWidth: 120,
+      compressImageMaxHeight: 120,
+      cropping: true,
+      mediaType: 'photo',
+    })
+      .then((image: Image) => {
+        closeBotSheet(photoBottomSheet);
+        if ('path' in image) setImage(image);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const closeBotSheet = useCallback((sheet: RefObject<BottomSheet>) => sheet.current?.close(), []);
 
   // console.log(JSON.stringify(mode?.userId),"12345678hjjgh");
   const { appColors } = useTheme();
+
+  const keyboardDidHide = () => {
+    Keyboard.dismiss();
+  };
+
+  useEffect(() => {
+    // Keyboard events.
+    Keyboard.addListener('keyboardDidHide', keyboardDidHide);
+
+    // cleanup function
+    return () => {
+      Keyboard.removeAllListeners('keyboardDidHide');
+    };
+  }, []);
+
+  const renderPhotoBottomSheet = () => (
+    <BottomSheet
+      ref={photoBottomSheet}
+      index={-1}
+      snapPoints={snapPoints}
+      enablePanDownToClose
+      onChange={(index: number) => handleSheetChanges(index, photoBottomSheet)}
+      backdropComponent={renderBackdrop}>
+      <BottomSheetScrollView
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={[styles.listContainer]}
+        persistentScrollbar
+        removeClippedSubviews>
+        <View style={{ alignItems: 'center', paddingTop: 10, }}>
+          <Text style={styles.panelTitle}>Upload Photo</Text>
+          <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
+        </View>
+        <View style={[styles.panelButtonContainer]}>
+          <View style={[styles.panelButtonView]}>
+            <Button
+              dark
+              loading={false}
+              mode="contained"
+              onPress={takePhotoFromCamera}
+              contentStyle={styles.panelButton}
+              theme={{
+                colors: {
+                  primary: appColors.btncolor,
+                },
+              }}>
+              TAKE PHOTO
+            </Button>
+          </View>
+          <View style={[styles.panelButtonView]}>
+            <Button
+              dark
+              loading={false}
+              mode="contained"
+              onPress={choosePhotoFromLibrary}
+              contentStyle={styles.panelButton}
+              theme={{
+                colors: {
+                  primary: appColors.btncolor,
+                },
+              }}>
+              SELECT FROM GALLERY
+            </Button>
+          </View>
+          <View style={[styles.panelButtonView]}>
+            <Button
+              dark
+              loading={false}
+              mode="contained"
+              onPress={() => closeBotSheet(photoBottomSheet)}
+              contentStyle={styles.panelButton}
+              theme={{
+                colors: {
+                  primary: appColors.btncolor,
+                },
+              }}>
+              CANCEL
+            </Button>
+          </View>
+        </View>
+      </BottomSheetScrollView>
+    </BottomSheet>
+  );
   return (
     <View style={styless.container}>
-      <View  style={styles.profilecontainer}>
-        <View  style={styles.profile}>
+      <View style={styles.profilecontainer}>
+        <View style={styles.profile}>
+        
+              <ImageBackground
+                source={{
+                  uri: image.path,
+                }}
+                style={[
+                  styles.imgContainer,
+                  {
+                    borderColor: appColors.white,
+                    backgroundColor: appColors.dimwhite,
+                  },
+                ]}
+              />
+              
 
         </View>
+        <View style={styles.viewcontainer}>
+        <Pressable
+                disabled={isBotSheetActive}
+                onPress={() => showBotSheet(photoBottomSheet)}
+                style={[styles.editPic, { backgroundColor: appColors.secondary }]}>
+                <Icon name="camera-plus" color={appColors.primary} size={14} />
+        </Pressable>
         <Text  style={styles.profiletag}>Add Profile Picture</Text>
+        </View>
       </View>
      
               <View style={styles.details}>
@@ -135,9 +312,9 @@ const Profile = () => {
       <View style={styles.savebtn}>
         <TouchableOpacity style={styles.save}>
           <Text style={styles.savetxt}> Save </Text>
-          </TouchableOpacity>
+        </TouchableOpacity>
       </View>
-   
+      {renderPhotoBottomSheet()}
     </View>
   );
 };
@@ -146,7 +323,24 @@ export default Profile;
 const styles = StyleSheet.create({
   textInput:{
     width: '70%',
-    marginVertical:3
+    marginVertical:3,
+    zIndex:-1
+  },
+  viewcontainer:{
+    display:'flex',
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',
+    // backgroundColor:"red"
+  },
+  listContainer: {
+    flexWrap: 'wrap',
+    flexGrow: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 20,
+    justifyContent: 'center',
+    backgroundColor:'#DADADA' 
   },
 
   profilecontainer:{
@@ -161,6 +355,17 @@ const styles = StyleSheet.create({
     borderWidth:3.5,
     borderColor:colors.profileborder,
     borderRadius:70
+  },
+  editPic: {
+    // position: 'absolute',
+    bottom: 3,
+    marginHorizontal:2,
+    // left: '55%',
+    width: 24,
+    height: 24,
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   profiletag:{
     fontSize:16,
@@ -207,7 +412,37 @@ const styles = StyleSheet.create({
     color:colors.white,
     fontWeight:'400',
     fontFamily:"Gotham Rounded"
-  }
+  },
+  panelTitle: {
+    // height: 30,
+    fontWeight: '700',
+    fontSize: 22,
+  },
+  panelSubtitle: {
+    color: 'gray',
+    height: 30,
+    fontWeight: '400',
+    fontSize: 15,
+    lineHeight:29
+  },
+  panelButtonContainer: {
+    width: '100%',
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    
+  },
+  panelButtonView: {
+    width: '90%',
+    marginBottom: 20,
+    
+  },
+  panelButton: {
+    width: '100%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
 
 })

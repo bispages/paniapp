@@ -41,12 +41,12 @@ const data = [
   },
 ];
 
-const OrdersHistory = () => {
+  const OrdersHistory = () => {
   const [toggleState, setToggleState] = useState(true);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const userId = useSelector(selectUserId);
   const { data: users } = useGetShopOrderListQuery(userId);
-  console.log(users,"getshoporderhistory")
+  console.log(userId,"getshoporderhistory")
 
   const toggleTabs = () => {
     navigation.navigate('OrderDet');
@@ -54,6 +54,7 @@ const OrdersHistory = () => {
 
   return (
     <View style={styles.container}>
+
       {/* <View style={styles.headbar}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image style={styles.arrow} source={require('../../assets/img/Group63.png')} />
@@ -79,7 +80,7 @@ const OrdersHistory = () => {
                 </View>
               </View>
               <View style={styles.call}>
-                <Text style={styles.tag}>Today</Text>
+                <Text style={styles.tag}>Todayss</Text>
 
                 <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} />
               </View>

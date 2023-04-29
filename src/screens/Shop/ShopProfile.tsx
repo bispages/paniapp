@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, {useCallback} from 'react';
+import { View, StyleSheet, TouchableOpacity, Image, Pressable } from 'react-native';
 // import { Text } from 'react-native-paper';
 import { TextInput, useTheme, Text } from 'react-native-paper';
 import colors from '../../assets/colors';
@@ -10,6 +10,7 @@ import { selectUserId } from '../../store/selectors';
 import { useSelector } from 'react-redux';
 import { useGetUsersQuery, useUpdateUserProfileMutation } from '../../store/slices/IdentityApiSlice';
 import { selectUser } from '../../store/selectors';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ShopProfile = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -20,6 +21,9 @@ const ShopProfile = () => {
   console.log(users,"getUsersiooio");
   const { appColors } = useTheme();
   const user = useSelector(selectUser);
+
+ 
+
   return (
     <View style={styless.container}>
       {/* <View style={styles.headcontainer}>
@@ -38,6 +42,7 @@ const ShopProfile = () => {
             
             )}
         </View>
+   
         <Text style={styles.profiletag}>Add Profile Picture</Text>
       </View>
       <View style={styles.details}>
