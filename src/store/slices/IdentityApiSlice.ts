@@ -2,7 +2,6 @@ import { User } from 'types';
 import { ApiSlice } from './ApiSlice';
 
 export const IdentityApiSlice = ApiSlice.injectEndpoints({
- 
   endpoints: builder => ({
     getUsers: builder.query<User[] | User, void | string>({
       query: userId => `users/${userId}`,
@@ -16,11 +15,12 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
     getMaterials: builder.query<User[], void>({
       query: () => `materials`,
     }),
-    getMyOrderList: builder.query<User[], string>({  
+    getMyOrderList: builder.query<User[], string>({
       query: userId => `estimates?userId=${userId}`,
     }),
-    getShopOrderList: builder.query<User[], string>({
-      query: userId => `estimates?userId=${userId}`,
+    getShopOrderList: builder.query<User[], { userId: string; pageNo?: number; pageSize?: number }>({
+      query: ({ userId, pageNo = 0, pageSize = 10 }) =>
+        `estimates?userId=${userId}&pageNo=${pageNo}&pageSize=${pageSize}`,
     }),
     getEstimateDet: builder.query<User[], string>({
       query: estimateId => `estimates/${estimateId}`,
