@@ -6,6 +6,7 @@ export enum USERTYPE {
   USER,
   SHOP,
 }
+export const OTP_RESEND_DELAY_SECONDS = 120;
 export const USERFORM_BOTSHEET_SNAPMAX = '75%';
 export const USERFORM_BOTSHEET_SNAPMID = '50%';
 export const USERFORM_BOTSHEET_SNAPMIN = '25%';
