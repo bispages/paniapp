@@ -30,8 +30,8 @@ export default StyleSheet.create({
     lineHeight: 33.6,
   },
   description: {
-    fontSize: 18,
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '400',
     color: '#000000',
     textAlign: 'center',
     lineHeight: 21.6,

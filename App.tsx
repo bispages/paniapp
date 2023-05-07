@@ -8,12 +8,7 @@
  */
 
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  useColorScheme,
-  StatusBar,
-  StyleSheet,
-  ColorSchemeName,
-} from 'react-native';
+import { useColorScheme, StatusBar, StyleSheet, ColorSchemeName } from 'react-native';
 import { enableFreeze } from 'react-native-screens';
 import BootSplash from 'react-native-bootsplash';
 import { Provider as StoreProvider } from 'react-redux';
@@ -25,10 +20,7 @@ import {
   DarkTheme as PaperDarkTheme,
   Provider as PaperProvider,
 } from 'react-native-paper';
-import {
-  DefaultTheme as NavigationDefaultTheme,
-  DarkTheme as NavigationDarkTheme,
-} from '@react-navigation/native';
+import { DefaultTheme as NavigationDefaultTheme, DarkTheme as NavigationDarkTheme } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 

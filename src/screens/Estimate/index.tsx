@@ -1,58 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { TextInput, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Text, FAB, useTheme } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import Colors from '../../assets/colors';
-import EstimateForm from './EstimateForm';
-import Selectelectritian from './Selectelectritian';
-import Select from './Select';
+// import EstimateForm from './EstimateForm';
+// import Selectelectritian from './Selectelectritian';
+// import Select from './Select';
 import styless from './Estimate.style';
-import EmptyList from '../../assets/img/empty_list.svg';
-import colors from '../../assets/colors';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import EmptyList from '../../assets/img/empty_list.svg';
+// import colors from '../../assets/colors';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useLazyGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
-
-const data = [
-  {
-    id: 1,
-    title: 'Find an Electritian',
-    image: require('../../assets/img/electrician.png'),
-  },
-  {
-    id: 2,
-    title: 'Find a Elecrical Shop ',
-    image: require('../../assets/img/shop.png'),
-  },
-  {
-    id: 3,
-    title: 'Estimate',
-    image: require('../../assets/img/estimate.png'),
-  },
-  {
-    id: 4,
-    title: 'New Offers',
-    image: require('../../assets/img/offer.png'),
-  },
-];
+import { useGetMaterialsQuery, useLazyGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
+import { selectUser } from '../../store/selectors';
 
 const Estimate = () => {
-  const { colors, appColors } = useTheme();
+  // const { colors, appColors } = useTheme();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-  const [mode, setMode] = useState<string | null>('');
-
-  AsyncStorage.getItem('usertype').then(value => {
-    setMode(value);
-  });
 
   const [getMaterialList] = useLazyGetMaterialsQuery();
+  const user = useSelector(selectUser);
+  const { data: matItems, isLoading, isError } = useGetMaterialsQuery();
+  
 
   const callestimate = () => {
     getMaterialList().then((res)=> console.log(res));
     navigation.navigate('EstimateForm');
-  }
-
+  };
 
   return (
     <View style={[styless.panelButtonContainer]}>
@@ -69,7 +45,7 @@ const Estimate = () => {
       </View>
       {/* {console.log("selectmode",mode)} */}
       {/* <Text style={styles.title}>Electrician</Text> */}
-      {mode === '0' ? <Text style={styles.title}>Electrician</Text> : <Text style={styles.title}>Shop</Text>}
+      {user?.userType === 0 ? <Text style={styles.title}>Electrician</Text> : <Text style={styles.title}>Shop</Text>}
 
       <View
         style={{
@@ -79,7 +55,7 @@ const Estimate = () => {
           alignItems: 'center',
         }}></View>
 
-      {mode === '1' ? (
+      {user?.userType === 1 ? (
         <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate('Order')}>
           <View style={styles.LeftContainer}>
             <Image style={styles.iconimg} source={require('../../assets/img/shopcart.png')} />
@@ -107,7 +83,7 @@ const Estimate = () => {
           <Text style={styles.Righttag}>Find a Elecrical Shop </Text>
         </View>
       </TouchableOpacity>
-      {mode === '1' ? (
+      {user?.userType === 1 ? (
         <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate('Selectelectritian')}>
           <View style={styles.LeftContainer}>
             <Image style={styles.iconimg} source={require('../../assets/img/electrician.png')} />

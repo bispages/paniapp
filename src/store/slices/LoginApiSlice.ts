@@ -10,8 +10,8 @@ export const LoginApiSlice = ApiSlice.injectEndpoints({
       invalidatesTags: ['User'],
     }),
     otpVerify: builder.mutation<
-      { accessToken: string; userPhone: string; userId: string; isNewUser: boolean },
-      { userPhone: string; sessionId: string; otp: string }
+      { accessToken: string; userPhone: string; userId: string; isNewUser: boolean; userType: number },
+      { userPhone: string; sessionId: string; otp: string; userType: number }
     >({
       query: function (data) {
         return { url: 'login/verify', method: 'PUT', body: { ...data } };

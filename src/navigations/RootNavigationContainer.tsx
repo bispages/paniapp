@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Splash from '../screens/Splash';
-import useIsLoggedIn from '../hooks/useIsLoggedIn';
 import AppNavigationDrawer from './AppNavigationDrawer';
 import OnBoardingNavigationStack, { LoginNavigationStack } from './OnBoardingNavigationStack';
 import Colors from '../assets/colors';

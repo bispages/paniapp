@@ -306,11 +306,13 @@ const MaterialItems = ({route: { params: {type}}}) => {
       </View> */}
       <ScrollView style={styles.cardcontainer}>
         <View style={styles.cardboxcontainer}>
+         
           {/* {matItems?.map((item, i) => {
             return (
-              <TouchableOpacity style={styles.card} onPress={() => [setVisible(!visible),setMatType(item?.materialType),setMatItemName(item?.materialName)]} key={i}>
-                <Image style={styles.productimg} source={item?.image} />
-                <Text style={styles.txt}>{item?.materialName}</Text>  
+              <TouchableOpacity style={styles.card} 
+              onPress={() => [setVisible(!visible),setMatType(item?.materialType),setMatItemName(item?.materialName)]} key={i}>
+              <Image style={styles.productimg} source={item?.image} />
+              <Text style={styles.txt}>{item?.materialName}</Text>  
               </TouchableOpacity>
             );
           })}  */}
