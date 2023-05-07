@@ -50,13 +50,13 @@ function reducer(state: CodeObject | any, action: Action) {
 }
 
 type routeParams = {
-  route: { params: { sessionId: string; userPhone: string } };
+  route: { params: { sessionId: string; userPhone: string; userType: number } };
 };
 
 const VerifyPhone = ({ route: { params } }: routeParams) => {
   const INITIAL_SCALE = 1;
   const INITIAL_OFFSET = 0;
-  const { userPhone } = params;
+  const { userPhone, userType } = params;
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
@@ -152,11 +152,12 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
       const data = await otpVerify({ ...params, otp }).unwrap();
 
       if (data) {
-        const { userId, userPhone, isNewUser } = data;
+        const { userId, userPhone, isNewUser, userType } = data;
         dispatchAction(logInUser(data));
-        if (isNewUser) navigation.navigate('userform', { userId, userPhone });
+        if (isNewUser) navigation.navigate('userform', { userId, userPhone, userType });
         else {
           const userDetails = (await triggerGetUser(userId).unwrap()) as User;
+          console.log(userDetails);
           AsyncStorage.setItem('user', JSON.stringify(userDetails)).then(() => {
             dispatchAction(saveUser(userDetails));
           });

@@ -5,7 +5,6 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    
   },
   image: {
     flex: 0.5,
@@ -80,9 +79,6 @@ export default StyleSheet.create({
   button: {
     width: '100%',
     height: 52,
-    
-    
-
   },
   phoneVerifyContainer: {
     width: '70%',
@@ -132,7 +128,6 @@ export default StyleSheet.create({
   resendBtn: {
     padding: 4,
     marginLeft: 8,
-    
   },
   resendBtnTxt: {
     fontWeight: '700',

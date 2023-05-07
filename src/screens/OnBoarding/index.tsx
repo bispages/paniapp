@@ -13,11 +13,9 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import useBackHandler from '../../hooks/useBackHandler';
 import styles from './OnBoarding.style';
-import { setIsOnBoarded } from '../../store/slices/AppStateSlice';
 import { selectIsOnBoarded } from '../../store/selectors';
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -147,7 +145,7 @@ const OnBoarding = (): ReactElement => {
   const scrollX = useRef(new Animated.Value(0));
   const inputRange = slides.map((_, index) => index * width);
 
-  // Adds BackHandler hook. 
+  // Adds BackHandler hook.
   useBackHandler();
 
   const navigateToLanguageSelection = useCallback(() => {
@@ -160,7 +158,7 @@ const OnBoarding = (): ReactElement => {
 
   useEffect(() => {
     // If user already onBoarded navigate to login.
-     if (onBoarded) navigateToLogin();
+    if (onBoarded) navigateToLogin();
   }, []);
 
   const renderScreens = ({ item }: { item: Item }) => {
@@ -179,14 +177,6 @@ const OnBoarding = (): ReactElement => {
       </View>
     );
   };
-
-  // const onDone = () => {
-  //   // User finished the introduction. Save this and show login.
-  //   dispatch(setIsOnBoarded(true));
-  //   AsyncStorage.setItem('onboarded', '1').then(() => {
-  //     navigateToLogin();
-  //   });
-  // };
 
   return onBoarded ? (
     <View style={styles.slide} />

@@ -1,5 +1,16 @@
-import React, { useEffect, useState, useRef, useCallback, useMemo, RefObject} from 'react';
-import { Text, View, Keyboard, Pressable, ImageBackground, StyleSheet, useWindowDimensions, Alert, TouchableOpacity, NativeEventEmitter } from 'react-native';
+import React, { useEffect, useState, useRef, useCallback, useMemo, RefObject } from 'react';
+import {
+  Text,
+  View,
+  Keyboard,
+  Pressable,
+  ImageBackground,
+  StyleSheet,
+  useWindowDimensions,
+  Alert,
+  TouchableOpacity,
+  NativeEventEmitter,
+} from 'react-native';
 import { TextInput, Button, useTheme, Snackbar } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -47,7 +58,6 @@ const UserForm = ({ route: { params } }: routeParams) => {
   const windowWidth = useWindowDimensions().width;
   const { appColors } = useTheme();
   const dispatchAction = useDispatch();
-  const user = AsyncStorage.getItem('usertype');
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [updateUserProfile, { isLoading: updateUserProfileLoader }] = useUpdateUserProfileMutation();
 
@@ -266,7 +276,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
         contentContainerStyle={[styles.listContainer]}
         persistentScrollbar
         removeClippedSubviews>
-        <View style={{ alignItems: 'center', paddingTop: 10, }}>
+        <View style={{ alignItems: 'center', paddingTop: 10 }}>
           <Text style={styles.panelTitle}>Upload Photo</Text>
           <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
         </View>
@@ -323,10 +333,9 @@ const UserForm = ({ route: { params } }: routeParams) => {
 
   return (
     <View style={styless.container}>
-      {console.log("cfghj",image)}
       <View style={[styles.container, { backgroundColor: appColors.userpagetopback }]}>
         {/* <View style={styless.logocontainer}> */}
-       
+
         {/* </View> */}
         <View style={[styles.userBannerContainer]}>
           {image ? (
@@ -402,22 +411,24 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 textContentType="name"
               />
             </View>
-            <TouchableOpacity 
-            style={{borderColor:'grey', 
-            width:'70%', height:50, 
-            borderWidth:1, borderRadius:4, 
-            display:'flex', justifyContent:'center', 
-            marginHorizontal:10,}} 
-            // onPress={navigation.navigate('placeselection')}
+            <TouchableOpacity
+              style={{
+                borderColor: 'grey',
+                width: '70%',
+                height: 50,
+                borderWidth: 1,
+                borderRadius: 4,
+                display: 'flex',
+                justifyContent: 'center',
+                marginHorizontal: 10,
+              }}
+              // onPress={navigation.navigate('placeselection')}
             >
-              
               {/* <View style={[styles.textInput]}> */}
-                <Text>dub</Text>
-                
+              <Text>dub</Text>
+
               {/* <View/> */}
-              </TouchableOpacity>
-           
-            
+            </TouchableOpacity>
 
             <View style={styles.savebtnContainer}>
               <Button
@@ -475,13 +486,12 @@ const styless = StyleSheet.create({
   },
   textInputtouch: {
     width: '70%',
-    height:50,
-    borderWidth:1,
-    alignItems:'flex-start',
-    display:'flex',
-    justifyContent:'flex-start',
-    backgroundColor:'red'
-
+    height: 50,
+    borderWidth: 1,
+    alignItems: 'flex-start',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    backgroundColor: 'red',
   },
   imgContainer: {
     width: 140,
