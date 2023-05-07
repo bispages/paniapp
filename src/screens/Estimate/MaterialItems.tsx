@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Image, Text, TouchableOpacity, ScrollView } from 'react-native';
 import Colors from '../../assets/colors';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import {useGetMaterialsQuery} from '../../store/slices/IdentityApiSlice'
-// import {colors} from '../../assets/colors'
+import {useGetMaterialsQuery} from '../../store/slices/IdentityApiSlice';
+import { selectMaterials } from '../../store/selectors/apiSelectors';
+import { useSelector} from 'react-redux';
+// import {colors} from '../../assets/colors';
 
 const arr = [
   {
@@ -126,7 +128,7 @@ const countitem = [
   },
 ];
 
-const MaterialItems = () => {
+const MaterialItems = ({route: { params: {type}}}) => {
   const [visible, setVisible] = useState(false);
   const [num, setNum] = useState(false);
   const [productDetails, setProductDetails] = useState([]);  
@@ -137,8 +139,29 @@ const MaterialItems = () => {
   const [click, setClick] = useState({ id: 0, count: 0 });
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
+  console.log("MATERIAL TYPES",type);
+
+  const materials = useSelector(selectMaterials);
+
+  console.log('MATERIALS', materials.data);
+
   const { data: matItems } = useGetMaterialsQuery();
-  console.log(matItems,"matItems123456")
+  console.log(matItems,"matItems123456");
+
+  const matypes = Object.values(materials.data);
+  console.log(matypes,"matypes12");
+  // const matypesvalue = Object.values(materials.data);
+  // console.log(matypesvalue,"matypes1288888");
+
+  console.log("jjjj")
+
+  const listItem = () => {
+    // materials?.map((iiitem) => {
+      
+    //   console.log("jjjjttt656",iiitem)
+      
+    // })
+  }
 
   const popup = () => {
     setNum(true);
@@ -208,6 +231,10 @@ const MaterialItems = () => {
   //     }
   //   }
 
+  useEffect(() => {
+    listItem();
+  }, []);
+
   return (
     <View style={styles.container}>
       {visible === true ? (
@@ -219,7 +246,6 @@ const MaterialItems = () => {
           ) : (
             ''
           )}
-
           <View style={styles.contentdiv}>
             <View style={styles.contentdivtap}></View>
             <View style={styles.contentbar}>
@@ -287,7 +313,7 @@ const MaterialItems = () => {
                 <Text style={styles.txt}>{item?.materialName}</Text>  
               </TouchableOpacity>
             );
-          })} */}
+          })}  */}
         </View>
       </ScrollView>
       <View></View>

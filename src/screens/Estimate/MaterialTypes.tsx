@@ -9,24 +9,29 @@ import colorss from '../../assets/colors';
 import colors from '../../assets/colors';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
-// import Cart from '../Estimate/Cart/Cart'
-// import { Image } from 'react-native-paper/lib/typescript/components/Avatar/Avatar';
+import { selectMaterials } from '../../store/selectors/apiSelectors';
+import { useSelector} from 'react-redux';
+
 
 const MaterialTypes = () => {
   const { dark, colors } = useTheme();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [vist, setVisit] = useState(false);
-  const { data: matItems, isFetching, isError } = useGetMaterialsQuery();
 
-  if (isFetching) {
-    return null;
-  }
+  const materials = useSelector(selectMaterials);
+  console.log('userestimate123', materials);
 
-  console.log(matItems, 'matItems123456');
+  // const { data: matItems, isFetching, isError } = useGetMaterialsQuery();
 
-  const matypes = Object.keys(matItems);
+  // if (isFetching) {
+  //   return null;
+  // }
 
-  // console.log(matypes,"WWWmatItems123456");
+  // console.log(matItems, 'matItems123456');
+
+  const matypes = Object.keys(materials.data);
+
+  console.log(matypes,"WWWmatItems123456");
   const changestate = () => {
     setVisit(!vist);
     // navigation.navigate("ChooseShop")

@@ -72,6 +72,7 @@ export const {
   useUpdateEstimateMutation,
   useGetNearUsersQuery,
   useGetMaterialsQuery,
+  useLazyGetMaterialsQuery,
   useGetFavUsersQuery,
   useGetMyOrderListQuery,
   useGetShopOrderListQuery,

@@ -11,7 +11,7 @@ import EmptyList from '../../assets/img/empty_list.svg';
 import colors from '../../assets/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
+import { useLazyGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
 
 const data = [
   {
@@ -46,11 +46,10 @@ const Estimate = () => {
     setMode(value);
   });
 
-  const { data: matItems, isLoading, isError } = useGetMaterialsQuery();
-  let matlist;
+  const [getMaterialList] = useLazyGetMaterialsQuery();
 
   const callestimate = () => {
-    matlist = matItems;
+    getMaterialList().then((res)=> console.log(res));
     navigation.navigate('EstimateForm');
   }
 
