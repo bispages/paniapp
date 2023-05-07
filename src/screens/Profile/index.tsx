@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo, RefObject } from 'react';
 import { View, StyleSheet, TouchableOpacity, Pressable, Keyboard, ImageBackground } from 'react-native';
-import { TextInput, useTheme, Button  } from 'react-native-paper';
+import { TextInput, useTheme, Button } from 'react-native-paper';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors';
 import styless from './Profile.style';
@@ -21,19 +21,21 @@ import {
   USERFORM_BOTSHEET_SNAPMIN,
 } from '../../utils/constants';
 const Profile = () => {
-
   const userId = useSelector(selectUserId);
   // const { data: userdet } = useGetNearUsersQuery(userId);
   const [isBotSheetActive, setIsBotSheetActive] = useState(false);
   const [image, setImage] = useState<Image | null>(null);
   const bottomSheet = useRef<BottomSheet>(null);
   const photoBottomSheet = useRef<BottomSheet>(null);
-  const { data: users } = useGetUsersQuery(userId);
-  console.log(users,"getUsersiooio");
-  console.log(image,"ImageUpload");
-  console.log(Image,"ImageUpload12334");
+  const { data: users, isFetching, isError } = useGetUsersQuery(userId);
 
-  const[mode,setMode] = useState('');
+  if (isFetching) {
+    return null;
+  }
+  console.log(users, 'getUsersiooio');
+  console.log(image, 'ImageUpload');
+
+  const [mode, setMode] = useState('');
 
   AsyncStorage.getItem('user').then(value => {
     setMode(value || '');
@@ -48,10 +50,10 @@ const Profile = () => {
     ),
     [],
   );
-   
+
   const showBotSheet = useCallback((sheet: RefObject<BottomSheet>) => {
     keyboardDidHide();
-    console.log("Hai")
+    console.log('Hai');
     sheet.current?.snapToIndex(1);
   }, []);
   const handleSheetChanges = useCallback(
@@ -126,7 +128,7 @@ const Profile = () => {
         contentContainerStyle={[styles.listContainer]}
         persistentScrollbar
         removeClippedSubviews>
-        <View style={{ alignItems: 'center', paddingTop: 10, }}>
+        <View style={{ alignItems: 'center', paddingTop: 10 }}>
           <Text style={styles.panelTitle}>Upload Photo</Text>
           <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
         </View>
@@ -184,8 +186,7 @@ const Profile = () => {
     <View style={styless.container}>
       <View style={styles.profilecontainer}>
         <View style={styles.profile}>
-        
-              {/* <ImageBackground
+          {/* <ImageBackground
                 source={{
                   uri: image.path,
                 }}
@@ -197,117 +198,102 @@ const Profile = () => {
                   },
                 ]}
               /> */}
-              
-
         </View>
         <View style={styles.viewcontainer}>
-        <Pressable
-                disabled={isBotSheetActive}
-                onPress={() => showBotSheet(photoBottomSheet)}
-                style={[styles.editPic, { backgroundColor: appColors.secondary }]}>
-                <Icon name="camera-plus" color={appColors.primary} size={14} />
-        </Pressable>
-        <Text  style={styles.profiletag}>Add Profile Picture</Text>
+          <Pressable
+            disabled={isBotSheetActive}
+            onPress={() => showBotSheet(photoBottomSheet)}
+            style={[styles.editPic, { backgroundColor: appColors.secondary }]}>
+            <Icon name="camera-plus" color={appColors.primary} size={14} />
+          </Pressable>
+          <Text style={styles.profiletag}>Add Profile Picture</Text>
         </View>
       </View>
-     
-              <View style={styles.details}>
-              <TextInput
-                mode="outlined"
-                label="Name"
-                theme={{
-                  colors: {
-                    primary: appColors.secondary,
-                    text: appColors.primary,
-                    background: appColors.white,
-                  },
-                }}
-                style={[styles.textInput]}
-               
-                keyboardType="default"
-                maxLength={40}
-              
-                // defaultValue={userName}
-                value={users?.userName}
-                autoCorrect={false}
-                autoComplete="name"
-                // returnKeyType="next"
-                textAlign="left"
-                textContentType="name"
-              />
-           
-              <TextInput
-                mode="outlined"
-                label="Place"
-                theme={{
-                  colors: {
-                    primary: appColors.secondary,
-                    text: appColors.primary,
-                    background: appColors.white,
-                  },
-                }}
-                style={[styles.textInput]}
-               
-                keyboardType="default"
-                maxLength={40}
-              
-                // defaultValue={userName}
-                value={users?.place}
-                autoCorrect={false}
-                autoComplete="name"
-                // returnKeyType="next"
-                textAlign="left"
-                textContentType="name"
-              />
-              <TextInput
-                mode="outlined"
-                label="Pincode"
-                theme={{
-                  colors: {
-                    primary: appColors.secondary,
-                    text: appColors.primary,
-                    background: appColors.white,
-                  },
-                }}
-                style={[styles.textInput]}
-               
-                keyboardType="default"
-                maxLength={6}
-              
-                defaultValue={Number}
-                value={users?.pincode}
-                autoCorrect={false}
-                autoComplete="name"
-                // returnKeyType="next"
-                textAlign="left"
-                textContentType="name"
-              />
-              <TextInput
-                mode="outlined"
-                label="User Phone"
-                theme={{
-                  colors: {
-                    primary: appColors.secondary,
-                    text: appColors.primary,
-                    background: appColors.white,
-                  },
-                }}
-                style={styles.textInput}
-               
-                keyboardType="numeric"
-                maxLength={10}
-              
-                
-                value={users?.userPhone}
-                autoCorrect={false}
-                // autoComplete="phone"
-                returnKeyType="next"
-                textAlign="left"
-                textContentType="phone"
-              />
-         {/* <Text>{users?.userPhone}</Text> */}
-              
-              </View>
+
+      <View style={styles.details}>
+        <TextInput
+          mode="outlined"
+          label="Name"
+          theme={{
+            colors: {
+              primary: appColors.secondary,
+              text: appColors.primary,
+              background: appColors.white,
+            },
+          }}
+          style={[styles.textInput]}
+          keyboardType="default"
+          maxLength={40}
+          // defaultValue={userName}
+          value={users?.userName}
+          autoCorrect={false}
+          autoComplete="name"
+          // returnKeyType="next"
+          textAlign="left"
+          textContentType="name"
+        />
+
+        <TextInput
+          mode="outlined"
+          label="Place"
+          theme={{
+            colors: {
+              primary: appColors.secondary,
+              text: appColors.primary,
+              background: appColors.white,
+            },
+          }}
+          style={[styles.textInput]}
+          keyboardType="default"
+          maxLength={40}
+          // defaultValue={userName}
+          value={users?.place}
+          autoCorrect={false}
+          autoComplete="name"
+          // returnKeyType="next"
+          textAlign="left"
+          textContentType="name"
+        />
+        <TextInput
+          mode="outlined"
+          label="Pincode"
+          theme={{
+            colors: {
+              primary: appColors.secondary,
+              text: appColors.primary,
+              background: appColors.white,
+            },
+          }}
+          style={[styles.textInput]}
+          keyboardType="numeric"
+          maxLength={6}
+          defaultValue={users?.pincode}
+          value={users?.pincode}
+          autoCorrect={false}
+          // returnKeyType="next"
+          textAlign="left"
+        />
+        <TextInput
+          mode="outlined"
+          label="User Phone"
+          theme={{
+            colors: {
+              primary: appColors.secondary,
+              text: appColors.primary,
+              background: appColors.white,
+            },
+          }}
+          style={styles.textInput}
+          keyboardType="numeric"
+          maxLength={10}
+          value={users?.userPhone}
+          autoCorrect={false}
+          // autoComplete="phone"
+          returnKeyType="next"
+          textAlign="left"
+        />
+        {/* <Text>{users?.userPhone}</Text> */}
+      </View>
 
       <View style={styles.savebtn}>
         <TouchableOpacity style={styles.save}>
@@ -321,16 +307,16 @@ const Profile = () => {
 
 export default Profile;
 const styles = StyleSheet.create({
-  textInput:{
+  textInput: {
     width: '70%',
-    marginVertical:3,
-    zIndex:-1
+    marginVertical: 3,
+    zIndex: -1,
   },
-  viewcontainer:{
-    display:'flex',
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'center',
+  viewcontainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     // backgroundColor:"red"
   },
   listContainer: {
@@ -340,26 +326,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 20,
     justifyContent: 'center',
-    backgroundColor:'#DADADA' 
+    backgroundColor: '#DADADA',
   },
 
-  profilecontainer:{
-    width:'100%',
-    height:200,
-    alignItems:'center',
-    justifyContent:'center'
+  profilecontainer: {
+    width: '100%',
+    height: 200,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  profile:{
-    width:140,
-    height:140,
-    borderWidth:3.5,
-    borderColor:colors.profileborder,
-    borderRadius:70
+  profile: {
+    width: 140,
+    height: 140,
+    borderWidth: 3.5,
+    borderColor: colors.profileborder,
+    borderRadius: 70,
   },
   editPic: {
     // position: 'absolute',
     bottom: 3,
-    marginHorizontal:2,
+    marginHorizontal: 2,
     // left: '55%',
     width: 24,
     height: 24,
@@ -367,51 +353,51 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  profiletag:{
-    fontSize:16,
-    fontWeight:'400',
-    lineHeight:19,
-    letterSpacing:-0.2,
-    color:'rgba(0,0,0,0.7)',
-    marginVertical:20    
+  profiletag: {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 19,
+    letterSpacing: -0.2,
+    color: 'rgba(0,0,0,0.7)',
+    marginVertical: 20,
   },
-  details:{
-    display:'flex',
-    flexDirection:'column',
-    marginTop:20,
-    width:'100%',
-    alignItems:'center',
-    justifyContent:'center'
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 20,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  inputdetails:{
-    width:319,
-    height:50,
-    borderWidth:2,
-    borderColor:colors.inputborder,
-    borderRadius:7,
-    marginVertical:10
+  inputdetails: {
+    width: 319,
+    height: 50,
+    borderWidth: 2,
+    borderColor: colors.inputborder,
+    borderRadius: 7,
+    marginVertical: 10,
   },
-  savebtn:{
-    width:'100%',
-    alignItems:'center',
-    justifyContent:'center',
-    marginTop:30,
-    marginBottom:10
+  savebtn: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 30,
+    marginBottom: 10,
   },
-  save:{
-    width:109,
-    height:60,
-    color:colors.white,
-    borderRadius:30,
-    backgroundColor:colors.btncolor,
-    alignItems:'center',
-    justifyContent:'center'   
+  save: {
+    width: 109,
+    height: 60,
+    color: colors.white,
+    borderRadius: 30,
+    backgroundColor: colors.btncolor,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  savetxt:{
-    fontSize:20,
-    color:colors.white,
-    fontWeight:'400',
-    fontFamily:"Gotham Rounded"
+  savetxt: {
+    fontSize: 20,
+    color: colors.white,
+    fontWeight: '400',
+    fontFamily: 'Gotham Rounded',
   },
   panelTitle: {
     // height: 30,
@@ -423,19 +409,17 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: '400',
     fontSize: 15,
-    lineHeight:29
+    lineHeight: 29,
   },
   panelButtonContainer: {
     width: '100%',
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    
   },
   panelButtonView: {
     width: '90%',
     marginBottom: 20,
-    
   },
   panelButton: {
     width: '100%',
@@ -443,6 +427,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
-
-})
+});
