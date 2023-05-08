@@ -61,6 +61,7 @@ const Placeselection = () => {
 
   if (text) {
     const newData = masterdData.filter((item) => {
+      // const itemData= item.txt ? item.txt.toUpperCase() : "".toUpperCase;
       const itemData= item.txt ? item.txt.toUpperCase() : "".toUpperCase;
 const textData = text.toUpperCase();
 return itemData.indexOf(textData) > -1;
@@ -78,9 +79,9 @@ setSearch(text);
  const selectaction = (item) => {
  
   try {
-         
-    navigation.goBack();
-    AsyncStorage.setItem('useradddet',item);
+    navigation.navigate('userform')
+    // navigation.goBack();
+    AsyncStorage.setItem('useradddet',JSON.stringify(item?.pin));
   } catch (e) {
   }
  }

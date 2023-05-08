@@ -35,12 +35,12 @@ import { StackNavigationProp } from '@react-navigation/stack';
 // import { professionList } from '../../utils/professionList';
 // import { categoryList } from '../../utils/categoryList';
 
-type routeParams = {
-  route: { params: { userPhone: string } };
-};
+// type routeParams = {
+//   route: { params: { userPhone: string } };
+// };
 
 const UserForm = ({ route: { params } }: routeParams) => {
-  const { userPhone } = params;
+  // const { userPhone } = params;
   const userId = useSelector(selectUserId);
   const [userName, setUserName] = useState('');
   const [pincode, setPincode] = useState('');
@@ -49,6 +49,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
   const [image, setImage] = useState<Image | null>(null);
   // const [selectedItems, setSelectedItems] = useState<ItemList[]>([]);
   const [saveDisabled, setSaveDisabled] = useState(true);
+  const [usderadd, setUsderadd] = useState('');
   // const [dataList, setDataList] = useState(professionList);
   const [showSnack, setShowSnack] = useState(false);
   const [message, setMessage] = useState('');
@@ -71,6 +72,11 @@ const UserForm = ({ route: { params } }: routeParams) => {
     ),
     [],
   );
+
+ const onFocuss = () => {
+    
+    navigation.navigate('placeselection')
+  }
 
   const handleSheetChanges = useCallback(
     (index: number, sheet: RefObject<BottomSheet>) => {
@@ -106,9 +112,15 @@ const UserForm = ({ route: { params } }: routeParams) => {
   const keyboardDidHide = () => {
     Keyboard.dismiss();
   };
+  // AsyncStorage.getItem('useradddet').then(value => {
+  //   setUsderadd(JSON.parse(value) || '');
+  // });
 
   useEffect(() => {
     // Keyboard events.
+    AsyncStorage.getItem('useradddet').then(value => {
+      setUsderadd(JSON.parse(value) || '');
+    });
     Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
     // cleanup function
@@ -122,22 +134,36 @@ const UserForm = ({ route: { params } }: routeParams) => {
     setMessage('');
   };
 
+  
+
   // useEffect(() => {
   //   const list = userType === USERTYPE_USER ? professionList : categoryList;
   //   setDataList(list);
   //   setSelectedItems([]);
   // }, [userType]);
+//   AsyncStorage.getItem('useradd').then(value => {
+      
+//     setUsderadd(value || '');
+ 
+// });
+
 
   useEffect(() => {
     if (pincode.length >= 6) Keyboard.dismiss();
     // setSaveDisabled(!(userName && pincode && selectedItems.length > 0));
-    setSaveDisabled(!(userName && pincode));
+    setSaveDisabled((userName && pincode));
+
+    
+   
   }, [userName, pincode]);
   // }, [userName, pincode, selectedItems]);
 
+  console.log("QQQQWWWW",usderadd)
+  
+
   const saveDetails = async () => {
     const userDetails = {
-      userPhone,
+      // userPhone,
       userName,
       userId,
       pincode,
@@ -411,7 +437,34 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 textContentType="name"
               />
             </View>
-            <TouchableOpacity
+
+            <View style={[styles.textContainer]}>
+              <TextInput
+                mode="outlined"
+                label="Pincode"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput]}
+                
+                // keyboardType="none"
+                maxLength={40}
+                onFocus={onFocuss}
+                onChangeText={(text: string) => setPlace(text)}
+                defaultValue={pincode}
+                value={usderadd}
+                // autoCorrect={false}
+                // autoComplete="name"
+                // returnKeyType="next"
+                // textAlign="left"
+                // textContentType="name"
+              />
+            </View>
+            {/* <TouchableOpacity
               style={{
                 borderColor: 'grey',
                 width: '70%',
@@ -421,14 +474,14 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 display: 'flex',
                 justifyContent: 'center',
                 marginHorizontal: 10,
-              }}
-              // onPress={navigation.navigate('placeselection')}
-            >
+              }} */}
+              {/* onPress={navigation.navigate('placeselection')}
+             > */}
               {/* <View style={[styles.textInput]}> */}
-              <Text>dub</Text>
+              {/* <Text>dub</Text> */}
 
               {/* <View/> */}
-            </TouchableOpacity>
+            {/* </TouchableOpacity> */}
 
             <View style={styles.savebtnContainer}>
               <Button

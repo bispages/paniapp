@@ -32,8 +32,9 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
           {user?.userType === 0 ? (
             <View
               style={{
-                paddingTop: 10,
+                // paddingTop: 10,
                 alignItems: 'center',
+                justifyContent:'center',
                 width: 160,
                 height: 160,
                 borderWidth: 3,
@@ -41,7 +42,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
                 borderColor: '#667280',
               }}>
               {user?.image?.path ? (
-                <Avatar.Image source={{ uri: user?.image?.path }} size={200} />
+                <Avatar.Image source={{ uri: user?.image?.path }} size={155} />
               ) : (
                 // <Avatar.Icon size={200} icon="account-circle" />
                 <Image source={require('../../assets/img/Vectorshop.png')} />
@@ -50,7 +51,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
           ) : (
             <View
               style={{
-                paddingTop: 10,
+                // paddingTop: 10,
                 alignItems: 'center',
                 width: 160,
                 height: 160,
@@ -62,7 +63,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
                 justifyContent: 'center',
               }}>
               {user?.image?.path ? (
-                <Avatar.Image source={{ uri: user?.image?.path }} size={200} />
+                <Avatar.Image source={{ uri: user?.image?.path }} size={155} />
               ) : (
                 // <Avatar.Icon size={200} icon="account-circle" />
                 <Image

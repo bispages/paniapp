@@ -267,8 +267,8 @@ const Profile = () => {
           style={[styles.textInput]}
           keyboardType="numeric"
           maxLength={6}
-          defaultValue={users?.pincode}
-          value={users?.pincode}
+          // defaultValue={users?.pincode}
+          // value={users?.pincode}
           autoCorrect={false}
           // returnKeyType="next"
           textAlign="left"
@@ -286,7 +286,7 @@ const Profile = () => {
           style={styles.textInput}
           keyboardType="numeric"
           maxLength={10}
-          value={users?.userPhone}
+          // value={users?.userPhone}
           autoCorrect={false}
           // autoComplete="phone"
           returnKeyType="next"
