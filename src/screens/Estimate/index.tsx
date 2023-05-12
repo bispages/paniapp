@@ -43,7 +43,7 @@ const Estimate = () => {
           <Text style={styles.pintitle}>Location</Text>
         </TouchableOpacity>
       </View>
-      {/* {console.log("selectmode",mode)} */}
+      {console.log("selectmodeWWWWEEE",user)}
       {/* <Text style={styles.title}>Electrician</Text> */}
       {user?.userType === 0 ? <Text style={styles.title}>Electrician</Text> : <Text style={styles.title}>Shop</Text>}
 
