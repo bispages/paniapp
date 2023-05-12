@@ -160,7 +160,6 @@ const UserForm = ({ route: { params } }: routeParams) => {
 
   console.log("QQQQWWWW",usderadd)
   
-
   const saveDetails = async () => {
     const userDetails = {
       // userPhone,

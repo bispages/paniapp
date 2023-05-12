@@ -51,6 +51,24 @@ const Profile = () => {
     [],
   );
 
+  const saveDetails = async () => {
+    const userDetails = {
+      // userPhone,
+      userName,
+      userId,
+      pincode,
+      userType,
+      image,
+      place,
+      // category: selectedItems,
+      category: [],
+    };
+    await updateUserProfile(userDetails);
+    AsyncStorage.setItem('user', JSON.stringify(userDetails)).then(() => {
+      dispatchAction(saveUser(userDetails));
+    });
+  };
+
   const showBotSheet = useCallback((sheet: RefObject<BottomSheet>) => {
     keyboardDidHide();
     console.log('Hai');
@@ -186,9 +204,11 @@ const Profile = () => {
     <View style={styless.container}>
       <View style={styles.profilecontainer}>
         <View style={styles.profile}>
-          {/* <ImageBackground
+        {/* {console.log(image,"WWEEWW%^%^%^$%^%^")} */}
+        {image ? (
+          <ImageBackground
                 source={{
-                  uri: image.path,
+                  uri: image?.path,
                 }}
                 style={[
                   styles.imgContainer,
@@ -197,7 +217,23 @@ const Profile = () => {
                     backgroundColor: appColors.dimwhite,
                   },
                 ]}
-              /> */}
+              /> 
+        ) 
+        : 
+        <ImageBackground
+                source={
+                  require('../../assets/img/Vectorshop.png')
+                  
+                }
+                style={[
+                  styles.imgContainer,
+                  {
+                    borderColor: appColors.white,
+                    backgroundColor: appColors.dimwhite,
+                  },
+                ]}
+              /> 
+        }
         </View>
         <View style={styles.viewcontainer}>
           <Pressable
@@ -296,7 +332,8 @@ const Profile = () => {
       </View>
 
       <View style={styles.savebtn}>
-        <TouchableOpacity style={styles.save}>
+        <TouchableOpacity style={styles.save}
+        onPress={saveDetails}>
           <Text style={styles.savetxt}> Save </Text>
         </TouchableOpacity>
       </View>
@@ -360,6 +397,18 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
     color: 'rgba(0,0,0,0.7)',
     marginVertical: 20,
+  },
+  imgContainer: {
+    width: 140,
+    borderWidth: 4,
+    borderRadius: 120,
+    height: 140,
+    bottom: -3.5,
+    alignSelf: 'center',
+    position: 'absolute',
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   details: {
     display: 'flex',
