@@ -143,7 +143,7 @@ const MaterialItems = ({route: { params: {type}}}) => {
 
   const materials = useSelector(selectMaterials);
 
-  console.log('MATERIALS', materials.data);
+  console.log('MATERIALS', materials.data.PVC);
 
   const { data: matItems } = useGetMaterialsQuery();
 
@@ -311,6 +311,17 @@ const MaterialItems = ({route: { params: {type}}}) => {
       </View> */}
       <ScrollView style={styles.cardcontainer}>
         <View style={styles.cardboxcontainer}>
+        
+
+          {materials.data.PVC?.map((item, i) => {
+            return (
+              <TouchableOpacity style={styles.card} 
+              onPress={() => [setVisible(!visible),setMatType(item?.materialType),setMatItemName(item?.materialName)]} key={i}>
+              <Image style={styles.productimg} source={item?.image} />
+              <Text style={styles.txt}>{item?.name}</Text>  
+              </TouchableOpacity>
+            );
+          })}  
          
           {/* {matItems?.map((item, i) => {
             return (

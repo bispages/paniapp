@@ -3,6 +3,10 @@ import { View, StyleSheet, TextInput, Image, TouchableOpacity } from 'react-nati
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors';
 import { useNavigation } from '@react-navigation/native';
+import { useGetMyOrderListQuery } from '../../store/slices/IdentityApiSlice';
+import { selectUserId } from '../../store/selectors';
+import { useSelector } from 'react-redux';
+
 
 const info =[
     {
@@ -27,6 +31,7 @@ const info =[
         date:"20-08-2022",
         name:"Leo Electricals",
         place:"Thrissur,Ollur",
+
         rate:"20,000"
     },
     {
@@ -43,28 +48,31 @@ const info =[
 
 const Profile = () => {
   const navigation = useNavigation();
+  const userId = useSelector(selectUserId);
+  const { data: users, isLoading } = useGetMyOrderListQuery({ userId });
+  // console.log("WWW",users.estimates)
   return (
     <View style={styles.ordercontainer}>
          <View style={styles.container}>
         {
-            info?.map((item,i)=>{
+            users?.estimates?.map((item,i)=>{
                 return (
                     <TouchableOpacity style={styles.cardcontainer} key={i} 
                     onPress={()=>navigation.navigate('Orderdet')
 
                     }>
                     <View style={styles.imagecard}>
-                        <Image style={styles.img} source={item?.image}/>
+                        <Image style={styles.img} source={require('../../assets/img/shopimg.png')}/>
         
                      </View>
                     <View style={styles.carddet}>
-                    <Text style={styles.date}>{item?.date}</Text>
-                    <Text style={styles.name}>{item?.name}</Text>
-                    <Text style={styles.place}>{item?.place}</Text>
+                    <Text style={styles.date}>20-08-2022//</Text>
+                    <Text style={styles.name}>{item?.estimateName}</Text>
+                    <Text style={styles.place}>Thrissur//</Text>
         
                     </View>
                      <View style={styles.contactdet}>
-                    <Text style={styles.price}>{item?.rate} Rs</Text>
+                    <Text style={styles.price}>{item?.totalAmount} Rs</Text>
                     <Image  style={styles.contact} source={require('../../assets/img/phone-call.png')}/>
         
                      </View>

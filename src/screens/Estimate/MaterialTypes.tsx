@@ -31,7 +31,7 @@ const MaterialTypes = () => {
 
   const matypes = Object.keys(materials.data);
 
-  console.log(matypes,"WWWmatItems123456");
+  console.log(materials.data,"WWWmatItems123456");
   const changestate = () => {
     setVisit(!vist);
     // navigation.navigate("ChooseShop")

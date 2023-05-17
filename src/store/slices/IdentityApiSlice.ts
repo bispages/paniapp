@@ -15,8 +15,9 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
     getMaterials: builder.query<User[], void>({
       query: () => `materials`,
     }),
-    getMyOrderList: builder.query<User[], string>({
-      query: userId => `estimates?userId=${userId}`,
+    getMyOrderList: builder.query<User[], { userId: string; pageNo?: number; pageSize?: number }>({
+      query: ({ userId, pageNo = 0, pageSize = 10 }) => 
+      `estimates?userId=${userId}&pageNo=${pageNo}&pageSize=${pageSize}`,
     }),
     getShopOrderList: builder.query<User[], { userId: string; pageNo?: number; pageSize?: number }>({
       query: ({ userId, pageNo = 0, pageSize = 10 }) =>
