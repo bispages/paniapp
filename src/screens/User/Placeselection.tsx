@@ -77,14 +77,16 @@ setSearch(text);
  }
 
  const selectaction = (item) => {
- 
-  try {
-    navigation.navigate('userform')
-    // navigation.goBack();
-    AsyncStorage.setItem('useradddet',JSON.stringify(item?.pin));
-  } catch (e) {
-  }
+  navigation.navigate('userform', {item});
  }
+ 
+  // try {
+  //   navigation.navigate('userform')
+  //   // navigation.goBack();
+  //   AsyncStorage.setItem('useradddet',JSON.stringify(item?.pin));
+  // } catch (e) {
+  // }
+//  }
  const ItemView = ({item}) => {
   return (
     <TouchableOpacity

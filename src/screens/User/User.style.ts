@@ -66,6 +66,7 @@ export default StyleSheet.create({
 
   textInput: {
     width: '70%',
+    color:'black'
   },
 
   radioContainer: {

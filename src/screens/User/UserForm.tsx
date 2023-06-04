@@ -39,8 +39,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 //   route: { params: { userPhone: string } };
 // };
 
-const UserForm = ({ route: { params } }: routeParams) => {
-  // const { userPhone } = params;
+const UserForm = ({ route: { params = null } }: routeParams) => {
+  const { item } = params;
+console.log("PINCODE",item)
   const userId = useSelector(selectUserId);
   const [userName, setUserName] = useState('');
   const [pincode, setPincode] = useState('');
@@ -66,6 +67,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
     () => [USERFORM_BOTSHEET_SNAPMIN, USERFORM_BOTSHEET_SNAPMID, USERFORM_BOTSHEET_SNAPMAX],
     [],
   );
+
   const renderBackdrop = useCallback(
     (props: JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps) => (
       <BottomSheetBackdrop {...props} disappearsOnIndex={0} appearsOnIndex={1} />
@@ -75,7 +77,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
 
  const onFocuss = () => {
     
-    navigation.navigate('placeselection')
+    navigation.navigate('placeselection');
   }
 
   const handleSheetChanges = useCallback(
@@ -117,6 +119,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
   // });
 
   useEffect(() => {
+    setPincode(item ? item?.pin : '');
     // Keyboard events.
     AsyncStorage.getItem('useradddet').then(value => {
       setUsderadd(JSON.parse(value) || '');
@@ -136,22 +139,18 @@ const UserForm = ({ route: { params } }: routeParams) => {
 
   
 
-  // useEffect(() => {
-  //   const list = userType === USERTYPE_USER ? professionList : categoryList;
-  //   setDataList(list);
-  //   setSelectedItems([]);
-  // }, [userType]);
-//   AsyncStorage.getItem('useradd').then(value => {
-      
-//     setUsderadd(value || '');
- 
-// });
+// useEffect(() => {
+// console.log(item,"PINCODEITEM")
+//   setPincode(item ? item?.pin : '');
+  
+// },[]);
 
 
   useEffect(() => {
+    
     if (pincode.length >= 6) Keyboard.dismiss();
     // setSaveDisabled(!(userName && pincode && selectedItems.length > 0));
-    setSaveDisabled((userName && pincode));
+    setSaveDisabled(!(userName && pincode));
 
     
    
@@ -176,6 +175,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
     AsyncStorage.setItem('user', JSON.stringify(userDetails)).then(() => {
       dispatchAction(saveUser(userDetails));
     });
+    
   };
 
   // const updateSelectedItems = (item: ItemList, index: number) => {
@@ -454,8 +454,9 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 maxLength={40}
                 onFocus={onFocuss}
                 onChangeText={(text: string) => setPlace(text)}
+                // onChangeText={(text: string) => setPlace(usderadd)}
                 defaultValue={pincode}
-                value={usderadd}
+                value={ pincode }
                 // autoCorrect={false}
                 // autoComplete="name"
                 // returnKeyType="next"

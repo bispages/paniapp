@@ -8,6 +8,7 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
     }),
     getNearUsers: builder.query<User[], string>({
       query: userId => `users/nearby/${userId}`,
+
     }),
     getFavUsers: builder.query<User[], string>({
       query: userId => `users/fav/${userId}`,
@@ -16,8 +17,8 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
       query: () => `materials`,
     }),
     getMyOrderList: builder.query<User[], { userId: string; pageNo?: number; pageSize?: number }>({
-      query: ({ userId, pageNo = 0, pageSize = 10 }) => 
-      `estimates?userId=${userId}&pageNo=${pageNo}&pageSize=${pageSize}`,
+      query: ({ userId, pageNo = 0, pageSize = 10 }) =>
+        `estimates?userId=${userId}&pageNo=${pageNo}&pageSize=${pageSize}`,
     }),
     getShopOrderList: builder.query<User[], { userId: string; pageNo?: number; pageSize?: number }>({
       query: ({ userId, pageNo = 0, pageSize = 10 }) =>
@@ -32,12 +33,12 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
       },
       invalidatesTags: ['User'],
     }),
-    updateProfilePhoto: builder.mutation<User, User>({
-      query: function (data) {
-        return { url: 'users/updateProfilePhoto', method: 'PUT', body: { ...data } };
-      },
-      invalidatesTags: ['User'],
-    }),
+    // updateProfilePhoto: builder.mutation<User, User>({
+    //   query: function (data) {
+    //     return { url: 'users/updateProfilePhoto', method: 'PUT', body: { ...data } };
+    //   },
+    //   invalidatesTags: ['User'],
+    // }),
     addEstimate: builder.mutation<User, User>({
       query: function (data) {
         return { url: 'estimates/add', method: 'POST', body: { ...data } };

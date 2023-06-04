@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { Image } from 'react-native-animatable';
 import { useTheme, Avatar, Title, Caption, Drawer } from 'react-native-paper';
@@ -19,7 +19,23 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const dispatchAction = useDispatch();
   const { colors } = useTheme();
   const user = useSelector(selectUser);
+  const [userddet, setUserddet] = useState('')
+  const [userpick, setUserpick] = useState('')
 
+  useEffect(()=> {
+    AsyncStorage.getItem('user').then(value => {
+      setUsderadd(JSON.parse(value) || '');
+    });
+    
+
+    AsyncStorage.getItem('userimgs').then(value => {
+      setUserpick(JSON.parse(value) || '');
+    });
+
+    // console.log("QQQQQQQQQQ",user);
+
+  }, [])
+  console.log("QQQQQQQQQQ",setUserpick);
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.userInfoSection}>

@@ -3,9 +3,9 @@ import { View, StyleSheet, Image, Text, TouchableOpacity, ScrollView } from 'rea
 import Colors from '../../assets/colors';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import {useGetMaterialsQuery} from '../../store/slices/IdentityApiSlice';
+import { useGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
 import { selectMaterials } from '../../store/selectors/apiSelectors';
-import { useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 // import {colors} from '../../assets/colors';
 
 const arr = [
@@ -128,18 +128,23 @@ const countitem = [
   },
 ];
 
-const MaterialItems = ({route: { params: {type}}}) => {
+const MaterialItems = ({
+  route: {
+    params: { type },
+  },
+}) => {
   const [visible, setVisible] = useState(false);
   const [num, setNum] = useState(false);
-  const [productDetails, setProductDetails] = useState([]);  
+  const [productDetails, setProductDetails] = useState([]);
   const [matType, setMatType] = useState();
   const [matItemName, setMatItemName] = useState();
   const [data, setData] = useState(countitem);
   const [load, setLoad] = useState(true);
+  const [size, setSize] = useState([]);
   const [click, setClick] = useState({ id: 0, count: 0 });
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-  console.log("MATERIAL TYPES",type);
+  console.log('MATERIAL TYPES', type);
 
   const materials = useSelector(selectMaterials);
 
@@ -147,26 +152,22 @@ const MaterialItems = ({route: { params: {type}}}) => {
 
   const { data: matItems } = useGetMaterialsQuery();
 
-  console.log(matItems,"matItems123456");
+  console.log(matItems, 'matItems123456');
 
   const matypes = Object.values(materials.data);
-  
-  console.log(matypes,"matypes12");
+
+  console.log(matypes, 'matypes12');
 
   // const matypesvalue = Object.values(materials.data);
   // console.log(matypesvalue,"matypes1288888");
 
-  console.log("jjjj")
+  console.log('jjjj');
 
   const listItem = () => {
-
     // materials?.map((iiitem) => {
-      
     //   console.log("jjjjttt656",iiitem)
-      
     // })
-
-  }
+  };
 
   const popup = () => {
     setNum(true);
@@ -252,17 +253,20 @@ const MaterialItems = ({route: { params: {type}}}) => {
             ''
           )}
           <View style={styles.contentdiv}>
+            {console.log("WWWWWWW",size)}
             <View style={styles.contentdivtap}></View>
             <View style={styles.contentbar}>
-              <Text style={styles.producttxt}>{matType} - {matItemName}</Text>
+              <Text style={styles.producttxt}>
+                {type} - {matItemName}
+              </Text>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.below}>
-              {countitem?.map((item, index) => {
+              {size?.map((item, index) => {
                 return (
                   <View style={styles.itemcontentbar} key={index}>
                     <View style={styles.typecontentbar}>
                       <Text style={styles.amountline}>
-                        {item?.amount}
+                        {item?.unit}
                         <Text style={styles.inches}> inch</Text>
                       </Text>
                     </View>
@@ -273,7 +277,7 @@ const MaterialItems = ({route: { params: {type}}}) => {
                         <Text style={styles.icontxt}>—</Text>
                       </TouchableOpacity>
                       <View style={styles.number}>
-                        <Text style={styles.Count}>{item.count}</Text>
+                        <Text style={styles.Count}>{ item?.count || 0}</Text>
                       </View>
                       <TouchableOpacity
                         style={styles.btnselector}
@@ -311,18 +315,24 @@ const MaterialItems = ({route: { params: {type}}}) => {
       </View> */}
       <ScrollView style={styles.cardcontainer}>
         <View style={styles.cardboxcontainer}>
-        
-
-          {materials.data.PVC?.map((item, i) => {
+          {materials.data[type]?.map((item, i) => {
             return (
-              <TouchableOpacity style={styles.card} 
-              onPress={() => [setVisible(!visible),setMatType(item?.materialType),setMatItemName(item?.materialName)]} key={i}>
-              <Image style={styles.productimg} source={item?.image} />
-              <Text style={styles.txt}>{item?.name}</Text>  
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() => [
+                  setVisible(!visible),
+                  setMatType(item?.materialType),
+                  setMatItemName(item?.materialName),
+                  setSize(item?.sizes)
+                ]}
+                key={i}>
+                  {console.log("ARRAY1222",item)}
+                <Image style={styles.productimg} source={{ uri: item?.image }} />
+                <Text style={styles.txt}>{item?.name}</Text>
               </TouchableOpacity>
             );
-          })}  
-         
+          })}
+
           {/* {matItems?.map((item, i) => {
             return (
               <TouchableOpacity style={styles.card} 
@@ -346,7 +356,6 @@ const styles = StyleSheet.create({
   },
   itemcontentbar: {
     width: '97%',
-    // height:55,
     borderRadius: 8,
     backgroundColor: '#f5f5f5',
     display: 'flex',
@@ -428,13 +437,13 @@ const styles = StyleSheet.create({
     color: '#515253',
   },
   cardcontainer: {
-    marginVertical:10,
+    marginVertical: 10,
     display: 'flex',
     // flexDirection:'row',
     // flexWrap:'wrap',
     width: '100%',
-    borderTopWidth:2,
-    borderTopColor:"rgba(216, 214, 214, 0.8)"
+    borderTopWidth: 2,
+    borderTopColor: 'rgba(216, 214, 214, 0.8)',
   },
   card: {
     width: 110,

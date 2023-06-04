@@ -52,6 +52,9 @@ const Profile = () => {
   );
 
   const saveDetails = async () => {
+   
+    AsyncStorage.setItem('userimgs',JSON.stringify(image));
+
     const userDetails = {
       // userPhone,
       userName,
@@ -63,6 +66,7 @@ const Profile = () => {
       // category: selectedItems,
       category: [],
     };
+
     await updateUserProfile(userDetails);
     AsyncStorage.setItem('user', JSON.stringify(userDetails)).then(() => {
       dispatchAction(saveUser(userDetails));
@@ -204,7 +208,7 @@ const Profile = () => {
     <View style={styless.container}>
       <View style={styles.profilecontainer}>
         <View style={styles.profile}>
-        {/* {console.log(image,"WWEEWW%^%^%^$%^%^")} */}
+        {console.log(image,"WWEEWW%^%^%^$%^%^")}
         {image ? (
           <ImageBackground
                 source={{

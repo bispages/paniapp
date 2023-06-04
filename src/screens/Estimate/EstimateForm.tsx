@@ -23,7 +23,7 @@ const EstimateForm = () => {
   const { customer } = formVal;
 
   const createEstimate = () => {
-    dispatch(addCustomer({ name, area, mobile, }));
+    dispatch(addCustomer({ name, area, mobile }));
     navigation.navigate('MaterialTypes');
   };
   const { appColors } = useTheme();
