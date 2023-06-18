@@ -6,6 +6,9 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
     getUsers: builder.query<User[] | User, void | string>({
       query: userId => `users/${userId}`,
     }),
+    getPlaces: builder.query<User[], void>({
+      query: () => `place/query=`,
+    }),
     getNearUsers: builder.query<User[], string>({
       query: userId => `users/nearby/${userId}`,
 
@@ -81,8 +84,10 @@ export const {
   useGetEstimateDetQuery,
   useSendEstimateMutation,
   useSetFavUserMutation,
+  useGetPlacesQuery,
   useAddEstimateMutation,
   useUpdateProfilePhotoMutation,
+  
 } = IdentityApiSlice;
 
 export const {
@@ -99,4 +104,5 @@ export const {
   updateEstimate,
   addEstimate,
   updateProfilePhoto,
+  getPlaces,
 } = IdentityApiSlice.endpoints;

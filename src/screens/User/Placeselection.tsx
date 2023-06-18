@@ -2,6 +2,10 @@ import React, {useEffect, useState} from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useGetPlacesQuery } from '../../store/slices/IdentityApiSlice';
+import { selectUserId } from '../../store/selectors';
+import { useSelector } from 'react-redux';
+
 import {
   StyleSheet,
   Text,
@@ -52,9 +56,18 @@ const arr = [
   },
 ]
 const Placeselection = () => {
- const [filterdData, setFilterdData] = useState(arr);
- const [masterdData, setMasterdData] = useState(arr);
+ const [filterdData, setFilterdData] = useState();
+ const [masterdData, setMasterdData] = useState();
+ const [searchitem, setSearchitem] = useState();
+ const userId = useSelector(selectUserId);
  const [search, setSearch] = useState('');
+ const { data: locationdet, isLoading } = useGetPlacesQuery();
+ 
+ //cannot get datas in locationdet
+
+
+ console.log(locationdet,"locationdet");
+
  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
  const searchFilter = (text) => {
@@ -88,23 +101,25 @@ setSearch(text);
   // }
 //  }
  const ItemView = ({item}) => {
+ 
   return (
     <TouchableOpacity
     style={{height:60, backgroundColor:'rgba(243, 243, 243, 0.8)', paddingHorizontal:15,
     borderRadius:8, margin:8, display:'flex', flexDirection:'row',justifyContent:'space-between'}}
     onPress={()=>selectaction(item)}>
+     
       <View style={{ display:'flex', flexDirection:'column', height:60,
       justifyContent:'center'}}>
       <Text style={{fontSize:16,lineHeight:24,color:"#424242",fontWeight:'500'}}>
-      {item?.txt}
+      {item?.placeName}
       </Text>
     <Text style={{fontSize:16,lineHeight:24,color:"#424242",fontWeight:'500'}}>
-      {item?.dist}
+      {item?.district}
     </Text>
     </View>
     <View style={{height:60, display:'flex',justifyContent:'center',alignItems:'center'}}>
     <Text style={{fontSize:16,lineHeight:26,color:"#424242",fontWeight:'500'}}>
-      {item?.pin}
+      {item?.pincode}
     </Text>
     </View>
 
@@ -130,7 +145,7 @@ setSearch(text);
         underlineColorAndroid="transparent"
         onChangeText={(text) => searchFilter(text)}/>
         <FlatList
-        data={filterdData}
+        data={locationdet}
         keyExtractor={(item, index) => index.toString()}
         ItemSeparatorComponent={ItemSeparatorView}
         renderItem={ItemView}

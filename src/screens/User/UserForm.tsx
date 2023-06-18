@@ -120,6 +120,7 @@ console.log("PINCODE",item)
 
   useEffect(() => {
     setPincode(item ? item?.pin : '');
+    setPlace(item ? item?.txt : '');
     // Keyboard events.
     AsyncStorage.getItem('useradddet').then(value => {
       setUsderadd(JSON.parse(value) || '');
@@ -408,7 +409,7 @@ console.log("PINCODE",item)
                   width: windowWidth,
                   height: windowWidth * 2,
                   backgroundColor: '#ffffff',
-                  transform: [{ translateY: -windowWidth * 0.01 }],
+                  transform: [{ translateY: -windowWidth * 0.02 }],
                 },
               ]}
             />
@@ -453,7 +454,7 @@ console.log("PINCODE",item)
                 // keyboardType="none"
                 maxLength={40}
                 onFocus={onFocuss}
-                onChangeText={(text: string) => setPlace(text)}
+                onChangeText={(text: string) => setPincode(text)}
                 // onChangeText={(text: string) => setPlace(usderadd)}
                 defaultValue={pincode}
                 value={ pincode }
@@ -462,6 +463,28 @@ console.log("PINCODE",item)
                 // returnKeyType="next"
                 // textAlign="left"
                 // textContentType="name"
+              />
+            </View>
+            <View style={[styles.textContainer]}>
+              <TextInput
+                mode="outlined"
+                label="Place"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput]}
+                
+                maxLength={40}
+                onFocus={onFocuss}
+                onChangeText={(text: string) => setPlace(text)}
+                // onChangeText={(text: string) => setPlace(usderadd)}
+                defaultValue={place}
+                value={ place }
+                
               />
             </View>
             {/* <TouchableOpacity

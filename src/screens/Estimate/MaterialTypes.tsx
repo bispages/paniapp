@@ -11,6 +11,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
 import { selectMaterials } from '../../store/selectors/apiSelectors';
 import { useSelector} from 'react-redux';
+import { addCustomer } from '../../store/slices/EstimateStateSlice';
 
 
 const MaterialTypes = () => {

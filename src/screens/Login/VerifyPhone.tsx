@@ -154,7 +154,7 @@ const VerifyPhone = ({ route: { params } }: routeParams) => {
       if (data) {
         const { userId, userPhone, isNewUser, userType } = data;
         dispatchAction(logInUser(data));
-        
+        console.log("DATAS",data?.accessToken)
           
         
         if (isNewUser) navigation.navigate('userform', { userId, userPhone, userType });

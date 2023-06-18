@@ -24,6 +24,7 @@ const Profile = () => {
   const userId = useSelector(selectUserId);
   // const { data: userdet } = useGetNearUsersQuery(userId);
   const [isBotSheetActive, setIsBotSheetActive] = useState(false);
+  const [userPhone, setUserPhone] = useState('')
   const [image, setImage] = useState<Image | null>(null);
   const bottomSheet = useRef<BottomSheet>(null);
   const photoBottomSheet = useRef<BottomSheet>(null);
@@ -34,6 +35,11 @@ const Profile = () => {
   }
   console.log(users, 'getUsersiooio');
   console.log(image, 'ImageUpload');
+
+  const onTextChange = () => {
+    
+    setUserPhone(users?.pincode);
+  };
 
   const [mode, setMode] = useState('');
 
@@ -129,6 +135,7 @@ const Profile = () => {
 
   useEffect(() => {
     // Keyboard events.
+    setUserPhone(users?.pincode);
     Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
     // cleanup function
@@ -294,6 +301,7 @@ const Profile = () => {
           textAlign="left"
           textContentType="name"
         />
+        {console.log("ZZZZZZ",userPhone,users?.pincode)}
         <TextInput
           mode="outlined"
           label="Pincode"
@@ -308,10 +316,11 @@ const Profile = () => {
           keyboardType="numeric"
           maxLength={6}
           // defaultValue={users?.pincode}
-          // value={users?.pincode}
+          value={userPhone}
           autoCorrect={false}
           // returnKeyType="next"
           textAlign="left"
+          onChangeText={onTextChange}
         />
         <TextInput
           mode="outlined"

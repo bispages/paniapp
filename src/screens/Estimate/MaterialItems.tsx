@@ -270,6 +270,7 @@ const MaterialItems = ({
                         <Text style={styles.inches}> inch</Text>
                       </Text>
                     </View>
+                    
                     <View style={styles.rowset}>
                       <TouchableOpacity
                         style={styles.btnselector}
