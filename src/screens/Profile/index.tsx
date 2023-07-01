@@ -316,7 +316,7 @@ const Profile = () => {
           keyboardType="numeric"
           maxLength={6}
           // defaultValue={users?.pincode}
-          value={userPhone}
+          value={JSON.stringify(users?.pincode)}
           autoCorrect={false}
           // returnKeyType="next"
           textAlign="left"
@@ -335,7 +335,7 @@ const Profile = () => {
           style={styles.textInput}
           keyboardType="numeric"
           maxLength={10}
-          // value={users?.userPhone}
+          value={JSON.stringify(users?.userPhone)}
           autoCorrect={false}
           // autoComplete="phone"
           returnKeyType="next"

@@ -6,10 +6,13 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
     getUsers: builder.query<User[] | User, void | string>({
       query: userId => `users/${userId}`,
     }),
-    getPlaces: builder.query<User[], void>({
-      query: () => `place/query=`,
+    getPlaces: builder.query<User[], void | string>({
+      query: (search) => {
+        console.log(search,"Search")
+        return `places?query=${search}`
+      },
     }),
-    getNearUsers: builder.query<User[], string>({
+    getNearUsers: builder.query<User[], void | string>({
       query: userId => `users/nearby/${userId}`,
 
     }),

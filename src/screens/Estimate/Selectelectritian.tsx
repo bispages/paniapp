@@ -58,9 +58,7 @@ const Select = () => {
   const [isFavourite, setIsFavourite] = useState();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [updatefavUserProfile, { isLoading: updatefavUserProfileLoader }] = useSetFavUserMutation();
-  const toggleTab = () => {
-    setToggleState(false);
-  };
+
   const toggleTabs = () => {
     setToggleState(true);
   };
@@ -69,29 +67,42 @@ const Select = () => {
    
     setFavUserId(item?.userId);
     setIsFavourite(true);
-    console.log("WTRXX",favUserId,isFavourite);
+    console.log("WTRXX", favUserId, isFavourite);
     const favuserDetails = {
       favUserId,
       isFavourite
     };
     await updatefavUserProfile(favuserDetails);
     
-    
   };
 
-  
-
-
-
   const userId = useSelector(selectUserId);
-  const { data: users} = useGetUsersQuery(userId);
-  const { data: nearusers } = useGetNearUsersQuery(userId);
-  const { data: favusers} = useGetFavUsersQuery(userId);
+  const { data: users } = useGetUsersQuery(userId);
+  const { data: nearusers, error } = useGetNearUsersQuery(userId);
+  const { data: favusers, isLoading, refetch} = useGetFavUsersQuery(userId);
 
   console.log(users, 'getUsers');
   console.log(nearusers, 'Nearusers');
   console.log(favusers, 'Favusers');
+  console.log(userId, 'userId');
+  console.log(error,"error");
+
+  const toggleTab = () => {
+    refetch();
   
+    console.log(favusers, 'Favusers');
+    setToggleState(false);
+  };
+  
+  // useEffect(()=> {
+  //   console.log(nearusers, 'Nearusers');
+  // },[nearusers])
+
+  useEffect(() => {
+
+    console.log(nearusers,"nearusers");
+    console.log(error,"error")
+  },[nearusers, error])
 
  
 
@@ -161,7 +172,7 @@ const Select = () => {
                 </View>
               </View>
             );
-          })}
+          })} 
         </ScrollView>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}

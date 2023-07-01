@@ -61,32 +61,27 @@ const Placeselection = () => {
  const [searchitem, setSearchitem] = useState();
  const userId = useSelector(selectUserId);
  const [search, setSearch] = useState('');
- const { data: locationdet, isLoading } = useGetPlacesQuery();
+
+ 
+ const { data: locationdet, error } = useGetPlacesQuery(search);
+ 
+
  
  //cannot get datas in locationdet
 
+useEffect(()=> {
 
- console.log(locationdet,"locationdet");
+  console.log(locationdet,"locationdet");
+  console.log(error,"error")
+},[locationdet, error])
+ 
 
  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
  const searchFilter = (text) => {
 
-  if (text) {
-    const newData = masterdData.filter((item) => {
-      // const itemData= item.txt ? item.txt.toUpperCase() : "".toUpperCase;
-      const itemData= item.txt ? item.txt.toUpperCase() : "".toUpperCase;
-const textData = text.toUpperCase();
-return itemData.indexOf(textData) > -1;
-
-    });
-  setFilterdData(newData);
 setSearch(text);
-  }
-  else {
-    setFilterdData(masterdData);
-    setSearch(text);
-  }
+
  }
 
  const selectaction = (item) => {
@@ -145,7 +140,7 @@ setSearch(text);
         underlineColorAndroid="transparent"
         onChangeText={(text) => searchFilter(text)}/>
         <FlatList
-        data={locationdet}
+        data={search == '' ? '' : locationdet }
         keyExtractor={(item, index) => index.toString()}
         ItemSeparatorComponent={ItemSeparatorView}
         renderItem={ItemView}

@@ -29,9 +29,10 @@ import {
 import useBackHandler from '../../hooks/useBackHandler';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { saveUser } from '../../store/slices/AppStateSlice';
-import { useUpdateUserProfileMutation } from '../../store/slices/IdentityApiSlice';
+import { useUpdateUserProfileMutation, useGetPlacesQuery } from '../../store/slices/IdentityApiSlice';
 import { selectUserId } from '../../store/selectors';
 import { StackNavigationProp } from '@react-navigation/stack';
+
 // import { professionList } from '../../utils/professionList';
 // import { categoryList } from '../../utils/categoryList';
 
@@ -44,8 +45,12 @@ const UserForm = ({ route: { params = null } }: routeParams) => {
 console.log("PINCODE",item)
   const userId = useSelector(selectUserId);
   const [userName, setUserName] = useState('');
-  const [pincode, setPincode] = useState('');
+  const [pincode, setPincode] = useState();
   const [place, setPlace] = useState('');
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState(''); 
+  const [openmode, setOpenmode] = useState(false);
+  const [search, setSearch] = useState('');
   const [userType, setUserType] = useState(USERTYPE.USER);
   const [image, setImage] = useState<Image | null>(null);
   // const [selectedItems, setSelectedItems] = useState<ItemList[]>([]);
@@ -62,7 +67,8 @@ console.log("PINCODE",item)
   const dispatchAction = useDispatch();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [updateUserProfile, { isLoading: updateUserProfileLoader }] = useUpdateUserProfileMutation();
-
+  const { data: locationdet, error } = useGetPlacesQuery(search);
+  // {console.log("1112233",locationdet)}
   const snapPoints = useMemo(
     () => [USERFORM_BOTSHEET_SNAPMIN, USERFORM_BOTSHEET_SNAPMID, USERFORM_BOTSHEET_SNAPMAX],
     [],
@@ -76,8 +82,10 @@ console.log("PINCODE",item)
   );
 
  const onFocuss = () => {
-    
-    navigation.navigate('placeselection');
+  setOpenmode(true);
+
+
+    // navigation.navigate('placeselection');
   }
 
   const handleSheetChanges = useCallback(
@@ -118,9 +126,24 @@ console.log("PINCODE",item)
   //   setUsderadd(JSON.parse(value) || '');
   // });
 
+  const searchFilter = (text) => {
+
+    setSearch(text);
+    
+     }
+
+  useEffect(()=> {
+
+    console.log(locationdet,"locationdet");
+    console.log(error,"error")
+  },[locationdet, error])
+
   useEffect(() => {
-    setPincode(item ? item?.pin : '');
-    setPlace(item ? item?.txt : '');
+    
+    // setPincode(item ? item?.pincode : '');
+    // setPlace(item ? item?.placeName : '');
+    // setLatitude(item ? item?.latitude : ''); 
+    // setLongitude(item ? item?.longitude : '');
     // Keyboard events.
     AsyncStorage.getItem('useradddet').then(value => {
       setUsderadd(JSON.parse(value) || '');
@@ -141,7 +164,7 @@ console.log("PINCODE",item)
   
 
 // useEffect(() => {
-// console.log(item,"PINCODEITEM")
+console.log(pincode,"PINCODEITEM")
 //   setPincode(item ? item?.pin : '');
   
 // },[]);
@@ -149,14 +172,23 @@ console.log("PINCODE",item)
 
   useEffect(() => {
     
-    if (pincode.length >= 6) Keyboard.dismiss();
-    // setSaveDisabled(!(userName && pincode && selectedItems.length > 0));
+    // if (pincode.length >= 6) Keyboard.dismiss();
+  
     setSaveDisabled(!(userName && pincode));
 
     
    
   }, [userName, pincode]);
   // }, [userName, pincode, selectedItems]);
+
+  const selectaction = (item) => {
+    setPincode(item?.pincode);
+    setPlace(item?.placeName);
+    setLatitude(item?.latitude); 
+    setLongitude(item?.longitude);
+    setOpenmode(false);
+    // navigation.navigate('userform', {item});
+   }
 
   console.log("QQQQWWWW",usderadd)
   
@@ -169,6 +201,8 @@ console.log("PINCODE",item)
       userType,
       image,
       place,
+      longitude,
+      latitude,
       // category: selectedItems,
       category: [],
     };
@@ -178,6 +212,7 @@ console.log("PINCODE",item)
     });
     
   };
+
 
   // const updateSelectedItems = (item: ItemList, index: number) => {
   //   if (
@@ -334,7 +369,7 @@ console.log("PINCODE",item)
                   primary: appColors.btncolor,
                 },
               }}>
-              SELECT FROM GALLERY
+               FROM GALLERY
             </Button>
           </View>
           <View style={[styles.panelButtonView]}>
@@ -359,6 +394,67 @@ console.log("PINCODE",item)
 
   return (
     <View style={styless.container}>
+      {
+        openmode === true ? 
+        <View style={styles.opencontainer}>
+          
+        <TextInput 
+        // style={{ backgroundColor:'#fff',borderWidth:1, margin:8,
+        //  paddingHorizontal:12, borderRadius:8, borderColor:'#BEBEBE', fontSize:16, 
+        // lineHeight:26,color:"#424242",fontWeight:'500', caretColor:'red'}}
+       
+                theme={{
+                  colors: {
+                    primary: "#BEBEBE",
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput2]}
+        value={search}
+        placeholder='Search Place or Pincode'
+        underlineColorAndroid="transparent"
+        onChangeText={(text) => searchFilter(text)}/>
+          
+          {
+            locationdet?.map((item,key)=> {
+              return (
+                <TouchableOpacity
+    style={{height:60, backgroundColor:'rgba(243, 243, 243, 0.8)', paddingHorizontal:15,
+    borderRadius:8, margin:8, display:'flex', flexDirection:'row',justifyContent:'space-between'}}
+    onPress={()=>selectaction(item)}>
+     
+      <View style={{ display:'flex', flexDirection:'column', height:60,
+      justifyContent:'center'}}>
+      <Text style={{fontSize:16,lineHeight:24,color:"#424242",fontWeight:'500'}}>
+      {item?.placeName}
+      </Text>
+    <Text style={{fontSize:16,lineHeight:24,color:"#424242",fontWeight:'500'}}>
+      {item?.district}
+    </Text>
+    </View>
+    <View style={{height:60, display:'flex',justifyContent:'center',alignItems:'center'}}>
+    <Text style={{fontSize:16,lineHeight:26,color:"#424242",fontWeight:'500'}}>
+      {item?.pincode}
+    </Text>
+    </View>
+
+    </TouchableOpacity> 
+
+              )
+
+            })
+          }
+           
+
+          {/* <TouchableOpacity>
+          <Text>sdfghj</Text>
+          </TouchableOpacity> */}
+
+        </View>
+        :
+        ('')
+      }
       <View style={[styles.container, { backgroundColor: appColors.userpagetopback }]}>
         {/* <View style={styless.logocontainer}> */}
 
@@ -450,14 +546,13 @@ console.log("PINCODE",item)
                   },
                 }}
                 style={[styles.textInput]}
-                
                 // keyboardType="none"
                 maxLength={40}
                 onFocus={onFocuss}
                 onChangeText={(text: string) => setPincode(text)}
                 // onChangeText={(text: string) => setPlace(usderadd)}
                 defaultValue={pincode}
-                value={ pincode }
+                value={JSON.stringify(pincode)}
                 // autoCorrect={false}
                 // autoComplete="name"
                 // returnKeyType="next"
