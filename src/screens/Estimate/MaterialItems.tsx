@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, ScrollView } from 'react-native';
 import Colors from '../../assets/colors';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
@@ -73,59 +73,11 @@ const arr = [
 
 const countitem = [
   {
-    id: 1,
-    amount: '1.50',
+  
     count: 0,
     initialCount: 0,
   },
-  {
-    id: 2,
-    amount: '1.00',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 3,
-    amount: '2.00',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 4,
-    amount: '2.50',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 5,
-    amount: '3.00',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 6,
-    amount: '3.50',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 7,
-    amount: '2.50',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 8,
-    amount: '3.00',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 9,
-    amount: '3.50',
-    count: 0,
-    initialCount: 0,
-  },
+
 ];
 
 const MaterialItems = ({
@@ -138,7 +90,9 @@ const MaterialItems = ({
   const [productDetails, setProductDetails] = useState([]);
   const [matType, setMatType] = useState();
   const [matItemName, setMatItemName] = useState();
-  const [data, setData] = useState(countitem);
+  const [data, setData] = useState();
+  const [manual, setManual] = useState([])
+  const [countitem, setCountitem] = useState([]);
   const [load, setLoad] = useState(true);
   const [size, setSize] = useState([]);
   const [click, setClick] = useState({ id: 0, count: 0 });
@@ -163,6 +117,11 @@ const MaterialItems = ({
 
   console.log('jjjj');
 
+  
+  
+  
+console.log("123456000II",countitem)
+
   const listItem = () => {
     // materials?.map((iiitem) => {
     //   console.log("jjjjttt656",iiitem)
@@ -175,25 +134,40 @@ const MaterialItems = ({
       setNum(false);
     }, 100);
   };
-
+  
   const handleProductCount = (id: number, payload: string) => {
-    const item = data.find(item => item.id === id);
+    
+    // setCountitem(arr1);
+    console.log("99999935$%",countitem);
+    const item = countitem?.find(item => item.id === id);
     if (item) {
       if (payload === 'inc') {
+        // console.log("postive");
+        // setCountitem(countitem + 1);
+        // console.log("))))",JSON.stringify(countitem))
         item.count += 1;
         item.initialCount += 1;
+        console.log("CHECKINGkk",click.id,id);
         if (click.id === id) {
           click.count += 1;
+          console.log("CHECKING",click.id,id);
+          console.log("WWW", click.count)
         } else {
           if (item.initialCount > 0) {
             click.count = item.initialCount;
+            console.log("YYYZZZZZZZZZZZ")
+            console.log("WWW", click.count)
           } else {
             click.count = 1;
+            console.log("VVVV")
+            console.log("WWW", click.count)
           }
         }
         click.id = id;
         setLoad(!load);
+        {console.log("YYYY",item.count)}
       } else {
+        console.log("negatives");
         if (item.count > 0) {
           item.count--;
           item.initialCount--;
@@ -236,10 +210,25 @@ const MaterialItems = ({
   //     setProductDetails(product_array);
   //     }
   //   }
+  useEffect(() => {
+
+    const arr1 = size?.map(item  => ({
+      ...item,
+      count: 0,
+      initialCount: 0
+      
+    }));
+    setCountitem( arr1 )
+  
+  }, []);
 
   useEffect(() => {
     listItem();
   }, []);
+
+  // const [data, setData] = useState(arr1);
+  // console.log(data,"TTTT")
+  
 
   return (
     <View style={styles.container}>
@@ -261,7 +250,7 @@ const MaterialItems = ({
               </Text>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.below}>
-              {size?.map((item, index) => {
+              {countitem?.map((item, index) => {
                 return (
                   <View style={styles.itemcontentbar} key={index}>
                     <View style={styles.typecontentbar}>
@@ -270,7 +259,6 @@ const MaterialItems = ({
                         <Text style={styles.inches}> inch</Text>
                       </Text>
                     </View>
-                    
                     <View style={styles.rowset}>
                       <TouchableOpacity
                         style={styles.btnselector}
@@ -278,7 +266,7 @@ const MaterialItems = ({
                         <Text style={styles.icontxt}>—</Text>
                       </TouchableOpacity>
                       <View style={styles.number}>
-                        <Text style={styles.Count}>{ item?.count || 0}</Text>
+                        <Text style={styles.Count}>{ item?.count }</Text>
                       </View>
                       <TouchableOpacity
                         style={styles.btnselector}
@@ -299,7 +287,7 @@ const MaterialItems = ({
                 style={styles.donebar}
                 onPress={() => {
                   setVisible(false), (click.count = 0);
-                  data.map((item, i) => (item.initialCount = 0));
+                  countitem.map((item,i) => (item.initialCount = 0));
                   setLoad(!load);
                 }}>
                 <Text style={styles.donetxt}>Done</Text>
