@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, Image, Text, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import Colors from '../../assets/colors';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
 import { selectMaterials } from '../../store/selectors/apiSelectors';
 import { useSelector } from 'react-redux';
+
 // import {colors} from '../../assets/colors';
 
 const arr = [
@@ -71,14 +72,14 @@ const arr = [
   },
 ];
 
-const countitem = [
-  {
+// const countitem = [
+//   {
   
-    count: 0,
-    initialCount: 0,
-  },
+//     count: 0,
+//     initialCount: 0,
+//   },
 
-];
+// ];
 
 const MaterialItems = ({
   route: {
@@ -91,11 +92,13 @@ const MaterialItems = ({
   const [matType, setMatType] = useState();
   const [matItemName, setMatItemName] = useState();
   const [data, setData] = useState();
-  const [manual, setManual] = useState([])
+  const [manual, setManual] = useState([]);
+  const [countitem12, setCountitem12] = useState([]);
   const [countitem, setCountitem] = useState([]);
   const [load, setLoad] = useState(true);
   const [size, setSize] = useState([]);
   const [click, setClick] = useState({ id: 0, count: 0 });
+  const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   console.log('MATERIAL TYPES', type);
@@ -142,32 +145,21 @@ console.log("123456000II",countitem)
     const item = countitem?.find(item => item.id === id);
     if (item) {
       if (payload === 'inc') {
-        // console.log("postive");
-        // setCountitem(countitem + 1);
-        // console.log("))))",JSON.stringify(countitem))
         item.count += 1;
         item.initialCount += 1;
-        console.log("CHECKINGkk",click.id,id);
         if (click.id === id) {
           click.count += 1;
-          console.log("CHECKING",click.id,id);
-          console.log("WWW", click.count)
         } else {
           if (item.initialCount > 0) {
             click.count = item.initialCount;
-            console.log("YYYZZZZZZZZZZZ")
-            console.log("WWW", click.count)
           } else {
             click.count = 1;
-            console.log("VVVV")
-            console.log("WWW", click.count)
           }
         }
         click.id = id;
         setLoad(!load);
         {console.log("YYYY",item.count)}
       } else {
-        console.log("negatives");
         if (item.count > 0) {
           item.count--;
           item.initialCount--;
@@ -210,49 +202,54 @@ console.log("123456000II",countitem)
   //     setProductDetails(product_array);
   //     }
   //   }
-  useEffect(() => {
+//   useEffect(() => {
+//     materials.data[type]?.map((item, i) => {
+// console.log('################',item.sizes)
+// const arr1 = item.sizes?.map(items  => ({
+//   ...items,
+//   count: 0,
+//   initialCount: 0
+  
+// }))
+// setCountitem( arr1 );
 
-    const arr1 = size?.map(item  => ({
+//     }
+
+    
+        
+//     )
+
+//   }, [])
+
+//   {console.log('%%%%%%%&',countitem)}
+
+  const newlygetarr = (items : string) => {
+    // useEffect(() => {
+    const arr1 = items?.map(item  => ({
       ...item,
       count: 0,
       initialCount: 0
       
     }));
-    setCountitem( arr1 )
-  
-  }, []);
+    setCountitem( arr1 );
+    console.log('WWWWW123333',arr1)
+    
+  // }, []);
+  };
+  {console.log('WWWWW123333yyy',countitem)}
 
   useEffect(() => {
     listItem();
+    
   }, []);
 
   // const [data, setData] = useState(arr1);
   // console.log(data,"TTTT")
-  
 
-  return (
-    <View style={styles.container}>
-      {visible === true ? (
-        <View style={styles.modalcontainer}>
-          {num === true ? (
-            <View style={styles.countbar}>
-              <Text style={styles.countnum}>{click.count}</Text>
-            </View>
-          ) : (
-            ''
-          )}
-          <View style={styles.contentdiv}>
-            {console.log("WWWWWWW",size)}
-            <View style={styles.contentdivtap}></View>
-            <View style={styles.contentbar}>
-              <Text style={styles.producttxt}>
-                {type} - {matItemName}
-              </Text>
-            </View>
-            <ScrollView showsVerticalScrollIndicator={false} style={styles.below}>
-              {countitem?.map((item, index) => {
-                return (
-                  <View style={styles.itemcontentbar} key={index}>
+  const renderItems = ({item, index}) => 
+     (
+      <View style={styles.itemcontentbar} key={index}>
+                    {console.log('iuevfguyuyv gvg')}
                     <View style={styles.typecontentbar}>
                       <Text style={styles.amountline}>
                         {item?.unit}
@@ -275,19 +272,47 @@ console.log("123456000II",countitem)
                       </TouchableOpacity>
                     </View>
                   </View>
-                );
-              })}
-            </ScrollView>
+    );
+
+  return (
+    <View style={styles.container}>
+     {console.log("sizesizesizesizesize23",size)}
+      {visible === true ? (
+        <View style={styles.modalcontainer}>
+          {num === true ? (
+            <View style={styles.countbar}>
+              <Text style={styles.countnum}>{click.count}</Text>
+            </View>
+          ) : (
+            ''
+          )}
+          <View style={styles.contentdiv}>
+            {console.log("WWWWWWW",size)}
+            <View style={styles.contentdivtap}></View>
+            <View style={styles.contentbar}>
+              <Text style={styles.producttxt}>
+                {type} - {matItemName}
+              </Text>
+            </View>
+           
+              <FlatList
+              showsVerticalScrollIndicator={false}
+              data={countitem}
+              renderItem={renderItems}
+              keyExtractor={(item, index) => index.toString()}
+              
+              />
+         
             <View style={styles.productback}>
               <TouchableOpacity style={styles.donebar} onPress={() => navigation.navigate('MaterialTypes')}>
-                {/* <Text  style={styles.donetxt}>Back</Text> */}
+             
                 <Image source={require('../../assets/img/Group112.png')} />
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.donebar}
                 onPress={() => {
                   setVisible(false), (click.count = 0);
-                  countitem.map((item,i) => (item.initialCount = 0));
+                  countitem?.map((item, i) => (item.initialCount = 0));
                   setLoad(!load);
                 }}>
                 <Text style={styles.donetxt}>Done</Text>
@@ -309,9 +334,10 @@ console.log("123456000II",countitem)
               <TouchableOpacity
                 style={styles.card}
                 onPress={() => [
+                  newlygetarr(item?.sizes),
                   setVisible(!visible),
                   setMatType(item?.materialType),
-                  setMatItemName(item?.materialName),
+                  setMatItemName(item?.name),
                   setSize(item?.sizes)
                 ]}
                 key={i}>

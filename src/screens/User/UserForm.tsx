@@ -553,11 +553,7 @@ console.log(pincode,"PINCODEITEM")
                 // onChangeText={(text: string) => setPlace(usderadd)}
                 defaultValue={pincode}
                 value={JSON.stringify(pincode)}
-                // autoCorrect={false}
-                // autoComplete="name"
-                // returnKeyType="next"
-                // textAlign="left"
-                // textContentType="name"
+               
               />
             </View>
             <View style={[styles.textContainer]}>
@@ -582,24 +578,7 @@ console.log(pincode,"PINCODEITEM")
                 
               />
             </View>
-            {/* <TouchableOpacity
-              style={{
-                borderColor: 'grey',
-                width: '70%',
-                height: 50,
-                borderWidth: 1,
-                borderRadius: 4,
-                display: 'flex',
-                justifyContent: 'center',
-                marginHorizontal: 10,
-              }} */}
-              {/* onPress={navigation.navigate('placeselection')}
-             > */}
-              {/* <View style={[styles.textInput]}> */}
-              {/* <Text>dub</Text> */}
-
-              {/* <View/> */}
-            {/* </TouchableOpacity> */}
+          
 
             <View style={styles.savebtnContainer}>
               <Button

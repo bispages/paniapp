@@ -20,9 +20,12 @@ import {
   USERFORM_BOTSHEET_SNAPMID,
   USERFORM_BOTSHEET_SNAPMIN,
 } from '../../utils/constants';
+
+
 const Profile = () => {
   const userId = useSelector(selectUserId);
   // const { data: userdet } = useGetNearUsersQuery(userId);
+  const [base64String, setBase64String] = useState('');
   const [isBotSheetActive, setIsBotSheetActive] = useState(false);
   const [userPhone, setUserPhone] = useState('')
   const [image, setImage] = useState<Image | null>(null);
@@ -107,6 +110,8 @@ const Profile = () => {
       .then((image: Image) => {
         closeBotSheet(photoBottomSheet);
         if ('path' in image) setImage(image);
+        // convertToBase64(image.path);
+        
       })
       .catch(err => console.log(err));
   };
@@ -143,6 +148,43 @@ const Profile = () => {
       Keyboard.removeAllListeners('keyboardDidHide');
     };
   }, []);
+  // let base64code = ""
+
+  // const convertToBase64 = async (image) => {
+  //   const fileReader = new FileReader();
+
+  //   fileReader.onload = () => {
+  //     setBase64String(fileReader.result);
+  //     console.log("setBase64String",base64String);
+  //   };
+
+  //   fileReader.onerror = (error) => {
+  //     console.log('Error converting image to Base64:', error);
+  //   };
+
+  //   fetch(image)
+  //     .then((response) => response.blob())
+  //     .then((blob) => {
+  //       fileReader.readAsDataURL(blob);
+  //     })
+  //     .catch((error) => {
+  //       console.log('Error fetching image:', error);
+  //     });
+  // };
+
+  // const convertToBase64 = (image) => {
+  //   console.log('===============================================================',image);
+  //   console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',image?.path);
+
+    // RNFS.readFile(imagePath, 'base64')
+    //   .then((base64String) => {
+    //     console.log('Base64 string:', base64String);
+    //     // Use the base64String for further processing or API upload
+    //   })
+    //   .catch((error) => {
+    //     console.log('Error converting image to Base64:', error);
+    //   });
+  // };
 
   const renderPhotoBottomSheet = () => (
     <BottomSheet
@@ -234,7 +276,6 @@ const Profile = () => {
         <ImageBackground
                 source={
                   require('../../assets/img/Vectorshop.png')
-                  
                 }
                 style={[
                   styles.imgContainer,
