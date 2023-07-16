@@ -117,6 +117,7 @@ const styless = StyleSheet.create({
     borderBottomColor: colorss.borderColor,
     // backgroundColor:'red',
   },
+
   backimg: {
     width: 45,
     height: 45,
@@ -212,10 +213,8 @@ const styless = StyleSheet.create({
   },
   carts: {
     width: '100%',
-
     height: 130,
     borderRadius: 16,
-
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',

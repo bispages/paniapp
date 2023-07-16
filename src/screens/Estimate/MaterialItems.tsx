@@ -5,8 +5,10 @@ import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
 import { selectMaterials } from '../../store/selectors/apiSelectors';
-import { useSelector } from 'react-redux';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { useFetchDataQuery } from '../../store/slices/IdentityApiSlice';
+import { useDataFetch } from '../../store/fetchData'
+import { RootState } from '../../store';
 // import {colors} from '../../assets/colors';
 
 const arr = [
@@ -101,6 +103,23 @@ const MaterialItems = ({
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
+  // useDataFetch();
+//   const dispatch = useDispatch();
+
+ 
+//   dispatch(useFetchDataQuery());
+  
+//   const transformedData = useSelector((state: RootState) => state.api.endpoints.fetchData.data);
+ 
+// console.log(transformedData,"333232323333")
+//   if (!transformedData) {
+//     return <Text>Loading...</Text>;
+//   }
+
+//   if (error) {
+//     return <Text>Error: {error.message}</Text>;
+//   }
+
   console.log('MATERIAL TYPES', type);
 
   const materials = useSelector(selectMaterials);
@@ -115,21 +134,13 @@ const MaterialItems = ({
 
   console.log(matypes, 'matypes12');
 
-  // const matypesvalue = Object.values(materials.data);
-  // console.log(matypesvalue,"matypes1288888");
-
-  console.log('jjjj');
-
-  
-  
-  
-console.log("123456000II",countitem)
 
   const listItem = () => {
     // materials?.map((iiitem) => {
     //   console.log("jjjjttt656",iiitem)
     // })
   };
+
 
   const popup = () => {
     setNum(true);
@@ -183,46 +194,6 @@ console.log("123456000II",countitem)
     console.log('%%', data);
   };
 
-  // let adding = (index, value) => {
-
-  //   let product_array;
-  //   product_array = [...countitem];
-  //   product_array[index][value] = parseInt(product_array[index]?.count) + 1;
-  //   product_array[index][value] = `${product_array[index]?.count}`;
-  //   setProductDetails(product_array);
-  // }
-
-  // let decending = (index, value) => {
-
-  //     let product_array;
-  //     product_array = [...countitem];
-  //     if(product_array[index]?.count > 0){
-  //     product_array[index][value] = parseInt(product_array[index]?.count) - 1;
-  //     product_array[index][value] = `${product_array[index]?.count}`;
-  //     setProductDetails(product_array);
-  //     }
-  //   }
-//   useEffect(() => {
-//     materials.data[type]?.map((item, i) => {
-// console.log('################',item.sizes)
-// const arr1 = item.sizes?.map(items  => ({
-//   ...items,
-//   count: 0,
-//   initialCount: 0
-  
-// }))
-// setCountitem( arr1 );
-
-//     }
-
-    
-        
-//     )
-
-//   }, [])
-
-//   {console.log('%%%%%%%&',countitem)}
-
   const newlygetarr = (items : string) => {
     // useEffect(() => {
     const arr1 = items?.map(item  => ({
@@ -242,9 +213,6 @@ console.log("123456000II",countitem)
     listItem();
     
   }, []);
-
-  // const [data, setData] = useState(arr1);
-  // console.log(data,"TTTT")
 
   const renderItems = ({item, index}) => 
      (
@@ -276,7 +244,8 @@ console.log("123456000II",countitem)
 
   return (
     <View style={styles.container}>
-     {console.log("sizesizesizesizesize23",size)}
+     {/* {console.log("sizesizesizesizesize23",size)}
+     {console.log("123456000IImodifiedData",datas)} */}
       {visible === true ? (
         <View style={styles.modalcontainer}>
           {num === true ? (
@@ -294,18 +263,14 @@ console.log("123456000II",countitem)
                 {type} - {matItemName}
               </Text>
             </View>
-           
               <FlatList
               showsVerticalScrollIndicator={false}
               data={countitem}
               renderItem={renderItems}
               keyExtractor={(item, index) => index.toString()}
-              
               />
-         
             <View style={styles.productback}>
               <TouchableOpacity style={styles.donebar} onPress={() => navigation.navigate('MaterialTypes')}>
-             
                 <Image source={require('../../assets/img/Group112.png')} />
               </TouchableOpacity>
               <TouchableOpacity
@@ -323,10 +288,6 @@ console.log("123456000II",countitem)
       ) : (
         ''
       )}
-      {/* <View style={styles.headcontainer}>
-        <Image style={styles.back} source={require('../../assets/img/backarrow.png')} />
-        <Text style={styles.head}>Material Items</Text>
-      </View> */}
       <ScrollView style={styles.cardcontainer}>
         <View style={styles.cardboxcontainer}>
           {materials.data[type]?.map((item, i) => {
@@ -348,15 +309,6 @@ console.log("123456000II",countitem)
             );
           })}
 
-          {/* {matItems?.map((item, i) => {
-            return (
-              <TouchableOpacity style={styles.card} 
-              onPress={() => [setVisible(!visible),setMatType(item?.materialType),setMatItemName(item?.materialName)]} key={i}>
-              <Image style={styles.productimg} source={item?.image} />
-              <Text style={styles.txt}>{item?.materialName}</Text>  
-              </TouchableOpacity>
-            );
-          })}  */}
         </View>
       </ScrollView>
       <View></View>

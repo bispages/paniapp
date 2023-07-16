@@ -32,7 +32,8 @@ import { saveUser } from '../../store/slices/AppStateSlice';
 import { useUpdateUserProfileMutation, useGetPlacesQuery } from '../../store/slices/IdentityApiSlice';
 import { selectUserId } from '../../store/selectors';
 import { StackNavigationProp } from '@react-navigation/stack';
-
+// import RNFS from 'react-native-fs'
+import RNFS from 'react-native-fs';
 // import { professionList } from '../../utils/professionList';
 // import { categoryList } from '../../utils/categoryList';
 
@@ -44,6 +45,8 @@ const UserForm = ({ route: { params = null } }: routeParams) => {
   const { item } = params;
 console.log("PINCODE",item)
   const userId = useSelector(selectUserId);
+  const [base64Image, setBase64Image] = useState(null);
+  const [imageData, setImageData] = useState(null);
   const [userName, setUserName] = useState('');
   const [pincode, setPincode] = useState();
   const [place, setPlace] = useState('');
@@ -83,9 +86,6 @@ console.log("PINCODE",item)
 
  const onFocuss = () => {
   setOpenmode(true);
-
-
-    // navigation.navigate('placeselection');
   }
 
   const handleSheetChanges = useCallback(
@@ -303,10 +303,22 @@ console.log(pincode,"PINCODEITEM")
     })
       .then((image: Image) => {
         closeBotSheet(photoBottomSheet);
-        if ('path' in image) setImage(image);
+        if ('path' in image) 
+          setImage(image);
+        //   RNFS.readFile(response.uri, 'base64')
+        //   .then((base64String) => setBase64Image(`data:${response.type};base64,${base64String}`))
+        //   .catch((error) => console.log('Error reading image file:', error.message));
+        // setBase64Image(base64String);
+        
+        // setImage(image)
+        // setBase64Image(RNFS.readFile(image?.path,'base64'));
+       
       })
       .catch(err => console.log(err));
   };
+
+  console.log("wwww",base64Image);
+  console.log("mmmm",image);
 
   const choosePhotoFromLibrary = () => {
     ImagePicker.openPicker({

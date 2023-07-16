@@ -1,5 +1,17 @@
 import { User } from 'types';
 import { ApiSlice } from './ApiSlice';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
+
+const transformResponse = (response: Array<any>) => {
+  if (Array.isArray(response)) {
+    return response.map((item) => ({
+      ...item,
+      count: 0,
+      initialCount: 0
+    }))
+  }
+  return response;
+}
 
 export const IdentityApiSlice = ApiSlice.injectEndpoints({
   endpoints: builder => ({
@@ -72,6 +84,18 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
   }),
   overrideExisting: true,
 });
+
+export const api = createApi({
+  baseQuery: fetchBaseQuery({ baseUrl: ApiSlice }),
+  endpoints: (builder) => ({
+    fetchData: builder.query({
+      query: () => 'materials',
+      transformResponse,
+    }),
+  }),
+});
+
+export const { useFetchDataQuery } = api;
 
 export const {
   useGetUsersQuery,

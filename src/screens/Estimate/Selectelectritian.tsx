@@ -95,7 +95,7 @@ const Select = () => {
   };
   
   // useEffect(()=> {
-  //   console.log(nearusers, 'Nearusers');
+    console.log(nearusers, 'Nearusers12');
   // },[nearusers])
 
   useEffect(() => {
