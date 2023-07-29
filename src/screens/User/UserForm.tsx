@@ -29,26 +29,36 @@ import {
 import useBackHandler from '../../hooks/useBackHandler';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { saveUser } from '../../store/slices/AppStateSlice';
-import { useUpdateUserProfileMutation } from '../../store/slices/IdentityApiSlice';
+import { useUpdateUserProfileMutation, useGetPlacesQuery } from '../../store/slices/IdentityApiSlice';
 import { selectUserId } from '../../store/selectors';
 import { StackNavigationProp } from '@react-navigation/stack';
+// import RNFS from 'react-native-fs'
+import RNFS from 'react-native-fs';
 // import { professionList } from '../../utils/professionList';
 // import { categoryList } from '../../utils/categoryList';
 
-type routeParams = {
-  route: { params: { userPhone: string } };
-};
+// type routeParams = {
+//   route: { params: { userPhone: string } };
+// };
 
-const UserForm = ({ route: { params } }: routeParams) => {
-  const { userPhone } = params;
+const UserForm = ({ route: { params = null } }: routeParams) => {
+  const { item } = params;
+console.log("PINCODE",item)
   const userId = useSelector(selectUserId);
+  const [base64Image, setBase64Image] = useState(null);
+  const [imageData, setImageData] = useState(null);
   const [userName, setUserName] = useState('');
-  const [pincode, setPincode] = useState('');
+  const [pincode, setPincode] = useState();
   const [place, setPlace] = useState('');
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState(''); 
+  const [openmode, setOpenmode] = useState(false);
+  const [search, setSearch] = useState('');
   const [userType, setUserType] = useState(USERTYPE.USER);
   const [image, setImage] = useState<Image | null>(null);
   // const [selectedItems, setSelectedItems] = useState<ItemList[]>([]);
   const [saveDisabled, setSaveDisabled] = useState(true);
+  const [usderadd, setUsderadd] = useState('');
   // const [dataList, setDataList] = useState(professionList);
   const [showSnack, setShowSnack] = useState(false);
   const [message, setMessage] = useState('');
@@ -60,17 +70,23 @@ const UserForm = ({ route: { params } }: routeParams) => {
   const dispatchAction = useDispatch();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [updateUserProfile, { isLoading: updateUserProfileLoader }] = useUpdateUserProfileMutation();
-
+  const { data: locationdet, error } = useGetPlacesQuery(search);
+  // {console.log("1112233",locationdet)}
   const snapPoints = useMemo(
     () => [USERFORM_BOTSHEET_SNAPMIN, USERFORM_BOTSHEET_SNAPMID, USERFORM_BOTSHEET_SNAPMAX],
     [],
   );
+
   const renderBackdrop = useCallback(
     (props: JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps) => (
       <BottomSheetBackdrop {...props} disappearsOnIndex={0} appearsOnIndex={1} />
     ),
     [],
   );
+
+ const onFocuss = () => {
+  setOpenmode(true);
+  }
 
   const handleSheetChanges = useCallback(
     (index: number, sheet: RefObject<BottomSheet>) => {
@@ -106,9 +122,32 @@ const UserForm = ({ route: { params } }: routeParams) => {
   const keyboardDidHide = () => {
     Keyboard.dismiss();
   };
+  // AsyncStorage.getItem('useradddet').then(value => {
+  //   setUsderadd(JSON.parse(value) || '');
+  // });
+
+  const searchFilter = (text) => {
+
+    setSearch(text);
+    
+     }
+
+  useEffect(()=> {
+
+    console.log(locationdet,"locationdet");
+    console.log(error,"error")
+  },[locationdet, error])
 
   useEffect(() => {
+    
+    // setPincode(item ? item?.pincode : '');
+    // setPlace(item ? item?.placeName : '');
+    // setLatitude(item ? item?.latitude : ''); 
+    // setLongitude(item ? item?.longitude : '');
     // Keyboard events.
+    AsyncStorage.getItem('useradddet').then(value => {
+      setUsderadd(JSON.parse(value) || '');
+    });
     Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
     // cleanup function
@@ -122,28 +161,48 @@ const UserForm = ({ route: { params } }: routeParams) => {
     setMessage('');
   };
 
-  // useEffect(() => {
-  //   const list = userType === USERTYPE_USER ? professionList : categoryList;
-  //   setDataList(list);
-  //   setSelectedItems([]);
-  // }, [userType]);
+  
+
+// useEffect(() => {
+console.log(pincode,"PINCODEITEM")
+//   setPincode(item ? item?.pin : '');
+  
+// },[]);
+
 
   useEffect(() => {
-    if (pincode.length >= 6) Keyboard.dismiss();
-    // setSaveDisabled(!(userName && pincode && selectedItems.length > 0));
+    
+    // if (pincode.length >= 6) Keyboard.dismiss();
+  
     setSaveDisabled(!(userName && pincode));
+
+    
+   
   }, [userName, pincode]);
   // }, [userName, pincode, selectedItems]);
 
+  const selectaction = (item) => {
+    setPincode(item?.pincode);
+    setPlace(item?.placeName);
+    setLatitude(item?.latitude); 
+    setLongitude(item?.longitude);
+    setOpenmode(false);
+    // navigation.navigate('userform', {item});
+   }
+
+  console.log("QQQQWWWW",usderadd)
+  
   const saveDetails = async () => {
     const userDetails = {
-      userPhone,
+      // userPhone,
       userName,
       userId,
       pincode,
       userType,
       image,
       place,
+      longitude,
+      latitude,
       // category: selectedItems,
       category: [],
     };
@@ -151,7 +210,9 @@ const UserForm = ({ route: { params } }: routeParams) => {
     AsyncStorage.setItem('user', JSON.stringify(userDetails)).then(() => {
       dispatchAction(saveUser(userDetails));
     });
+    
   };
+
 
   // const updateSelectedItems = (item: ItemList, index: number) => {
   //   if (
@@ -242,10 +303,22 @@ const UserForm = ({ route: { params } }: routeParams) => {
     })
       .then((image: Image) => {
         closeBotSheet(photoBottomSheet);
-        if ('path' in image) setImage(image);
+        if ('path' in image) 
+          setImage(image);
+        //   RNFS.readFile(response.uri, 'base64')
+        //   .then((base64String) => setBase64Image(`data:${response.type};base64,${base64String}`))
+        //   .catch((error) => console.log('Error reading image file:', error.message));
+        // setBase64Image(base64String);
+        
+        // setImage(image)
+        // setBase64Image(RNFS.readFile(image?.path,'base64'));
+       
       })
       .catch(err => console.log(err));
   };
+
+  console.log("wwww",base64Image);
+  console.log("mmmm",image);
 
   const choosePhotoFromLibrary = () => {
     ImagePicker.openPicker({
@@ -308,7 +381,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
                   primary: appColors.btncolor,
                 },
               }}>
-              SELECT FROM GALLERY
+               FROM GALLERY
             </Button>
           </View>
           <View style={[styles.panelButtonView]}>
@@ -333,6 +406,67 @@ const UserForm = ({ route: { params } }: routeParams) => {
 
   return (
     <View style={styless.container}>
+      {
+        openmode === true ? 
+        <View style={styles.opencontainer}>
+          
+        <TextInput 
+        // style={{ backgroundColor:'#fff',borderWidth:1, margin:8,
+        //  paddingHorizontal:12, borderRadius:8, borderColor:'#BEBEBE', fontSize:16, 
+        // lineHeight:26,color:"#424242",fontWeight:'500', caretColor:'red'}}
+       
+                theme={{
+                  colors: {
+                    primary: "#BEBEBE",
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput2]}
+        value={search}
+        placeholder='Search Place or Pincode'
+        underlineColorAndroid="transparent"
+        onChangeText={(text) => searchFilter(text)}/>
+          
+          {
+            locationdet?.map((item,key)=> {
+              return (
+                <TouchableOpacity
+    style={{height:60, backgroundColor:'rgba(243, 243, 243, 0.8)', paddingHorizontal:15,
+    borderRadius:8, margin:8, display:'flex', flexDirection:'row',justifyContent:'space-between'}}
+    onPress={()=>selectaction(item)}>
+     
+      <View style={{ display:'flex', flexDirection:'column', height:60,
+      justifyContent:'center'}}>
+      <Text style={{fontSize:16,lineHeight:24,color:"#424242",fontWeight:'500'}}>
+      {item?.placeName}
+      </Text>
+    <Text style={{fontSize:16,lineHeight:24,color:"#424242",fontWeight:'500'}}>
+      {item?.district}
+    </Text>
+    </View>
+    <View style={{height:60, display:'flex',justifyContent:'center',alignItems:'center'}}>
+    <Text style={{fontSize:16,lineHeight:26,color:"#424242",fontWeight:'500'}}>
+      {item?.pincode}
+    </Text>
+    </View>
+
+    </TouchableOpacity> 
+
+              )
+
+            })
+          }
+           
+
+          {/* <TouchableOpacity>
+          <Text>sdfghj</Text>
+          </TouchableOpacity> */}
+
+        </View>
+        :
+        ('')
+      }
       <View style={[styles.container, { backgroundColor: appColors.userpagetopback }]}>
         {/* <View style={styless.logocontainer}> */}
 
@@ -383,7 +517,7 @@ const UserForm = ({ route: { params } }: routeParams) => {
                   width: windowWidth,
                   height: windowWidth * 2,
                   backgroundColor: '#ffffff',
-                  transform: [{ translateY: -windowWidth * 0.01 }],
+                  transform: [{ translateY: -windowWidth * 0.02 }],
                 },
               ]}
             />
@@ -411,24 +545,52 @@ const UserForm = ({ route: { params } }: routeParams) => {
                 textContentType="name"
               />
             </View>
-            <TouchableOpacity
-              style={{
-                borderColor: 'grey',
-                width: '70%',
-                height: 50,
-                borderWidth: 1,
-                borderRadius: 4,
-                display: 'flex',
-                justifyContent: 'center',
-                marginHorizontal: 10,
-              }}
-              // onPress={navigation.navigate('placeselection')}
-            >
-              {/* <View style={[styles.textInput]}> */}
-              <Text>dub</Text>
 
-              {/* <View/> */}
-            </TouchableOpacity>
+            <View style={[styles.textContainer]}>
+              <TextInput
+                mode="outlined"
+                label="Pincode"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput]}
+                // keyboardType="none"
+                maxLength={40}
+                onFocus={onFocuss}
+                onChangeText={(text: string) => setPincode(text)}
+                // onChangeText={(text: string) => setPlace(usderadd)}
+                defaultValue={pincode}
+                value={JSON.stringify(pincode)}
+               
+              />
+            </View>
+            <View style={[styles.textContainer]}>
+              <TextInput
+                mode="outlined"
+                label="Place"
+                theme={{
+                  colors: {
+                    primary: appColors.secondary,
+                    text: appColors.primary,
+                    background: appColors.white,
+                  },
+                }}
+                style={[styles.textInput]}
+                
+                maxLength={40}
+                onFocus={onFocuss}
+                onChangeText={(text: string) => setPlace(text)}
+                // onChangeText={(text: string) => setPlace(usderadd)}
+                defaultValue={place}
+                value={ place }
+                
+              />
+            </View>
+          
 
             <View style={styles.savebtnContainer}>
               <Button

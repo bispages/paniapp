@@ -1,13 +1,32 @@
 import { User } from 'types';
 import { ApiSlice } from './ApiSlice';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
+
+const transformResponse = (response: Array<any>) => {
+  if (Array.isArray(response)) {
+    return response.map((item) => ({
+      ...item,
+      count: 0,
+      initialCount: 0
+    }))
+  }
+  return response;
+}
 
 export const IdentityApiSlice = ApiSlice.injectEndpoints({
   endpoints: builder => ({
     getUsers: builder.query<User[] | User, void | string>({
       query: userId => `users/${userId}`,
     }),
-    getNearUsers: builder.query<User[], string>({
+    getPlaces: builder.query<User[], void | string>({
+      query: (search) => {
+        console.log(search,"Search")
+        return `places?query=${search}`
+      },
+    }),
+    getNearUsers: builder.query<User[], void | string>({
       query: userId => `users/nearby/${userId}`,
+
     }),
     getFavUsers: builder.query<User[], string>({
       query: userId => `users/fav/${userId}`,
@@ -15,8 +34,9 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
     getMaterials: builder.query<User[], void>({
       query: () => `materials`,
     }),
-    getMyOrderList: builder.query<User[], string>({
-      query: userId => `estimates?userId=${userId}`,
+    getMyOrderList: builder.query<User[], { userId: string; pageNo?: number; pageSize?: number }>({
+      query: ({ userId, pageNo = 0, pageSize = 10 }) =>
+        `estimates?userId=${userId}&pageNo=${pageNo}&pageSize=${pageSize}`,
     }),
     getShopOrderList: builder.query<User[], { userId: string; pageNo?: number; pageSize?: number }>({
       query: ({ userId, pageNo = 0, pageSize = 10 }) =>
@@ -31,12 +51,12 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
       },
       invalidatesTags: ['User'],
     }),
-    updateProfilePhoto: builder.mutation<User, User>({
-      query: function (data) {
-        return { url: 'users/updateProfilePhoto', method: 'PUT', body: { ...data } };
-      },
-      invalidatesTags: ['User'],
-    }),
+    // updateProfilePhoto: builder.mutation<User, User>({
+    //   query: function (data) {
+    //     return { url: 'users/updateProfilePhoto', method: 'PUT', body: { ...data } };
+    //   },
+    //   invalidatesTags: ['User'],
+    // }),
     addEstimate: builder.mutation<User, User>({
       query: function (data) {
         return { url: 'estimates/add', method: 'POST', body: { ...data } };
@@ -65,6 +85,18 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
   overrideExisting: true,
 });
 
+export const api = createApi({
+  baseQuery: fetchBaseQuery({ baseUrl: ApiSlice }),
+  endpoints: (builder) => ({
+    fetchData: builder.query({
+      query: () => 'materials',
+      transformResponse,
+    }),
+  }),
+});
+
+export const { useFetchDataQuery } = api;
+
 export const {
   useGetUsersQuery,
   useLazyGetUsersQuery,
@@ -79,8 +111,10 @@ export const {
   useGetEstimateDetQuery,
   useSendEstimateMutation,
   useSetFavUserMutation,
+  useGetPlacesQuery,
   useAddEstimateMutation,
   useUpdateProfilePhotoMutation,
+  
 } = IdentityApiSlice;
 
 export const {
@@ -97,4 +131,5 @@ export const {
   updateEstimate,
   addEstimate,
   updateProfilePhoto,
+  getPlaces,
 } = IdentityApiSlice.endpoints;

@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import Colors from '../../assets/colors';
 // import { useNavigation } from '@react-navigation/native';
-import { useGetNearUsersQuery, useGetFavUsersQuery } from '../../store/slices/IdentityApiSlice';
+import { useGetNearUsersQuery, useGetFavUsersQuery, useSetFavUserMutation } from '../../store/slices/IdentityApiSlice';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
 import { selectUserId } from '../../store/selectors';
+
 
 const dataq = [
   {
@@ -53,20 +54,57 @@ const datas = [
 
 const Select = () => {
   const [toggleState, setToggleState] = useState(true);
+  const [favUserId, setFavUserId] = useState('');
+  const [isFavourite, setIsFavourite] = useState();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-  const toggleTab = () => {
-    setToggleState(false);
-  };
+  const [updatefavUserProfile, { isLoading: updatefavUserProfileLoader }] = useSetFavUserMutation();
+
   const toggleTabs = () => {
     setToggleState(true);
   };
+
+  const saveDetails = async (item) => {
+   
+    setFavUserId(item?.userId);
+    setIsFavourite(true);
+    console.log("WTRXX", favUserId, isFavourite);
+    const favuserDetails = {
+      favUserId,
+      isFavourite
+    };
+    await updatefavUserProfile(favuserDetails);
+    
+  };
+
   const userId = useSelector(selectUserId);
   const { data: users } = useGetUsersQuery(userId);
-  const { data: nearusers } = useGetNearUsersQuery(userId);
-  const { data: favusers } = useGetFavUsersQuery(userId);
+  const { data: nearusers, error } = useGetNearUsersQuery(userId);
+  const { data: favusers, isLoading, refetch} = useGetFavUsersQuery(userId);
+
   console.log(users, 'getUsers');
   console.log(nearusers, 'Nearusers');
   console.log(favusers, 'Favusers');
+  console.log(userId, 'userId');
+  console.log(error,"error");
+
+  const toggleTab = () => {
+    refetch();
+  
+    console.log(favusers, 'Favusers');
+    setToggleState(false);
+  };
+  
+  // useEffect(()=> {
+    console.log(nearusers, 'Nearusers12');
+  // },[nearusers])
+
+  useEffect(() => {
+
+    console.log(nearusers,"nearusers");
+    console.log(error,"error")
+  },[nearusers, error])
+
+ 
 
   return (
     <View style={styles.container}>
@@ -123,7 +161,9 @@ const Select = () => {
                   <Text style={styles.name}>{item?.userName}</Text>
 
                   <View style={styles.detcard}>
+                    <TouchableOpacity onPress={saveDetails}>
                     <Image source={require('../../assets/img/star.png')} style={styles.favicon} />
+                    </TouchableOpacity>
                     <Text style={styles.det}>{item?.pincode}</Text>
                   </View>
                 </View>
@@ -132,7 +172,7 @@ const Select = () => {
                 </View>
               </View>
             );
-          })}
+          })} 
         </ScrollView>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}
@@ -146,7 +186,14 @@ const Select = () => {
                   <Text style={styles.name}>{item?.userName}</Text>
 
                   <View style={styles.detcard}>
+                  <TouchableOpacity onPress={()=>saveDetails(item)}>
+                  <Image source={require('../../assets/img/Vector.png')} style={styles.favicon} />
+                    {/* {isFavourite == true ? 
+                  <Image source={require('../../assets/img/star.png')} style={styles.favicon} />
+                  :
                     <Image source={require('../../assets/img/Vector.png')} style={styles.favicon} />
+          } */}
+                  </TouchableOpacity>
                     <Text style={styles.det}>{item?.pincode}</Text>
                   </View>
                 </View>

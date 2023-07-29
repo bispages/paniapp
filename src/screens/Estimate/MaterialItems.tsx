@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect, useMemo } from 'react';
+import { View, StyleSheet, Image, Text, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import Colors from '../../assets/colors';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import {useGetMaterialsQuery} from '../../store/slices/IdentityApiSlice';
+import { useGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
 import { selectMaterials } from '../../store/selectors/apiSelectors';
-import { useSelector} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useFetchDataQuery } from '../../store/slices/IdentityApiSlice';
+import { useDataFetch } from '../../store/fetchData'
+import { RootState } from '../../store';
 // import {colors} from '../../assets/colors';
 
 const arr = [
@@ -71,97 +74,73 @@ const arr = [
   },
 ];
 
-const countitem = [
-  {
-    id: 1,
-    amount: '1.50',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 2,
-    amount: '1.00',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 3,
-    amount: '2.00',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 4,
-    amount: '2.50',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 5,
-    amount: '3.00',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 6,
-    amount: '3.50',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 7,
-    amount: '2.50',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 8,
-    amount: '3.00',
-    count: 0,
-    initialCount: 0,
-  },
-  {
-    id: 9,
-    amount: '3.50',
-    count: 0,
-    initialCount: 0,
-  },
-];
+// const countitem = [
+//   {
+  
+//     count: 0,
+//     initialCount: 0,
+//   },
 
-const MaterialItems = ({route: { params: {type}}}) => {
+// ];
+
+const MaterialItems = ({
+  route: {
+    params: { type },
+  },
+}) => {
   const [visible, setVisible] = useState(false);
   const [num, setNum] = useState(false);
-  const [productDetails, setProductDetails] = useState([]);  
+  const [productDetails, setProductDetails] = useState([]);
   const [matType, setMatType] = useState();
   const [matItemName, setMatItemName] = useState();
-  const [data, setData] = useState(countitem);
+  const [data, setData] = useState();
+  const [manual, setManual] = useState([]);
+  const [countitem12, setCountitem12] = useState([]);
+  const [countitem, setCountitem] = useState([]);
   const [load, setLoad] = useState(true);
+  const [size, setSize] = useState([]);
   const [click, setClick] = useState({ id: 0, count: 0 });
+  const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-  console.log("MATERIAL TYPES",type);
+  // useDataFetch();
+//   const dispatch = useDispatch();
+
+ 
+//   dispatch(useFetchDataQuery());
+  
+//   const transformedData = useSelector((state: RootState) => state.api.endpoints.fetchData.data);
+ 
+// console.log(transformedData,"333232323333")
+//   if (!transformedData) {
+//     return <Text>Loading...</Text>;
+//   }
+
+//   if (error) {
+//     return <Text>Error: {error.message}</Text>;
+//   }
+
+  console.log('MATERIAL TYPES', type);
 
   const materials = useSelector(selectMaterials);
 
-  console.log('MATERIALS', materials.data);
+  console.log('MATERIALS', materials.data.PVC);
 
   const { data: matItems } = useGetMaterialsQuery();
-  console.log(matItems,"matItems123456");
+
+  console.log(matItems, 'matItems123456');
 
   const matypes = Object.values(materials.data);
-  console.log(matypes,"matypes12");
-  // const matypesvalue = Object.values(materials.data);
-  // console.log(matypesvalue,"matypes1288888");
 
-  console.log("jjjj")
+  console.log(matypes, 'matypes12');
+
 
   const listItem = () => {
     // materials?.map((iiitem) => {
-      
     //   console.log("jjjjttt656",iiitem)
-      
     // })
-  }
+  };
+
 
   const popup = () => {
     setNum(true);
@@ -169,9 +148,12 @@ const MaterialItems = ({route: { params: {type}}}) => {
       setNum(false);
     }, 100);
   };
-
+  
   const handleProductCount = (id: number, payload: string) => {
-    const item = data.find(item => item.id === id);
+    
+    // setCountitem(arr1);
+    console.log("99999935$%",countitem);
+    const item = countitem?.find(item => item.id === id);
     if (item) {
       if (payload === 'inc') {
         item.count += 1;
@@ -187,6 +169,7 @@ const MaterialItems = ({route: { params: {type}}}) => {
         }
         click.id = id;
         setLoad(!load);
+        {console.log("YYYY",item.count)}
       } else {
         if (item.count > 0) {
           item.count--;
@@ -211,53 +194,33 @@ const MaterialItems = ({route: { params: {type}}}) => {
     console.log('%%', data);
   };
 
-  // let adding = (index, value) => {
-
-  //   let product_array;
-  //   product_array = [...countitem];
-  //   product_array[index][value] = parseInt(product_array[index]?.count) + 1;
-  //   product_array[index][value] = `${product_array[index]?.count}`;
-  //   setProductDetails(product_array);
-  // }
-
-  // let decending = (index, value) => {
-
-  //     let product_array;
-  //     product_array = [...countitem];
-  //     if(product_array[index]?.count > 0){
-  //     product_array[index][value] = parseInt(product_array[index]?.count) - 1;
-  //     product_array[index][value] = `${product_array[index]?.count}`;
-  //     setProductDetails(product_array);
-  //     }
-  //   }
+  const newlygetarr = (items : string) => {
+    // useEffect(() => {
+    const arr1 = items?.map(item  => ({
+      ...item,
+      count: 0,
+      initialCount: 0
+      
+    }));
+    setCountitem( arr1 );
+    console.log('WWWWW123333',arr1)
+    
+  // }, []);
+  };
+  {console.log('WWWWW123333yyy',countitem)}
 
   useEffect(() => {
     listItem();
+    
   }, []);
 
-  return (
-    <View style={styles.container}>
-      {visible === true ? (
-        <View style={styles.modalcontainer}>
-          {num === true ? (
-            <View style={styles.countbar}>
-              <Text style={styles.countnum}>{click.count}</Text>
-            </View>
-          ) : (
-            ''
-          )}
-          <View style={styles.contentdiv}>
-            <View style={styles.contentdivtap}></View>
-            <View style={styles.contentbar}>
-              <Text style={styles.producttxt}>{matType} - {matItemName}</Text>
-            </View>
-            <ScrollView showsVerticalScrollIndicator={false} style={styles.below}>
-              {countitem?.map((item, index) => {
-                return (
-                  <View style={styles.itemcontentbar} key={index}>
+  const renderItems = ({item, index}) => 
+     (
+      <View style={styles.itemcontentbar} key={index}>
+                    {console.log('iuevfguyuyv gvg')}
                     <View style={styles.typecontentbar}>
                       <Text style={styles.amountline}>
-                        {item?.amount}
+                        {item?.unit}
                         <Text style={styles.inches}> inch</Text>
                       </Text>
                     </View>
@@ -268,7 +231,7 @@ const MaterialItems = ({route: { params: {type}}}) => {
                         <Text style={styles.icontxt}>—</Text>
                       </TouchableOpacity>
                       <View style={styles.number}>
-                        <Text style={styles.Count}>{item.count}</Text>
+                        <Text style={styles.Count}>{ item?.count }</Text>
                       </View>
                       <TouchableOpacity
                         style={styles.btnselector}
@@ -277,19 +240,44 @@ const MaterialItems = ({route: { params: {type}}}) => {
                       </TouchableOpacity>
                     </View>
                   </View>
-                );
-              })}
-            </ScrollView>
+    );
+
+  return (
+    <View style={styles.container}>
+     {/* {console.log("sizesizesizesizesize23",size)}
+     {console.log("123456000IImodifiedData",datas)} */}
+      {visible === true ? (
+        <View style={styles.modalcontainer}>
+          {num === true ? (
+            <View style={styles.countbar}>
+              <Text style={styles.countnum}>{click.count}</Text>
+            </View>
+          ) : (
+            ''
+          )}
+          <View style={styles.contentdiv}>
+            {console.log("WWWWWWW",size)}
+            <View style={styles.contentdivtap}></View>
+            <View style={styles.contentbar}>
+              <Text style={styles.producttxt}>
+                {type} - {matItemName}
+              </Text>
+            </View>
+              <FlatList
+              showsVerticalScrollIndicator={false}
+              data={countitem}
+              renderItem={renderItems}
+              keyExtractor={(item, index) => index.toString()}
+              />
             <View style={styles.productback}>
               <TouchableOpacity style={styles.donebar} onPress={() => navigation.navigate('MaterialTypes')}>
-                {/* <Text  style={styles.donetxt}>Back</Text> */}
                 <Image source={require('../../assets/img/Group112.png')} />
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.donebar}
                 onPress={() => {
                   setVisible(false), (click.count = 0);
-                  data.map((item, i) => (item.initialCount = 0));
+                  countitem?.map((item, i) => (item.initialCount = 0));
                   setLoad(!load);
                 }}>
                 <Text style={styles.donetxt}>Done</Text>
@@ -300,22 +288,27 @@ const MaterialItems = ({route: { params: {type}}}) => {
       ) : (
         ''
       )}
-      {/* <View style={styles.headcontainer}>
-        <Image style={styles.back} source={require('../../assets/img/backarrow.png')} />
-        <Text style={styles.head}>Material Items</Text>
-      </View> */}
       <ScrollView style={styles.cardcontainer}>
         <View style={styles.cardboxcontainer}>
-         
-          {/* {matItems?.map((item, i) => {
+          {materials.data[type]?.map((item, i) => {
             return (
-              <TouchableOpacity style={styles.card} 
-              onPress={() => [setVisible(!visible),setMatType(item?.materialType),setMatItemName(item?.materialName)]} key={i}>
-              <Image style={styles.productimg} source={item?.image} />
-              <Text style={styles.txt}>{item?.materialName}</Text>  
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() => [
+                  newlygetarr(item?.sizes),
+                  setVisible(!visible),
+                  setMatType(item?.materialType),
+                  setMatItemName(item?.name),
+                  setSize(item?.sizes)
+                ]}
+                key={i}>
+                  {console.log("ARRAY1222",item)}
+                <Image style={styles.productimg} source={{ uri: item?.image }} />
+                <Text style={styles.txt}>{item?.name}</Text>
               </TouchableOpacity>
             );
-          })}  */}
+          })}
+
         </View>
       </ScrollView>
       <View></View>
@@ -330,7 +323,6 @@ const styles = StyleSheet.create({
   },
   itemcontentbar: {
     width: '97%',
-    // height:55,
     borderRadius: 8,
     backgroundColor: '#f5f5f5',
     display: 'flex',
@@ -412,13 +404,13 @@ const styles = StyleSheet.create({
     color: '#515253',
   },
   cardcontainer: {
-    marginVertical:10,
+    marginVertical: 10,
     display: 'flex',
     // flexDirection:'row',
     // flexWrap:'wrap',
     width: '100%',
-    borderTopWidth:2,
-    borderTopColor:"rgba(216, 214, 214, 0.8)"
+    borderTopWidth: 2,
+    borderTopColor: 'rgba(216, 214, 214, 0.8)',
   },
   card: {
     width: 110,

@@ -45,7 +45,7 @@ const OrdersHistory = () => {
   const [toggleState, setToggleState] = useState(true);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const userId = useSelector(selectUserId);
-  const { data: users } = useGetShopOrderListQuery({ userId });
+  const { data: users, isLoading, isError } = useGetShopOrderListQuery({ userId });
   console.log(users, 'getshoporderhistory');
 
   const toggleTabs = () => {

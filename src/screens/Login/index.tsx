@@ -8,6 +8,7 @@ import { USERTYPE } from '../../utils/constants';
 import { Text, TextInput, Button, useTheme } from 'react-native-paper';
 import { useOtpLoginMutation } from '../../store/slices/LoginApiSlice';
 
+
 const userOptions = [
   {
     ids: 0,

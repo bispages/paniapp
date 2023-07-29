@@ -11,6 +11,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
 import { selectMaterials } from '../../store/selectors/apiSelectors';
 import { useSelector} from 'react-redux';
+import { addCustomer } from '../../store/slices/EstimateStateSlice';
 
 
 const MaterialTypes = () => {
@@ -31,7 +32,7 @@ const MaterialTypes = () => {
 
   const matypes = Object.keys(materials.data);
 
-  console.log(matypes,"WWWmatItems123456");
+  console.log(materials.data,"WWWmatItems123456");
   const changestate = () => {
     setVisit(!vist);
     // navigation.navigate("ChooseShop")
@@ -116,6 +117,7 @@ const styless = StyleSheet.create({
     borderBottomColor: colorss.borderColor,
     // backgroundColor:'red',
   },
+
   backimg: {
     width: 45,
     height: 45,
@@ -211,10 +213,8 @@ const styless = StyleSheet.create({
   },
   carts: {
     width: '100%',
-
     height: 130,
     borderRadius: 16,
-
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',

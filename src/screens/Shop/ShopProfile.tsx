@@ -1,7 +1,7 @@
-import React, {useCallback} from 'react';
-import { View, StyleSheet, TouchableOpacity, Image, Pressable } from 'react-native';
+import React, {useState, useCallback, useRef, useEffect, useMemo, RefObject } from 'react';
+import { View, StyleSheet, TouchableOpacity, Pressable, Keyboard, ImageBackground} from 'react-native';
 // import { Text } from 'react-native-paper';
-import { TextInput, useTheme, Text } from 'react-native-paper';
+import { TextInput, useTheme, Text, Button } from 'react-native-paper';
 import colors from '../../assets/colors';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import styless from '../Profile/Profile.style';
@@ -11,39 +11,243 @@ import { useSelector } from 'react-redux';
 import { useGetUsersQuery, useUpdateUserProfileMutation } from '../../store/slices/IdentityApiSlice';
 import { selectUser } from '../../store/selectors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import ImagePicker, { Image } from 'react-native-image-crop-picker';
+import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import BottomSheet, { BottomSheetBackdrop, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import {
+  // PROFESSIONNUMBER,
+  USERTYPE,
+  USERFORM_BOTSHEET_SNAPMAX,
+  USERFORM_BOTSHEET_SNAPMID,
+  USERFORM_BOTSHEET_SNAPMIN,
+} from '../../utils/constants';
 
 const ShopProfile = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const userId = useSelector(selectUserId);
+  const [isBotSheetActive, setIsBotSheetActive] = useState(false);
+  const [image, setImage] = useState<Image | null>(null);
+  const bottomSheet = useRef<BottomSheet>(null);
+  const photoBottomSheet = useRef<BottomSheet>(null);
  
   // const { data: users } = useUpdateUserProfileMutation();
   const { data: users } = useGetUsersQuery(userId);
   console.log(users,"getUsersiooio");
-  const { appColors } = useTheme();
+  // const { appColors } = useTheme();
   const user = useSelector(selectUser);
 
- 
+  const snapPoints = useMemo(
+    () => [USERFORM_BOTSHEET_SNAPMIN, USERFORM_BOTSHEET_SNAPMID, USERFORM_BOTSHEET_SNAPMAX],
+    [],
+  );
+  const renderBackdrop = useCallback(
+    (props: JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps) => (
+      <BottomSheetBackdrop {...props} disappearsOnIndex={0} appearsOnIndex={1} />
+    ),
+    [],
+  );
+  const saveDetails = async () => {
+    const userDetails = {
+      // userPhone,
+      userName,
+      userId,
+      pincode,
+      userType,
+      image,
+      place,
+      // category: selectedItems,
+      category: [],
+    };
+    await updateUserProfile(userDetails);
+    AsyncStorage.setItem('user', JSON.stringify(userDetails)).then(() => {
+      dispatchAction(saveUser(userDetails));
+    });
+  };
+  const showBotSheet = useCallback((sheet: RefObject<BottomSheet>) => {
+    keyboardDidHide();
+    console.log('Hai');
+    sheet.current?.snapToIndex(1);
+  }, []);
+  const handleSheetChanges = useCallback(
+    (index: number, sheet: RefObject<BottomSheet>) => {
+      if (index <= 0) {
+        sheet.current?.close();
+        setIsBotSheetActive(false);
+      } else {
+        setIsBotSheetActive(true);
+      }
+    },
+    [isBotSheetActive],
+  );
+  const choosePhotoFromLibrary = () => {
+    ImagePicker.openPicker({
+      width: 120,
+      height: 120,
+      cropping: true,
+      mediaType: 'photo',
+      cropperCircleOverlay: true,
+      cropperActiveWidgetColor: appColors.secondary,
+    })
+      .then((image: Image) => {
+        closeBotSheet(photoBottomSheet);
+        if ('path' in image) setImage(image);
+      })
+      .catch(err => console.log(err));
+  };
+  const takePhotoFromCamera = () => {
+    ImagePicker.openCamera({
+      compressImageMaxWidth: 120,
+      compressImageMaxHeight: 120,
+      cropping: true,
+      mediaType: 'photo',
+    })
+      .then((image: Image) => {
+        closeBotSheet(photoBottomSheet);
+        if ('path' in image) setImage(image);
+      })
+      .catch(err => console.log(err));
+  };
+  const closeBotSheet = useCallback((sheet: RefObject<BottomSheet>) => sheet.current?.close(), []);
 
+  // console.log(JSON.stringify(mode?.userId),"12345678hjjgh");
+  const { appColors } = useTheme();
+
+  const keyboardDidHide = () => {
+    Keyboard.dismiss();
+  };
+
+  useEffect(() => {
+    // Keyboard events.
+    Keyboard.addListener('keyboardDidHide', keyboardDidHide);
+
+    // cleanup function
+    return () => {
+      Keyboard.removeAllListeners('keyboardDidHide');
+    };
+  }, []);
+
+  const renderPhotoBottomSheet = () => (
+    <BottomSheet
+      ref={photoBottomSheet}
+      index={-1}
+      snapPoints={snapPoints}
+      enablePanDownToClose
+      onChange={(index: number) => handleSheetChanges(index, photoBottomSheet)}
+      backdropComponent={renderBackdrop}>
+      <BottomSheetScrollView
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={[styles.listContainer]}
+        persistentScrollbar
+        removeClippedSubviews>
+        <View style={{ alignItems: 'center', paddingTop: 10 }}>
+          <Text style={styles.panelTitle}>Upload Photo</Text>
+          <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
+        </View>
+        <View style={[styles.panelButtonContainer]}>
+          <View style={[styles.panelButtonView]}>
+            <Button
+              dark
+              loading={false}
+              mode="contained"
+              onPress={takePhotoFromCamera}
+              contentStyle={styles.panelButton}
+              theme={{
+                colors: {
+                  primary: appColors.btncolor,
+                },
+              }}>
+              TAKE PHOTO
+            </Button>
+          </View>
+          <View style={[styles.panelButtonView]}>
+            <Button
+              dark
+              loading={false}
+              mode="contained"
+              onPress={choosePhotoFromLibrary}
+              contentStyle={styles.panelButton}
+              theme={{
+                colors: {
+                  primary: appColors.btncolor,
+                },
+              }}>
+              SELECT FROM GALLERY
+            </Button>
+          </View>
+          <View style={[styles.panelButtonView]}>
+            <Button
+              dark
+              loading={false}
+              mode="contained"
+              onPress={() => closeBotSheet(photoBottomSheet)}
+              contentStyle={styles.panelButton}
+              theme={{
+                colors: {
+                  primary: appColors.btncolor,
+                },
+              }}>
+              CANCEL
+            </Button>
+          </View>
+        </View>
+      </BottomSheetScrollView>
+    </BottomSheet>
+  );
   return (
     <View style={styless.container}>
       {/* <View style={styles.headcontainer}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../../assets/img/backarrow.png')} style={styles.imgback} />
+          
         </TouchableOpacity>
         <Text style={styles.profiletxt}>Shop Profile</Text>
       </View> */}
       <View style={styles.profilecontainer}>
+      
         <View style={styles.profile}>
+         
         {user?.image?.path ? (
               <Avatar.Image source={{ uri: user?.image?.path }} size={200} />
+              
+                // <ImageBackground
+                //       source={{
+                //         uri: image?.path,
+                //       }}
+                //       style={[
+                //         styles.imgContainer,
+                //         {
+                //           borderColor: appColors.white,
+                //           backgroundColor: appColors.dimwhite,
+                //         },
+                //       ]}
+                //     /> 
+              
             ) : (
               // <Avatar.Icon size={200} icon="account-circle" /> 
-              <Image source={require('../../assets/img/mdi_shop.png')} style={{resizeMode:'contain',width:140, height:140}}/>
+              <ImageBackground
+                source={
+                  require('../../assets/img/mdi_shop.png')
+                  
+                }
+               
+                    style={{resizeMode:'contain',width:140, height:140}}
+                  
+              
+              /> 
+
             
             )}
         </View>
+        <View style={styles.viewcontainer}>
+        <Pressable
+            disabled={isBotSheetActive}
+            onPress={() => showBotSheet(photoBottomSheet)}
+            style={[styles.editPic, { backgroundColor: appColors.secondary }]}>
+            <Icon name="camera-plus" color={appColors.primary} size={14} />
+          </Pressable>
+          <Text style={styles.profiletag}>Add Profile Picture</Text>
+        </View>
    
-        <Text style={styles.profiletag}>Add Profile Picture</Text>
+        
       </View>
       <View style={styles.details}>
       <TextInput
@@ -185,6 +389,24 @@ const styles = StyleSheet.create({
     display:'flex',
     alignItems:'center',
     justifyContent:'center'
+  },
+  viewcontainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor:"red"
+  },
+  editPic: {
+    // position: 'absolute',
+    bottom: 3,
+    marginHorizontal: 2,
+    // left: '55%',
+    width: 24,
+    height: 24,
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   profiletag: {
     fontSize: 16,

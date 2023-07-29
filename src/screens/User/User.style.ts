@@ -16,6 +16,16 @@ export default StyleSheet.create({
     top:80,
     zIndex:1
     },
+    opencontainer:{
+      flex:1,
+      position: 'absolute',
+      backgroundColor:"#ffffff",
+      zIndex:1,
+      width: '100%',
+      top:0,
+      bottom:0
+      
+    },
 
   imgContainer: {
     width: 140,
@@ -66,6 +76,16 @@ export default StyleSheet.create({
 
   textInput: {
     width: '70%',
+    color:'black'
+  },
+  textInput2: {
+    // width: '100%',
+    borderColor:'#BEBEBE',
+    borderTopWidth:1,
+    borderLeftWidth:1,
+    borderRightWidth:1,
+    color:'black',
+    margin:8
   },
 
   radioContainer: {

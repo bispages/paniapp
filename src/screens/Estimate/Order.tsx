@@ -51,9 +51,9 @@ const Order = () => {
   //   }
 
   const userId = useSelector(selectUserId);
-  const { data: ordersget } = useGetShopOrderListQuery(userId);
+  const { data: ordersget, isLoading, isError } = useGetShopOrderListQuery({userId});
 
-  console.log("OrdersList123", ordersget)
+  console.log("OrdersList123", ordersget?.estimates)
   const toggleTabs = () => {
     navigation.navigate('OrderDet');
   };
@@ -68,16 +68,16 @@ const Order = () => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.filter}>
-        {data.map((item, i) => {
+        {ordersget?.estimates.map((item, i) => {
           return (
             <TouchableOpacity style={styles.card} key={i} onPress={() => toggleTabs()}>
               <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
               <View style={styles.subcard}>
-                <Text style={styles.det}>{item?.date}</Text>
-                <Text style={styles.name}>{item?.title}</Text>
+                <Text style={styles.det}>20-10-2023//</Text>
+                <Text style={styles.name}>{item?.estimateName}</Text>
 
                 <View style={styles.detcard}>
-                  <Text style={styles.det}>{item?.tag}</Text>
+                  <Text style={styles.det}>Thrissur,Ollur//</Text>
                 </View>
               </View>
               <View style={styles.call}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { Image } from 'react-native-animatable';
 import { useTheme, Avatar, Title, Caption, Drawer } from 'react-native-paper';
@@ -19,7 +19,23 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const dispatchAction = useDispatch();
   const { colors } = useTheme();
   const user = useSelector(selectUser);
+  const [userddet, setUserddet] = useState('')
+  const [userpick, setUserpick] = useState('')
 
+  useEffect(()=> {
+    AsyncStorage.getItem('user').then(value => {
+      setUsderadd(JSON.parse(value) || '');
+    });
+    
+
+    AsyncStorage.getItem('userimgs').then(value => {
+      setUserpick(JSON.parse(value) || '');
+    });
+
+    // console.log("QQQQQQQQQQ",user);
+
+  }, [])
+  console.log("QQQQQQQQQQ",setUserpick);
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.userInfoSection}>
@@ -32,8 +48,9 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
           {user?.userType === 0 ? (
             <View
               style={{
-                paddingTop: 10,
+                // paddingTop: 10,
                 alignItems: 'center',
+                justifyContent:'center',
                 width: 160,
                 height: 160,
                 borderWidth: 3,
@@ -41,7 +58,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
                 borderColor: '#667280',
               }}>
               {user?.image?.path ? (
-                <Avatar.Image source={{ uri: user?.image?.path }} size={200} />
+                <Avatar.Image source={{ uri: user?.image?.path }} size={155} />
               ) : (
                 // <Avatar.Icon size={200} icon="account-circle" />
                 <Image source={require('../../assets/img/Vectorshop.png')} />
@@ -50,7 +67,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
           ) : (
             <View
               style={{
-                paddingTop: 10,
+                // paddingTop: 10,
                 alignItems: 'center',
                 width: 160,
                 height: 160,
@@ -62,7 +79,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
                 justifyContent: 'center',
               }}>
               {user?.image?.path ? (
-                <Avatar.Image source={{ uri: user?.image?.path }} size={200} />
+                <Avatar.Image source={{ uri: user?.image?.path }} size={155} />
               ) : (
                 // <Avatar.Icon size={200} icon="account-circle" />
                 <Image

@@ -23,8 +23,12 @@ const EstimateForm = () => {
   const { customer } = formVal;
 
   const createEstimate = () => {
-    dispatch(addCustomer({ name, area, mobile, }));
+    dispatch(addCustomer({ name, area, mobile }));
     navigation.navigate('MaterialTypes');
+    console.log( name, area,mobile,"iehdgdegy")
+    console.log(mobile,"tttt")
+    
+
   };
   const { appColors } = useTheme();
   return (
@@ -36,6 +40,7 @@ const EstimateForm = () => {
           <Image style={styless.backbtn} source={require('../../assets/img/backarrow.png')} />
         </TouchableOpacity>
       </View> */}
+
       <View style={styless.headfield}>
         <Text style={styless.head}> Customer Information </Text>
       </View>
@@ -55,11 +60,9 @@ const EstimateForm = () => {
                   },
                 }}
                 style={styless.textbox1}
-               
+                onChangeText={(text: string) => setName(text)}
                 keyboardType="default"
                 maxLength={40}
-              
-                
                 // value={users?.userPhone}
                 autoCorrect={false}
                 // autoComplete="phone"
@@ -85,14 +88,13 @@ const EstimateForm = () => {
                 multiline={true}
                 keyboardType="default"
                 maxLength={80}
-               
-                
+                onChangeText={(text: string) => setArea(text)}
                 // value={users?.userPhone}
                 autoCorrect={false}
                 // autoComplete="phone"
                 returnKeyType="next"
                 textAlign="left"
-                textContentType="address"
+                textContentType="area"
               />
       </View>
      
@@ -109,11 +111,9 @@ const EstimateForm = () => {
                   },
                 }}
                 style={styless.textbox3}
-               
+                onChangeText={(text: string) => setMobile(text)}
                 keyboardType="numeric"
                 maxLength={10}
-              
-                
                 // value={users?.userPhone}
                 autoCorrect={false}
                 // autoComplete="phone"

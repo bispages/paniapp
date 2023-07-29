@@ -43,7 +43,7 @@ const Estimate = () => {
           <Text style={styles.pintitle}>Location</Text>
         </TouchableOpacity>
       </View>
-      {/* {console.log("selectmode",mode)} */}
+      {console.log("selectmodeWWWWEEE",user)}
       {/* <Text style={styles.title}>Electrician</Text> */}
       {user?.userType === 0 ? <Text style={styles.title}>Electrician</Text> : <Text style={styles.title}>Shop</Text>}
 
@@ -106,9 +106,11 @@ const Estimate = () => {
         <View style={styles.LeftContainer}>
           <Image style={styles.iconimg} source={require('../../assets/img/offer.png')} />
         </View>
+
         <View style={styles.RightContainer}>
           <Text style={styles.Righttag}>New Offers</Text>
         </View>
+        
       </TouchableOpacity>
     </View>
   );
@@ -156,10 +158,12 @@ const styles = StyleSheet.create({
   RightContainer: {
     width: '80%',
   },
+
   Righttag: {
     fontSize: 22,
     fontWeight: '400',
   },
+
   iconimg: {
     width: 70,
     height: 70,
@@ -173,6 +177,7 @@ const styles = StyleSheet.create({
     color: Colors.title,
     marginVertical: 10,
   },
+
   background: {
     // width:'100%',
     height: 'auto',
@@ -185,6 +190,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     // backgroundColor:'red'
   },
+
   pintitle: {
     position: 'absolute',
     fontSize: 14,
@@ -192,6 +198,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: Colors.white,
   },
+
   pinbtn: {
     width: 147,
     height: 42,
@@ -204,9 +211,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     right: 0,
   },
+
   icon: {
     width: 13,
     height: 18,
     position: 'absolute',
   },
+
 });

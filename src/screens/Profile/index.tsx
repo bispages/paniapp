@@ -20,10 +20,14 @@ import {
   USERFORM_BOTSHEET_SNAPMID,
   USERFORM_BOTSHEET_SNAPMIN,
 } from '../../utils/constants';
+
+
 const Profile = () => {
   const userId = useSelector(selectUserId);
   // const { data: userdet } = useGetNearUsersQuery(userId);
+  const [base64String, setBase64String] = useState('');
   const [isBotSheetActive, setIsBotSheetActive] = useState(false);
+  const [userPhone, setUserPhone] = useState('')
   const [image, setImage] = useState<Image | null>(null);
   const bottomSheet = useRef<BottomSheet>(null);
   const photoBottomSheet = useRef<BottomSheet>(null);
@@ -34,6 +38,11 @@ const Profile = () => {
   }
   console.log(users, 'getUsersiooio');
   console.log(image, 'ImageUpload');
+
+  const onTextChange = () => {
+    
+    setUserPhone(users?.pincode);
+  };
 
   const [mode, setMode] = useState('');
 
@@ -50,6 +59,28 @@ const Profile = () => {
     ),
     [],
   );
+
+  const saveDetails = async () => {
+   
+    AsyncStorage.setItem('userimgs',JSON.stringify(image));
+
+    const userDetails = {
+      // userPhone,
+      userName,
+      userId,
+      pincode,
+      userType,
+      image,
+      place,
+      // category: selectedItems,
+      category: [],
+    };
+
+    await updateUserProfile(userDetails);
+    AsyncStorage.setItem('user', JSON.stringify(userDetails)).then(() => {
+      dispatchAction(saveUser(userDetails));
+    });
+  };
 
   const showBotSheet = useCallback((sheet: RefObject<BottomSheet>) => {
     keyboardDidHide();
@@ -79,6 +110,8 @@ const Profile = () => {
       .then((image: Image) => {
         closeBotSheet(photoBottomSheet);
         if ('path' in image) setImage(image);
+        // convertToBase64(image.path);
+        
       })
       .catch(err => console.log(err));
   };
@@ -107,6 +140,7 @@ const Profile = () => {
 
   useEffect(() => {
     // Keyboard events.
+    setUserPhone(users?.pincode);
     Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
     // cleanup function
@@ -114,6 +148,43 @@ const Profile = () => {
       Keyboard.removeAllListeners('keyboardDidHide');
     };
   }, []);
+  // let base64code = ""
+
+  // const convertToBase64 = async (image) => {
+  //   const fileReader = new FileReader();
+
+  //   fileReader.onload = () => {
+  //     setBase64String(fileReader.result);
+  //     console.log("setBase64String",base64String);
+  //   };
+
+  //   fileReader.onerror = (error) => {
+  //     console.log('Error converting image to Base64:', error);
+  //   };
+
+  //   fetch(image)
+  //     .then((response) => response.blob())
+  //     .then((blob) => {
+  //       fileReader.readAsDataURL(blob);
+  //     })
+  //     .catch((error) => {
+  //       console.log('Error fetching image:', error);
+  //     });
+  // };
+
+  // const convertToBase64 = (image) => {
+  //   console.log('===============================================================',image);
+  //   console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',image?.path);
+
+    // RNFS.readFile(imagePath, 'base64')
+    //   .then((base64String) => {
+    //     console.log('Base64 string:', base64String);
+    //     // Use the base64String for further processing or API upload
+    //   })
+    //   .catch((error) => {
+    //     console.log('Error converting image to Base64:', error);
+    //   });
+  // };
 
   const renderPhotoBottomSheet = () => (
     <BottomSheet
@@ -186,9 +257,11 @@ const Profile = () => {
     <View style={styless.container}>
       <View style={styles.profilecontainer}>
         <View style={styles.profile}>
-          {/* <ImageBackground
+        {console.log(image,"WWEEWW%^%^%^$%^%^")}
+        {image ? (
+          <ImageBackground
                 source={{
-                  uri: image.path,
+                  uri: image?.path,
                 }}
                 style={[
                   styles.imgContainer,
@@ -197,7 +270,22 @@ const Profile = () => {
                     backgroundColor: appColors.dimwhite,
                   },
                 ]}
-              /> */}
+              /> 
+        ) 
+        : 
+        <ImageBackground
+                source={
+                  require('../../assets/img/Vectorshop.png')
+                }
+                style={[
+                  styles.imgContainer,
+                  {
+                    borderColor: appColors.white,
+                    backgroundColor: appColors.dimwhite,
+                  },
+                ]}
+              /> 
+        }
         </View>
         <View style={styles.viewcontainer}>
           <Pressable
@@ -254,6 +342,7 @@ const Profile = () => {
           textAlign="left"
           textContentType="name"
         />
+        {console.log("ZZZZZZ",userPhone,users?.pincode)}
         <TextInput
           mode="outlined"
           label="Pincode"
@@ -267,11 +356,12 @@ const Profile = () => {
           style={[styles.textInput]}
           keyboardType="numeric"
           maxLength={6}
-          defaultValue={users?.pincode}
-          value={users?.pincode}
+          // defaultValue={users?.pincode}
+          value={JSON.stringify(users?.pincode)}
           autoCorrect={false}
           // returnKeyType="next"
           textAlign="left"
+          onChangeText={onTextChange}
         />
         <TextInput
           mode="outlined"
@@ -286,7 +376,7 @@ const Profile = () => {
           style={styles.textInput}
           keyboardType="numeric"
           maxLength={10}
-          value={users?.userPhone}
+          value={JSON.stringify(users?.userPhone)}
           autoCorrect={false}
           // autoComplete="phone"
           returnKeyType="next"
@@ -296,7 +386,8 @@ const Profile = () => {
       </View>
 
       <View style={styles.savebtn}>
-        <TouchableOpacity style={styles.save}>
+        <TouchableOpacity style={styles.save}
+        onPress={saveDetails}>
           <Text style={styles.savetxt}> Save </Text>
         </TouchableOpacity>
       </View>
@@ -360,6 +451,18 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
     color: 'rgba(0,0,0,0.7)',
     marginVertical: 20,
+  },
+  imgContainer: {
+    width: 140,
+    borderWidth: 4,
+    borderRadius: 120,
+    height: 140,
+    bottom: -3.5,
+    alignSelf: 'center',
+    position: 'absolute',
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   details: {
     display: 'flex',
