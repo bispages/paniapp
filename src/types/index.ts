@@ -31,9 +31,21 @@ export type DataListView = {
   component: FunctionComponent;
 }[];
 
+export type MaterialSizesType = {
+  id: string;
+  price: string;
+  unit: string;
+  count?: number;
+  initialCount?: number;
+};
+
 export type MaterialType = {
   id: string;
   name: string;
+  type: string;
+  group: string;
+  image: string;
+  sizes: MaterialSizesType[];
 };
 
 export type MaterialItem = {
@@ -72,4 +84,8 @@ export type FormValue = EstimateItem[];
 export type EstimateFormValues = {
   customer: Customer;
   estimateItems: EstimateItem[];
+};
+
+export type MaterialsResponseObjectType = {
+  [k: string]: MaterialType[];
 };
