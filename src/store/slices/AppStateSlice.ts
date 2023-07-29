@@ -10,7 +10,7 @@ type AppStateType = {
   login: boolean;
   userId: string;
   accessToken: string;
-  userPhone: string;
+  userPhone: number;
   userLanguage: null | LANGUAGES;
 };
 
@@ -21,7 +21,7 @@ const initialState: AppStateType = {
   login: false,
   userId: '',
   accessToken: '',
-  userPhone: '',
+  userPhone: -1,
   userLanguage: null,
 };
 
@@ -39,7 +39,7 @@ const appStateSlice = createSlice({
       state,
       action: PayloadAction<{
         accessToken: string;
-        userPhone: string;
+        userPhone: number;
         userId: string;
       }>,
     ) => {
@@ -53,7 +53,7 @@ const appStateSlice = createSlice({
       state.user = null;
       state.userId = '';
       state.accessToken = '';
-      state.userPhone = '';
+      state.userPhone = -1;
     },
     setLanguage: (state, action: PayloadAction<number>) => {
       state.userLanguage = action.payload;

@@ -50,7 +50,7 @@ function reducer(state: CodeObject | any, action: Action) {
 }
 
 type routeParams = {
-  route: { params: { sessionId: string; userPhone: string; userType: number } };
+  route: { params: { sessionId: string; userPhone: number; userType: number } };
 };
 
 const VerifyPhone = ({ route: { params } }: routeParams) => {
