@@ -1,147 +1,120 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import { TextInput, Button, useTheme, Text } from 'react-native-paper';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { selectEstimate } from '../../store/selectors';
-import { EstimateFormValues } from '../../types';
 import { addCustomer } from '../../store/slices/EstimateStateSlice';
 import styles from './Estimate.style';
 import colors from '../../assets/colors';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { useLazyGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
 
 const EstimateForm = () => {
   const dispatch = useDispatch();
-  const { dark, colors } = useTheme();
+  const { appColors } = useTheme();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [name, setName] = useState('');
   const [area, setArea] = useState('');
   const [mobile, setMobile] = useState('');
-  const [pincode, setPincode] = useState('');
-  const formVal: EstimateFormValues = useSelector(selectEstimate);
-  const { customer } = formVal;
-
+  const [getMaterialList, { isLoading, isError, data, error }] = useLazyGetMaterialsQuery();
   const createEstimate = () => {
     dispatch(addCustomer({ name, area, mobile }));
-    navigation.navigate('MaterialTypes');
-    console.log( name, area,mobile,"iehdgdegy")
-    console.log(mobile,"tttt")
-    
-
+    getMaterialList()
+      .then(() => navigation.navigate('MaterialTypes'))
+      .catch(err => console.log(err));
+    console.log(name, area, mobile, 'customer details');
   };
-  const { appColors } = useTheme();
+
   return (
     <View style={[styles.panelButtonContainer]}>
-      <View style={[styles.panelTextContainer]}></View>
+      {isLoading ? (
+        <View>
+          {/* please add styles here */}
+          <Image source={require('../../assets/img/loading.gif')} />
+        </View>
+      ) : (
+        <>
+          <View style={styless.headfield}>
+            <Text style={styless.head}> Customer Information </Text>
+          </View>
 
-      {/* <View style={styless.btnfield}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image style={styless.backbtn} source={require('../../assets/img/backarrow.png')} />
-        </TouchableOpacity>
-      </View> */}
+          <View style={styless.boxfield}>
+            <Image style={styless.icon} source={require('../../assets/img/addr.png')} />
 
-      <View style={styless.headfield}>
-        <Text style={styless.head}> Customer Information </Text>
-      </View>
-    
-      <View style={styless.boxfield}>
-        <Image style={styless.icon} source={require('../../assets/img/addr.png')} />
+            <TextInput
+              mode="outlined"
+              label="Name"
+              theme={{
+                colors: {
+                  primary: appColors.secondary,
+                  text: appColors.primary,
+                  background: appColors.white,
+                },
+              }}
+              style={styless.textbox1}
+              onChangeText={(text: string) => setName(text)}
+              keyboardType="default"
+              maxLength={40}
+              autoCorrect={false}
+              returnKeyType="next"
+              textAlign="left"
+              textContentType="name"
+            />
+          </View>
+          <View style={styless.boxfield}>
+            <Image style={styless.icons} source={require('../../assets/img/home.png')} />
+            <TextInput
+              mode="outlined"
+              label="Address"
+              theme={{
+                colors: {
+                  primary: appColors.secondary,
+                  text: appColors.primary,
+                  background: appColors.white,
+                },
+              }}
+              style={styless.textbox2}
+              multiline={true}
+              keyboardType="default"
+              maxLength={80}
+              onChangeText={(text: string) => setArea(text)}
+              autoCorrect={false}
+              returnKeyType="next"
+              textAlign="left"
+            />
+          </View>
 
-        
-        <TextInput
-                mode="outlined"
-                label="Name"
-                theme={{
-                  colors: {
-                    primary: appColors.secondary,
-                    text: appColors.primary,
-                    background: appColors.white,
-                  },
-                }}
-                style={styless.textbox1}
-                onChangeText={(text: string) => setName(text)}
-                keyboardType="default"
-                maxLength={40}
-                // value={users?.userPhone}
-                autoCorrect={false}
-                // autoComplete="phone"
-                returnKeyType="next"
-                textAlign="left"
-                textContentType="name"
-              />
-      </View>
-      <View style={styless.boxfield}>
-        <Image style={styless.icons} source={require('../../assets/img/home.png')} />
-        {/* <TextInput multiline style={styless.textbox2} placeholder="Address"></TextInput> */}
-        <TextInput
-                mode="outlined"
-                label="Address"
-                theme={{
-                  colors: {
-                    primary: appColors.secondary,
-                    text: appColors.primary,
-                    background: appColors.white,
-                  },
-                }}
-                style={styless.textbox2}
-                multiline={true}
-                keyboardType="default"
-                maxLength={80}
-                onChangeText={(text: string) => setArea(text)}
-                // value={users?.userPhone}
-                autoCorrect={false}
-                // autoComplete="phone"
-                returnKeyType="next"
-                textAlign="left"
-                textContentType="area"
-              />
-      </View>
-     
-      <View style={styless.boxfield}>
-      <Image style={styless.icon} source={require('../../assets/img/phonecall.png')} />
-      <TextInput
-                mode="outlined"
-                label="Mobile Number"
-                theme={{
-                  colors: {
-                    primary: appColors.secondary,
-                    text: appColors.primary,
-                    background: appColors.white,
-                  },
-                }}
-                style={styless.textbox3}
-                onChangeText={(text: string) => setMobile(text)}
-                keyboardType="numeric"
-                maxLength={10}
-                // value={users?.userPhone}
-                autoCorrect={false}
-                // autoComplete="phone"
-                returnKeyType="next"
-                textAlign="left"
-                textContentType="mobile"
-              />
-              </View>
+          <View style={styless.boxfield}>
+            <Image style={styless.icon} source={require('../../assets/img/phonecall.png')} />
+            <TextInput
+              mode="outlined"
+              label="Mobile Number"
+              theme={{
+                colors: {
+                  primary: appColors.secondary,
+                  text: appColors.primary,
+                  background: appColors.white,
+                },
+              }}
+              style={styless.textbox3}
+              onChangeText={(text: string) => setMobile(text)}
+              keyboardType="numeric"
+              maxLength={10}
+              autoCorrect={false}
+              returnKeyType="next"
+              textAlign="left"
+            />
+          </View>
 
-      <Button style={styless.btn} onPress={() => createEstimate()}>
-        Estimate
-      </Button>
-
-      {/* <View style={[styles.panelButtonView]}>
-        <Button
-          dark
-          loading={false}
-          mode="contained"
-          onPress={createEstimate}
-          contentStyle={styles.panelButton}
-          theme={{
-            colors: {
-              primary: colors.accent,
-            },
-          }}>
-          Estimate
-        </Button>
-      </View> */}
+          <Button
+            disabled={name === '' || area === '' || mobile === ''}
+            style={styless.btn}
+            onPress={() => createEstimate()}>
+            Estimate
+          </Button>
+        </>
+      )}
     </View>
   );
 };
@@ -164,12 +137,12 @@ const styless = StyleSheet.create({
     flexDirection: 'row',
     border: 'none',
     outline: 'none',
-    alignItems:'center'
+    alignItems: 'center',
   },
   textbox2: {
     width: '98%',
     outline: 'none',
-    
+
     minHeight: 55,
     maxHeight: 110,
     backgroundColor: colors.white,

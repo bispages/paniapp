@@ -1,146 +1,40 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import Colors from '../../assets/colors';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
 import { selectMaterials } from '../../store/selectors/apiSelectors';
-import { useSelector, useDispatch } from 'react-redux';
-import { useFetchDataQuery } from '../../store/slices/IdentityApiSlice';
-import { useDataFetch } from '../../store/fetchData'
-import { RootState } from '../../store';
-// import {colors} from '../../assets/colors';
-
-const arr = [
-  {
-    id: 1,
-    title: 'Ball valve',
-    img: require('../../assets/img/productz.png'),
-  },
-  {
-    id: 2,
-    title: 'Coupler',
-    img: require('../../assets/img/productz.png'),
-  },
-  {
-    id: 3,
-    title: 'Elbow',
-    img: require('../../assets/img/productz.png'),
-  },
-  {
-    id: 4,
-    title: 'End cap',
-    img: require('../../assets/img/productz.png'),
-  },
-  {
-    id: 5,
-    title: 'Reducer',
-    img: require('../../assets/img/productz.png'),
-  },
-  {
-    id: 6,
-    title: 'Union',
-    img: require('../../assets/img/productz.png'),
-  },
-  {
-    id: 7,
-    title: 'Elbow 90',
-    img: require('../../assets/img/productz.png'),
-  },
-  {
-    id: 8,
-    title: 'elbow Holder',
-    img: require('../../assets/img/productz.png'),
-  },
-  {
-    id: 9,
-    title: 'Equal tee',
-    img: require('../../assets/img/productz.png'),
-  },
-  {
-    id: 10,
-    title: 'Flange Adapter',
-    img: require('../../assets/img/productz.png'),
-  },
-  {
-    id: 11,
-    title: 'End cap2',
-    img: require('../../assets/img/productz.png'),
-  },
-  {
-    id: 12,
-    title: 'Elbow 2',
-    img: require('../../assets/img/productz.png'),
-  },
-];
-
-// const countitem = [
-//   {
-  
-//     count: 0,
-//     initialCount: 0,
-//   },
-
-// ];
+import { useSelector } from 'react-redux';
+import { MaterialSizesType } from 'types';
 
 const MaterialItems = ({
   route: {
     params: { type },
   },
+}: {
+  route: {
+    params: { type: string };
+  };
 }) => {
   const [visible, setVisible] = useState(false);
   const [num, setNum] = useState(false);
   const [productDetails, setProductDetails] = useState([]);
-  const [matType, setMatType] = useState();
-  const [matItemName, setMatItemName] = useState();
+  const [matType, setMatType] = useState('');
+  const [matItemName, setMatItemName] = useState('');
   const [data, setData] = useState();
   const [manual, setManual] = useState([]);
   const [countitem12, setCountitem12] = useState([]);
   const [countitem, setCountitem] = useState([]);
   const [load, setLoad] = useState(true);
-  const [size, setSize] = useState([]);
+  const [size, setSize] = useState<MaterialSizesType[]>([]);
   const [click, setClick] = useState({ id: 0, count: 0 });
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-  // useDataFetch();
-//   const dispatch = useDispatch();
-
- 
-//   dispatch(useFetchDataQuery());
-  
-//   const transformedData = useSelector((state: RootState) => state.api.endpoints.fetchData.data);
- 
-// console.log(transformedData,"333232323333")
-//   if (!transformedData) {
-//     return <Text>Loading...</Text>;
-//   }
-
-//   if (error) {
-//     return <Text>Error: {error.message}</Text>;
-//   }
-
-  console.log('MATERIAL TYPES', type);
-
   const materials = useSelector(selectMaterials);
-
-  console.log('MATERIALS', materials.data.PVC);
-
-  const { data: matItems } = useGetMaterialsQuery();
-
-  console.log(matItems, 'matItems123456');
-
-  const matypes = Object.values(materials.data);
+  const matypes = materials?.data ? Object.keys(materials.data) : [];
 
   console.log(matypes, 'matypes12');
-
-
-  const listItem = () => {
-    // materials?.map((iiitem) => {
-    //   console.log("jjjjttt656",iiitem)
-    // })
-  };
-
 
   const popup = () => {
     setNum(true);
@@ -148,16 +42,17 @@ const MaterialItems = ({
       setNum(false);
     }, 100);
   };
-  
-  const handleProductCount = (id: number, payload: string) => {
-    
+
+  const handleProductCount = (id: string, payload: string) => {
     // setCountitem(arr1);
-    console.log("99999935$%",countitem);
-    const item = countitem?.find(item => item.id === id);
+    console.log('99999935$%', size);
+    let item = size?.find(item => item.id === id);
+
     if (item) {
       if (payload === 'inc') {
-        item.count += 1;
-        item.initialCount += 1;
+        item.count = item.count ? item.count + 1 : 0;
+        item.initialCount = item.initialCount ? item.initialCount + 1 : 0;
+
         if (click.id === id) {
           click.count += 1;
         } else {
@@ -169,7 +64,9 @@ const MaterialItems = ({
         }
         click.id = id;
         setLoad(!load);
-        {console.log("YYYY",item.count)}
+        {
+          console.log('YYYY', item.count);
+        }
       } else {
         if (item.count > 0) {
           item.count--;
@@ -194,58 +91,30 @@ const MaterialItems = ({
     console.log('%%', data);
   };
 
-  const newlygetarr = (items : string) => {
-    // useEffect(() => {
-    const arr1 = items?.map(item  => ({
-      ...item,
-      count: 0,
-      initialCount: 0
-      
-    }));
-    setCountitem( arr1 );
-    console.log('WWWWW123333',arr1)
-    
-  // }, []);
-  };
-  {console.log('WWWWW123333yyy',countitem)}
-
-  useEffect(() => {
-    listItem();
-    
-  }, []);
-
-  const renderItems = ({item, index}) => 
-     (
-      <View style={styles.itemcontentbar} key={index}>
-                    {console.log('iuevfguyuyv gvg')}
-                    <View style={styles.typecontentbar}>
-                      <Text style={styles.amountline}>
-                        {item?.unit}
-                        <Text style={styles.inches}> inch</Text>
-                      </Text>
-                    </View>
-                    <View style={styles.rowset}>
-                      <TouchableOpacity
-                        style={styles.btnselector}
-                        onPress={() => [handleProductCount(item.id, 'dec'), popup()]}>
-                        <Text style={styles.icontxt}>—</Text>
-                      </TouchableOpacity>
-                      <View style={styles.number}>
-                        <Text style={styles.Count}>{ item?.count }</Text>
-                      </View>
-                      <TouchableOpacity
-                        style={styles.btnselector}
-                        onPress={() => [handleProductCount(item.id, 'inc'), popup()]}>
-                        <Text style={styles.icontxt}>+</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-    );
+  const renderItems = ({ item, index }: { item: MaterialSizesType; index: number }) => (
+    <View style={styles.itemcontentbar} key={index}>
+      <View style={styles.typecontentbar}>
+        <Text style={styles.amountline}>
+          {item?.unit}
+          <Text style={styles.inches}> inch</Text>
+        </Text>
+      </View>
+      <View style={styles.rowset}>
+        <TouchableOpacity style={styles.btnselector} onPress={() => [handleProductCount(item.id, 'dec'), popup()]}>
+          <Text style={styles.icontxt}>—</Text>
+        </TouchableOpacity>
+        <View style={styles.number}>
+          <Text style={styles.Count}>{item?.count}</Text>
+        </View>
+        <TouchableOpacity style={styles.btnselector} onPress={() => [handleProductCount(item.id, 'inc'), popup()]}>
+          <Text style={styles.icontxt}>+</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
-     {/* {console.log("sizesizesizesizesize23",size)}
-     {console.log("123456000IImodifiedData",datas)} */}
       {visible === true ? (
         <View style={styles.modalcontainer}>
           {num === true ? (
@@ -256,19 +125,18 @@ const MaterialItems = ({
             ''
           )}
           <View style={styles.contentdiv}>
-            {console.log("WWWWWWW",size)}
             <View style={styles.contentdivtap}></View>
             <View style={styles.contentbar}>
               <Text style={styles.producttxt}>
                 {type} - {matItemName}
               </Text>
             </View>
-              <FlatList
+            <FlatList
               showsVerticalScrollIndicator={false}
-              data={countitem}
+              data={size}
               renderItem={renderItems}
-              keyExtractor={(item, index) => index.toString()}
-              />
+              keyExtractor={item => item.id}
+            />
             <View style={styles.productback}>
               <TouchableOpacity style={styles.donebar} onPress={() => navigation.navigate('MaterialTypes')}>
                 <Image source={require('../../assets/img/Group112.png')} />
@@ -277,7 +145,7 @@ const MaterialItems = ({
                 style={styles.donebar}
                 onPress={() => {
                   setVisible(false), (click.count = 0);
-                  countitem?.map((item, i) => (item.initialCount = 0));
+                  size?.map(item => (item.initialCount = 0));
                   setLoad(!load);
                 }}>
                 <Text style={styles.donetxt}>Done</Text>
@@ -285,30 +153,27 @@ const MaterialItems = ({
             </View>
           </View>
         </View>
-      ) : (
-        ''
-      )}
+      ) : null}
+
       <ScrollView style={styles.cardcontainer}>
         <View style={styles.cardboxcontainer}>
-          {materials.data[type]?.map((item, i) => {
-            return (
-              <TouchableOpacity
-                style={styles.card}
-                onPress={() => [
-                  newlygetarr(item?.sizes),
-                  setVisible(!visible),
-                  setMatType(item?.materialType),
-                  setMatItemName(item?.name),
-                  setSize(item?.sizes)
-                ]}
-                key={i}>
-                  {console.log("ARRAY1222",item)}
-                <Image style={styles.productimg} source={{ uri: item?.image }} />
-                <Text style={styles.txt}>{item?.name}</Text>
-              </TouchableOpacity>
-            );
-          })}
-
+          {materials.data &&
+            materials.data[type]?.map((item, i) => {
+              return (
+                <TouchableOpacity
+                  style={styles.card}
+                  onPress={() => [
+                    setVisible(!visible),
+                    setMatType(item?.type),
+                    setMatItemName(item?.name),
+                    setSize(item?.sizes),
+                  ]}
+                  key={item.name}>
+                  <Image style={styles.productimg} source={{ uri: item?.image }} />
+                  <Text style={styles.txt}>{item?.name}</Text>
+                </TouchableOpacity>
+              );
+            })}
         </View>
       </ScrollView>
       <View></View>

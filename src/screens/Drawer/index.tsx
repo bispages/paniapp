@@ -19,23 +19,14 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const dispatchAction = useDispatch();
   const { colors } = useTheme();
   const user = useSelector(selectUser);
-  const [userddet, setUserddet] = useState('')
-  const [userpick, setUserpick] = useState('')
+  const [userdet, setUseradd] = useState('');
+  const [userpick, setUserpick] = useState('');
 
-  useEffect(()=> {
-    AsyncStorage.getItem('user').then(value => {
-      setUsderadd(JSON.parse(value) || '');
-    });
-    
+  useEffect(() => {
+    AsyncStorage.getItem('user').then(value => setUseradd(value ? JSON.parse(value) : ''));
+    AsyncStorage.getItem('userimgs').then(value => setUserpick(value ? JSON.parse(value) : ''));
+  }, []);
 
-    AsyncStorage.getItem('userimgs').then(value => {
-      setUserpick(JSON.parse(value) || '');
-    });
-
-    // console.log("QQQQQQQQQQ",user);
-
-  }, [])
-  console.log("QQQQQQQQQQ",setUserpick);
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.userInfoSection}>
@@ -50,7 +41,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
               style={{
                 // paddingTop: 10,
                 alignItems: 'center',
-                justifyContent:'center',
+                justifyContent: 'center',
                 width: 160,
                 height: 160,
                 borderWidth: 3,

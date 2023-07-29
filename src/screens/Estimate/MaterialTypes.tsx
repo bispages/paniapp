@@ -2,37 +2,24 @@ import React, { useState } from 'react';
 import { View, ScrollView, Pressable, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
-import { MaterialType } from '../../types';
-// import { materialTypesList } from '../../utils/materialTypesList';
 import styles from './Estimate.style';
 import colorss from '../../assets/colors';
 import colors from '../../assets/colors';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
 import { selectMaterials } from '../../store/selectors/apiSelectors';
-import { useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import { addCustomer } from '../../store/slices/EstimateStateSlice';
 
-
 const MaterialTypes = () => {
-  const { dark, colors } = useTheme();
+  const { colors } = useTheme();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [vist, setVisit] = useState(false);
 
   const materials = useSelector(selectMaterials);
-  console.log('userestimate123', materials);
+  console.log('materialsArray ', materials.data);
 
-  // const { data: matItems, isFetching, isError } = useGetMaterialsQuery();
+  const matypes = materials?.data ? Object.keys(materials.data) : [];
 
-  // if (isFetching) {
-  //   return null;
-  // }
-
-  // console.log(matItems, 'matItems123456');
-
-  const matypes = Object.keys(materials.data);
-
-  console.log(materials.data,"WWWmatItems123456");
   const changestate = () => {
     setVisit(!vist);
     // navigation.navigate("ChooseShop")
@@ -42,17 +29,17 @@ const MaterialTypes = () => {
   //   navigation.navigate('Cart');
   // };
 
-  const moveToMaterialItemSelect = (type: matypes) => {
+  const moveToMaterialItemSelect = (type: string) => {
     setTimeout(() => {
       navigation.navigate('MaterialItems', { type });
     }, 20);
   };
 
   // Function to render material Types List.
-  const renderMaterialTypesList = (item: matypes) => {
+  const renderMaterialTypesList = (item: string) => {
     return (
       <Pressable
-        key={item.id}
+        key={item}
         onPress={() => moveToMaterialItemSelect(item)}
         style={[styles.block, { backgroundColor: colorss.materialbackground }]}
         android_ripple={{ color: colors.background, radius: 200 }}>

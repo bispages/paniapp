@@ -4,31 +4,13 @@ import { TextInput, View, StyleSheet, Image, TouchableOpacity } from 'react-nati
 import { Text } from 'react-native-paper';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import Colors from '../../assets/colors';
-// import EstimateForm from './EstimateForm';
-// import Selectelectritian from './Selectelectritian';
-// import Select from './Select';
 import styless from './Estimate.style';
-// import EmptyList from '../../assets/img/empty_list.svg';
-// import colors from '../../assets/colors';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useGetMaterialsQuery, useLazyGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
 import { selectUser } from '../../store/selectors';
 
 const Estimate = () => {
-  // const { colors, appColors } = useTheme();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-
-
-  const [getMaterialList] = useLazyGetMaterialsQuery();
   const user = useSelector(selectUser);
-  const { data: matItems, isLoading, isError } = useGetMaterialsQuery();
-  
-
-  const callestimate = () => {
-    getMaterialList().then((res)=> console.log(res));
-    navigation.navigate('EstimateForm');
-  };
 
   return (
     <View style={[styless.panelButtonContainer]}>
@@ -43,7 +25,7 @@ const Estimate = () => {
           <Text style={styles.pintitle}>Location</Text>
         </TouchableOpacity>
       </View>
-      {console.log("selectmodeWWWWEEE",user)}
+
       {/* <Text style={styles.title}>Electrician</Text> */}
       {user?.userType === 0 ? <Text style={styles.title}>Electrician</Text> : <Text style={styles.title}>Shop</Text>}
 
@@ -93,7 +75,7 @@ const Estimate = () => {
           </View>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity style={styles.cardcontainer} onPress={() => callestimate()}>
+        <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate('EstimateForm')}>
           <View style={styles.LeftContainer}>
             <Image style={styles.iconimg} source={require('../../assets/img/estimate.png')} />
           </View>
@@ -110,7 +92,6 @@ const Estimate = () => {
         <View style={styles.RightContainer}>
           <Text style={styles.Righttag}>New Offers</Text>
         </View>
-        
       </TouchableOpacity>
     </View>
   );
@@ -217,5 +198,4 @@ const styles = StyleSheet.create({
     height: 18,
     position: 'absolute',
   },
-
 });
