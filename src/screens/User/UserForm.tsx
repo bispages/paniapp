@@ -190,7 +190,7 @@ console.log(pincode,"PINCODEITEM")
     // navigation.navigate('userform', {item});
    }
 
-  console.log("QQQQWWWW",usderadd)
+  console.log("QQQQWWWW",userType)
   
   const saveDetails = async () => {
     const userDetails = {

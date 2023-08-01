@@ -11,7 +11,7 @@ import { selectUser } from '../../store/selectors';
 const Estimate = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const user = useSelector(selectUser);
-
+ console.log(user,"ABCDEFG")
   return (
     <View style={[styless.panelButtonContainer]}>
       <View style={styles.background}>

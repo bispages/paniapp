@@ -21,7 +21,6 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const user = useSelector(selectUser);
   const [userdet, setUseradd] = useState('');
   const [userpick, setUserpick] = useState('');
-
   useEffect(() => {
     AsyncStorage.getItem('user').then(value => setUseradd(value ? JSON.parse(value) : ''));
     AsyncStorage.getItem('userimgs').then(value => setUserpick(value ? JSON.parse(value) : ''));

@@ -34,7 +34,7 @@ const Login = () => {
   const togglecheck = () => {
     setAgreeTerms(prevAgreeTerms => !prevAgreeTerms);
   };
-
+console.log(userType,"LLLLLLLLL")
   const submit = async () => {
     if (userPhone.length < 10 || !agreeTerms) return;
 
@@ -142,7 +142,7 @@ const Login = () => {
                   style={userType === item.ids ? styles.selecticons : styles.selecticon}
                   key={item.tag}
                   onPress={() => {
-                    setUserType(item.ids);
+                    setUserType(item?.ids);
                   }}>
                   <Image source={item?.img} style={styles.custicon} />
                   <Text style={styles.selecttag}>{item?.tag}</Text>

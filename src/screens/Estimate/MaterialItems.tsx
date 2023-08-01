@@ -29,13 +29,15 @@ const MaterialItems = ({
   const [size, setSize] = useState<MaterialSizesType[]>([]);
   const [click, setClick] = useState({ id: 0, count: 0 });
   const [refreshing, setRefreshing] = useState(false);
+  // const [sizedlist, setSizedlist] = useState([...size]);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const materials = useSelector(selectMaterials);
   const matypes = materials?.data ? Object.keys(materials.data) : [];
+  
 
   console.log(matypes, 'matypes12');
-
+  console.log('SIZE',size)
   const popup = () => {
     setNum(true);
     setTimeout(function () {
@@ -44,14 +46,19 @@ const MaterialItems = ({
   };
 
   const handleProductCount = (id: string, payload: string) => {
-    // setCountitem(arr1);
-    console.log('99999935$%', size);
-    let item = size?.find(item => item.id === id);
 
+    // setCountitem(arr1);
+    // const sizedlist = [...size];
+    // console.log('99999935$%', sizedlist);
+
+    let item = size?.find(item => item.id === id);
+      console.log("ITEM",item)
     if (item) {
       if (payload === 'inc') {
-        item.count = item.count ? item.count + 1 : 0;
-        item.initialCount = item.initialCount ? item.initialCount + 1 : 0;
+        console.log("POSTIVE")
+        const updatedSize = size.map(item =>
+          item.id === id ? { ...item, count: item.count + 1, initialCount: item.initialCount + 1} : item );
+          setSize(updatedSize);
 
         if (click.id === id) {
           click.count += 1;
@@ -69,6 +76,7 @@ const MaterialItems = ({
         }
       } else {
         if (item.count > 0) {
+          console.log("RRRTTT")
           item.count--;
           item.initialCount--;
           if (click.id === id) {
@@ -87,10 +95,8 @@ const MaterialItems = ({
         }
       }
     }
-
     console.log('%%', data);
   };
-
   const renderItems = ({ item, index }: { item: MaterialSizesType; index: number }) => (
     <View style={styles.itemcontentbar} key={index}>
       <View style={styles.typecontentbar}>
@@ -131,12 +137,42 @@ const MaterialItems = ({
                 {type} - {matItemName}
               </Text>
             </View>
+
             <FlatList
               showsVerticalScrollIndicator={false}
               data={size}
               renderItem={renderItems}
               keyExtractor={item => item.id}
             />
+            {/* <ScrollView>
+              {size.map((item, id) => {
+                return (
+                  <View style={styles.itemcontentbar} key={id}>
+                    <View style={styles.typecontentbar}>
+                      <Text style={styles.amountline}>
+                        {item?.unit}
+                        <Text style={styles.inches}> inch</Text>
+                      </Text>
+                    </View>
+                    <View style={styles.rowset}>
+                      <TouchableOpacity
+                        style={styles.btnselector}
+                        onPress={() => [handleProductCount(item.id, 'dec'), popup()]}>
+                        <Text style={styles.icontxt}>—</Text>
+                      </TouchableOpacity>
+                      <View style={styles.number}>
+                        <Text style={styles.Count}>{item?.count}</Text>
+                      </View>
+                      <TouchableOpacity
+                        style={styles.btnselector}
+                        onPress={() => [handleProductCount(item.id, 'inc'), popup()]}>
+                        <Text style={styles.icontxt}>+</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                );
+              })}
+            </ScrollView> */}
             <View style={styles.productback}>
               <TouchableOpacity style={styles.donebar} onPress={() => navigation.navigate('MaterialTypes')}>
                 <Image source={require('../../assets/img/Group112.png')} />
@@ -144,10 +180,13 @@ const MaterialItems = ({
               <TouchableOpacity
                 style={styles.donebar}
                 onPress={() => {
-                  setVisible(false), (click.count = 0);
-                  size?.map(item => (item.initialCount = 0));
+                  setVisible(false),
+                 (click.count = 0);
+                 setLoad(!load);
+                }}> 
+                  {/* size?.map(item => (item.initialCount = 0));
                   setLoad(!load);
-                }}>
+                 }}>  */}
                 <Text style={styles.donetxt}>Done</Text>
               </TouchableOpacity>
             </View>
