@@ -33,17 +33,17 @@ import { useUpdateUserProfileMutation, useGetPlacesQuery } from '../../store/sli
 import { selectUserId } from '../../store/selectors';
 import { StackNavigationProp } from '@react-navigation/stack';
 // import RNFS from 'react-native-fs'
-import RNFS from 'react-native-fs';
-// import { professionList } from '../../utils/professionList';
-// import { categoryList } from '../../utils/categoryList';
+// import RNFS from 'react-native-fs';
+import { professionList } from '../../utils/professionList';
+import { categoryList } from '../../utils/categoryList';
 
-// type routeParams = {
-//   route: { params: { userPhone: string } };
-// };
+type routeParams = {
+  route: { params: { userPhone: string } };
+};
 
 const UserForm = ({ route: { params = null } }: routeParams) => {
   const { item } = params;
-console.log("PINCODE",item)
+console.log("PINCODEUSERTYPE",USERTYPE)
   const userId = useSelector(selectUserId);
   const [base64Image, setBase64Image] = useState(null);
   const [imageData, setImageData] = useState(null);
@@ -187,10 +187,9 @@ console.log(pincode,"PINCODEITEM")
     setLatitude(item?.latitude); 
     setLongitude(item?.longitude);
     setOpenmode(false);
-    // navigation.navigate('userform', {item});
    }
 
-  console.log("QQQQWWWW",userType)
+ 
   
   const saveDetails = async () => {
     const userDetails = {
@@ -203,10 +202,19 @@ console.log(pincode,"PINCODEITEM")
       place,
       longitude,
       latitude,
-      // category: selectedItems,
+      // category: selectedItems
       category: [],
     };
-    await updateUserProfile(userDetails);
+    try {
+      const response = await updateUserProfile(userDetails);
+      // Assuming updateUserProfile returns a JSON response
+      console.log('API Response:', response);
+      // Handle the response as needed
+    } catch (error) {
+      console.error('API Error:', error);
+      // Handle the error in case the API call fails
+    }
+    
     AsyncStorage.setItem('user', JSON.stringify(userDetails)).then(() => {
       dispatchAction(saveUser(userDetails));
     });

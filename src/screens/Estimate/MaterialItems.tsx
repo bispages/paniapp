@@ -22,22 +22,26 @@ const MaterialItems = ({
   const [matType, setMatType] = useState('');
   const [matItemName, setMatItemName] = useState('');
   const [data, setData] = useState();
-  const [manual, setManual] = useState([]);
+  const [manual, setManual] = useState();
   const [countitem12, setCountitem12] = useState([]);
   const [countitem, setCountitem] = useState([]);
   const [load, setLoad] = useState(true);
   const [size, setSize] = useState<MaterialSizesType[]>([]);
-  const [click, setClick] = useState({ id: 0, count: 0 });
+  const [click, setClick] = useState({ id: 0, counts: 0 });
   const [refreshing, setRefreshing] = useState(false);
   // const [sizedlist, setSizedlist] = useState([...size]);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const materials = useSelector(selectMaterials);
   const matypes = materials?.data ? Object.keys(materials.data) : [];
+  const materialinfo = materials?.data[type];
   
-
+console.log(materials,"MATERIALSSS");
+console.log(materialinfo,"materialinfo")
   console.log(matypes, 'matypes12');
-  console.log('SIZE',size)
+  console.log('SIZE',size);
+  const [allmet, setAllmet] = useState([...materialinfo]);
+  console.log(allmet,"allmet")
   const popup = () => {
     setNum(true);
     setTimeout(function () {
@@ -45,7 +49,7 @@ const MaterialItems = ({
     }, 100);
   };
 
-  const handleProductCount = (id: string, payload: string) => {
+  const handleProductCount = (id: string, index: number, payload: string) => {
 
     // setCountitem(arr1);
     // const sizedlist = [...size];
@@ -59,14 +63,19 @@ const MaterialItems = ({
         const updatedSize = size.map(item =>
           item.id === id ? { ...item, count: item.count + 1, initialCount: item.initialCount + 1} : item );
           setSize(updatedSize);
+// console.log(manual,"MANUAL")
+          // const updatedItems = [...allmet];
+          // updatedItems[{manual}].sizes[{index}]?.count += 1;
+          // setAllmet(updatedItems);
+       
 
         if (click.id === id) {
-          click.count += 1;
+          click.counts += 1;
         } else {
           if (item.initialCount > 0) {
-            click.count = item.initialCount;
+            click.counts = item.initialCount;
           } else {
-            click.count = 1;
+            click.counts = 1;
           }
         }
         click.id = id;
@@ -80,12 +89,12 @@ const MaterialItems = ({
           item.count--;
           item.initialCount--;
           if (click.id === id) {
-            click.count -= 1;
+            click.counts -= 1;
           } else {
             if (item.initialCount > 0) {
-              click.count = item.initialCount;
+              click.counts = item.initialCount;
             } else {
-              click.count = -1;
+              click.counts = -1;
             }
           }
           click.id = id;
@@ -106,13 +115,13 @@ const MaterialItems = ({
         </Text>
       </View>
       <View style={styles.rowset}>
-        <TouchableOpacity style={styles.btnselector} onPress={() => [handleProductCount(item.id, 'dec'), popup()]}>
+        <TouchableOpacity style={styles.btnselector} onPress={() => [handleProductCount(item.id, index, 'dec'), popup()]}>
           <Text style={styles.icontxt}>—</Text>
         </TouchableOpacity>
         <View style={styles.number}>
           <Text style={styles.Count}>{item?.count}</Text>
         </View>
-        <TouchableOpacity style={styles.btnselector} onPress={() => [handleProductCount(item.id, 'inc'), popup()]}>
+        <TouchableOpacity style={styles.btnselector} onPress={() => [handleProductCount(item.id, index, 'inc'), popup()]}>
           <Text style={styles.icontxt}>+</Text>
         </TouchableOpacity>
       </View>
@@ -125,7 +134,7 @@ const MaterialItems = ({
         <View style={styles.modalcontainer}>
           {num === true ? (
             <View style={styles.countbar}>
-              <Text style={styles.countnum}>{click.count}</Text>
+              <Text style={styles.countnum}>{click.counts}</Text>
             </View>
           ) : (
             ''
@@ -181,7 +190,7 @@ const MaterialItems = ({
                 style={styles.donebar}
                 onPress={() => {
                   setVisible(false),
-                 (click.count = 0);
+                 (click.counts = 0);
                  setLoad(!load);
                 }}> 
                   {/* size?.map(item => (item.initialCount = 0));
@@ -196,8 +205,8 @@ const MaterialItems = ({
 
       <ScrollView style={styles.cardcontainer}>
         <View style={styles.cardboxcontainer}>
-          {materials.data &&
-            materials.data[type]?.map((item, i) => {
+          {
+            allmet?.map((item, itemIndex) => {
               return (
                 <TouchableOpacity
                   style={styles.card}
@@ -206,6 +215,8 @@ const MaterialItems = ({
                     setMatType(item?.type),
                     setMatItemName(item?.name),
                     setSize(item?.sizes),
+                    setManual(itemIndex)
+
                   ]}
                   key={item.name}>
                   <Image style={styles.productimg} source={{ uri: item?.image }} />

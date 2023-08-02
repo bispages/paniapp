@@ -78,14 +78,14 @@ const Select = () => {
 
   const userId = useSelector(selectUserId);
   const { data: users } = useGetUsersQuery(userId);
-  const { data: nearusers, error } = useGetNearUsersQuery(userId);
-  const { data: favusers, isLoading, refetch} = useGetFavUsersQuery(userId);
+  const { data: nearusers } = useGetNearUsersQuery(userId);
+  const { data: favusers} = useGetFavUsersQuery(userId);
 
   console.log(users, 'getUsers');
   console.log(nearusers, 'Nearusers');
   console.log(favusers, 'Favusers');
   console.log(userId, 'userId');
-  console.log(error,"error");
+  // console.log(error,"error");
 
   const toggleTab = () => {
     refetch();
@@ -101,8 +101,8 @@ const Select = () => {
   useEffect(() => {
 
     console.log(nearusers,"nearusers");
-    console.log(error,"error")
-  },[nearusers, error])
+    // console.log(error,"error")
+  },[nearusers])
 
  
 

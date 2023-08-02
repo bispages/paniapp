@@ -313,7 +313,7 @@ const ShopProfile = () => {
                 maxLength={6}
               
                 defaultValue={Number}
-                value={users?.pincode}
+                value={JSON.stringify(users?.pincode)}
                 autoCorrect={false}
                 autoComplete="name"
                 // returnKeyType="next"
@@ -335,8 +335,8 @@ const ShopProfile = () => {
                 keyboardType="numeric"
                 maxLength={10}
               
-                
-                value={users?.userPhone}
+                value={JSON.stringify(users?.userPhone)}
+               
                 autoCorrect={false}
                 // autoComplete="phone"
                 returnKeyType="next"

@@ -117,7 +117,7 @@ const Select = () => {
           <>
             <TouchableOpacity style={styles.tabs} onPress={() => toggleTab()}>
               <Image source={require('../../assets/img/star.png')} style={styles.toggleicon} />
-              <Text style={styles.toggletxt}>Favourites</Text>
+              <Text style={styles.toggletxt}>Favouristes</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.tab} onPress={() => toggleTabs()}>
               <Image source={require('../../assets/img/location.png')} style={styles.toggleicon} />
