@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, ScrollView, Pressable, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, ScrollView,ActivityIndicator, Pressable, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import styles from './Estimate.style';
@@ -7,19 +7,23 @@ import colorss from '../../assets/colors';
 import colors from '../../assets/colors';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { selectMaterials } from '../../store/selectors/apiSelectors';
-import { useSelector } from 'react-redux';
-import { addCustomer } from '../../store/slices/EstimateStateSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { addEstimate, selectEstimateState } from '../../store/slices/EstimateStateSlice';
 
 const MaterialTypes = () => {
   const { colors } = useTheme();
+  const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [vist, setVisit] = useState(false);
+ 
+  // get data from redux store
 
-  const materials = useSelector(selectMaterials);
-  console.log('materialsArray ', materials.data);
+  const matt = useSelector(selectEstimateState);
 
-  const matypes = materials?.data ? Object.keys(materials.data) : [];
+console.log("mattmatt",matt)
+  const matypes = matt.estimateItems.data ? Object.keys(matt.estimateItems.data) : [];
 
+console.log('87878787',matypes)
   const changestate = () => {
     setVisit(!vist);
     // navigation.navigate("ChooseShop")
@@ -52,6 +56,14 @@ const MaterialTypes = () => {
 
   return (
     <View style={styles.container}>
+      {
+        matypes === [] ?
+        <View style={styles.itemsContainer}>
+        <ActivityIndicator size="large" color="#00ff00"/>
+        </View>
+        :
+
+      
       <View style={styles.itemsContainer}>
         {matypes ? (
           <View style={{ flex: 1 }}>
@@ -62,6 +74,7 @@ const MaterialTypes = () => {
           </View>
         ) : null}
       </View>
+      }
       <View style={styless.btncontainer}>
         <TouchableOpacity style={styless.btn}>
           <Text>Reset Estimate</Text>

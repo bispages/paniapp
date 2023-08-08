@@ -1,14 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
-import { View, StyleSheet, Image, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import Colors from '../../assets/colors';
 // import { useNavigation } from '@react-navigation/native';
-import { useGetNearUsersQuery, useGetFavUsersQuery, useSetFavUserMutation } from '../../store/slices/IdentityApiSlice';
+import {
+  useGetNearUsersQuery,
+  useGetFavUsersQuery,
+  useSetFavUserMutation,
+  useSetFavRemoveMutation,
+} from '../../store/slices/IdentityApiSlice';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { useGetUsersQuery } from '../../store/slices/IdentityApiSlice';
 import { selectUserId } from '../../store/selectors';
-
 
 const dataq = [
   {
@@ -26,7 +39,7 @@ const dataq = [
     userName: 'Alwin John',
     pincode: '680302',
   },
-  
+
   {
     id: 3,
     userName: 'Alwin John',
@@ -58,53 +71,54 @@ const Select = () => {
   const [isFavourite, setIsFavourite] = useState();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [updatefavUserProfile, { isLoading: updatefavUserProfileLoader }] = useSetFavUserMutation();
-
-  const toggleTabs = () => {
-    setToggleState(true);
-  };
-
-  const saveDetails = async (item) => {
-   
-    setFavUserId(item?.userId);
-    setIsFavourite(true);
-    console.log("WTRXX", favUserId, isFavourite);
-    const favuserDetails = {
-      favUserId,
-      isFavourite
-    };
-    await updatefavUserProfile(favuserDetails);
-    
-  };
+  const [updateremoveUserProfile, { isLoading: updateremoveUserProfileLoader }] = useSetFavRemoveMutation();
 
   const userId = useSelector(selectUserId);
   const { data: users } = useGetUsersQuery(userId);
-  const { data: nearusers } = useGetNearUsersQuery(userId);
-  const { data: favusers} = useGetFavUsersQuery(userId);
+  const { data: nearusers, isLoading } = useGetNearUsersQuery(userId);
+  const { data: favusers, refetch } = useGetFavUsersQuery(userId);
 
   console.log(users, 'getUsers');
   console.log(nearusers, 'Nearusers');
   console.log(favusers, 'Favusers');
   console.log(userId, 'userId');
-  // console.log(error,"error");
+
+  const toggleTabs = () => {
+    setToggleState(true);
+  };
+
+  const saveDetails = async item => {
+    setFavUserId(item?.userId);
+    setIsFavourite(true);
+    console.log('WTRXX', favUserId, isFavourite);
+    const favuserDetails = {
+      favUserId,
+      isFavourite,
+    };
+    await updatefavUserProfile(favuserDetails);
+    refetch();
+    isLoading();
+  };
+
+  const removefromfav = async item => {
+    setFavUserId(item?.userId);
+    console.log('favUserId', favUserId);
+    const favuserDetailss = {
+      favUserId,
+    };
+    await updateremoveUserProfile(favuserDetailss);
+    refetch();
+    isLoading();
+  };
 
   const toggleTab = () => {
-    refetch();
-  
     console.log(favusers, 'Favusers');
     setToggleState(false);
   };
-  
-  // useEffect(()=> {
-    console.log(nearusers, 'Nearusers12');
-  // },[nearusers])
 
   useEffect(() => {
-
-    console.log(nearusers,"nearusers");
-    // console.log(error,"error")
-  },[nearusers])
-
- 
+    console.log(nearusers, 'nearusers');
+  }, [nearusers]);
 
   return (
     <View style={styles.container}>
@@ -149,60 +163,77 @@ const Select = () => {
       </View>
 
       {toggleState === false ? (
-        <ScrollView showsVerticalScrollIndicator={false}
-        style={styles.filter}
-        >
-          {favusers?.map((item, i) => {
-            return (
-              <View style={styles.card} key={i}>
-                
-                <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
-                <View style={styles.subcard}>
-                  <Text style={styles.name}>{item?.userName}</Text>
+        <ScrollView showsVerticalScrollIndicator={false} style={styles.filter}>
+          {favusers?.length === 0 ? (
+            <Text style={styles.dets}>There is no favourite users</Text>
+          ) : (
+            <>
+              {favusers?.map((item, i) => {
+                return (
+                  <View style={styles.card} key={i}>
+                    <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
+                    <View style={styles.subcard}>
+                      <Text style={styles.name}>{item?.userName}</Text>
 
-                  <View style={styles.detcard}>
-                    <TouchableOpacity onPress={saveDetails}>
-                    <Image source={require('../../assets/img/star.png')} style={styles.favicon} />
-                    </TouchableOpacity>
-                    <Text style={styles.det}>{item?.pincode}</Text>
+                      <View style={styles.detcard}>
+                        <TouchableOpacity onPress={() => removefromfav(item)}>
+                          <Image source={require('../../assets/img/star.png')} style={styles.favicon} />
+                        </TouchableOpacity>
+                        <Text style={styles.det}>{item?.pincode}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.call}>
+                      <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} />
+                    </View>
                   </View>
-                </View>
-                <View style={styles.call}>
-                  <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} />
-                </View>
-              </View>
-            );
-          })} 
+                );
+              })}
+            </>
+          )}
         </ScrollView>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false}
-        style={styles.filter}
-        >   
-          {nearusers?.map((item, i) => {
-            return (
-              <View style={styles.card} key={i}>
-                <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
-                <View style={styles.subcard}>
-                  <Text style={styles.name}>{item?.userName}</Text>
+        <ScrollView showsVerticalScrollIndicator={false} style={styles.filter}>
+          {nearusers?.length === 0 ? (
+            <Text style={styles.dets}>There is no Nearby users</Text>
+          ) : (
+            <>
+              {isLoading ? (
+                <View style={{ display: 'flex', alignItems: 'center' }}>
+                  <ActivityIndicator size="large" color="#6B7887" />
+                </View>
+              ) : (
+                <Fragment>
+                  {nearusers?.map((item, i) => {
+                    return (
+                      <View style={styles.card} key={i}>
+                        <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
+                        <View style={styles.subcard}>
+                          <Text style={styles.name}>{item?.userName}</Text>
 
-                  <View style={styles.detcard}>
-                  <TouchableOpacity onPress={()=>saveDetails(item)}>
-                  <Image source={require('../../assets/img/Vector.png')} style={styles.favicon} />
-                    {/* {isFavourite == true ? 
-                  <Image source={require('../../assets/img/star.png')} style={styles.favicon} />
-                  :
-                    <Image source={require('../../assets/img/Vector.png')} style={styles.favicon} />
-          } */}
-                  </TouchableOpacity>
-                    <Text style={styles.det}>{item?.pincode}</Text>
-                  </View>
-                </View>
-                <View style={styles.call}>
-                  <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} />
-                </View>
-              </View>
-            );
-          })}
+                          <View style={styles.detcard}>
+                            {favusers?.some(favusersItem => favusersItem.userId === item.userId) ? (
+                              <TouchableOpacity onPress={() => removefromfav(item)}>
+                                <Image source={require('../../assets/img/star.png')} style={styles.favicon} />
+                              </TouchableOpacity>
+                            ) : (
+                              <TouchableOpacity onPress={() => saveDetails(item)}>
+                                <Image source={require('../../assets/img/Vector.png')} style={styles.favicon} />
+                              </TouchableOpacity>
+                            )}
+
+                            <Text style={styles.det}>{item?.pincode}</Text>
+                          </View>
+                        </View>
+                        <View style={styles.call}>
+                          <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} />
+                        </View>
+                      </View>
+                    );
+                  })}
+                </Fragment>
+              )}
+            </>
+          )}
         </ScrollView>
       )}
     </View>
@@ -382,5 +413,14 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#8B8B8B',
     marginHorizontal: 10,
+  },
+  dets: {
+    fontSize: 18,
+    lineHeight: 20,
+    fontWeight: '400',
+    color: '#8B8B8B',
+    marginVertical: 25,
+    alignSelf: 'center',
+    fontStyle: 'italic',
   },
 });

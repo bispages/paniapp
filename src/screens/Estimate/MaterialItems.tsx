@@ -4,9 +4,10 @@ import Colors from '../../assets/colors';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { selectMaterials } from '../../store/selectors/apiSelectors';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { MaterialSizesType } from 'types';
-
+import { selectEstimateState } from '../../store/slices/EstimateStateSlice';
+import { addEstimate } from '../../store/slices/EstimateStateSlice';
 const MaterialItems = ({
   route: {
     params: { type },
@@ -27,17 +28,23 @@ const MaterialItems = ({
   const [countitem, setCountitem] = useState([]);
   const [load, setLoad] = useState(true);
   const [size, setSize] = useState<MaterialSizesType[]>([]);
+  const [sized, setSized] = useState([]);
   const [click, setClick] = useState({ id: 0, counts: 0 });
   const [refreshing, setRefreshing] = useState(false);
+  const [overchange, setOverchange] = useState([])
   // const [sizedlist, setSizedlist] = useState([...size]);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-
+  const matt = useSelector(selectEstimateState);
   const materials = useSelector(selectMaterials);
   const matypes = materials?.data ? Object.keys(materials.data) : [];
-  const materialinfo = materials?.data[type];
+  // const materialinfo = materials?.data[type];
+  const materialinfo = matt.estimateItems?.data[type];
+
   
-console.log(materials,"MATERIALSSS");
-console.log(materialinfo,"materialinfo")
+  const dispatch = useDispatch();
+
+  console.log(materials,"MATERIALSSS");
+  console.log(materialinfo[1].size,"00materialinfo")
   console.log(matypes, 'matypes12');
   console.log('SIZE',size);
   const [allmet, setAllmet] = useState([...materialinfo]);
@@ -49,63 +56,112 @@ console.log(materialinfo,"materialinfo")
     }, 100);
   };
 
-  const handleProductCount = (id: string, index: number, payload: string) => {
+  
+const handleProductCount = (id: string, index: number, payload: string) => {
 
-    // setCountitem(arr1);
-    // const sizedlist = [...size];
-    // console.log('99999935$%', sizedlist);
+  // setCountitem(arr1);
+  // const sizedlist = [...size];
+  // console.log('99999935$%', sizedlist);
 
-    let item = size?.find(item => item.id === id);
-      console.log("ITEM",item)
-    if (item) {
-      if (payload === 'inc') {
-        console.log("POSTIVE")
-        const updatedSize = size.map(item =>
-          item.id === id ? { ...item, count: item.count + 1, initialCount: item.initialCount + 1} : item );
-          setSize(updatedSize);
-// console.log(manual,"MANUAL")
-          // const updatedItems = [...allmet];
-          // updatedItems[{manual}].sizes[{index}]?.count += 1;
-          // setAllmet(updatedItems);
-       
+  let item = size?.find(item => item.id === id);
+    console.log("ITEM",item)
+  if (item) {
+    if (payload === 'inc') {
+      console.log("POSTIVE")
+      const updatedSize = size.map(item =>
+        item.id === id ? { ...item, count: item.count + 1, initialCount: item.initialCount + 1} : item );
+        setSize(updatedSize);
 
+        const upSize = sized.map(item =>
+          item.id === id ? { ...item, count: item.count + 1} : item );
+          setSized(upSize);
+
+          const updatedItems = [...allmet];
+        updatedItems[manual] = {
+          ...updatedItems[manual],
+          sizes: upSize,
+        };
+        const updtedown = {
+          ...materials,
+          data: {
+            ...materials.data,
+            [type] : updatedItems
+            
+          }
+        }
+        console.log('vvvupdtedown88',updtedown)
+        setOverchange(updtedown);
+        console.log("updatedItemsupdatedItems23", updatedItems);
+        setAllmet(updatedItems);
+        console.log(type,"type YYYYY")
+     
+
+      if (click.id === id) {
+        click.counts += 1;
+      } else {
+        if (item.initialCount > 0) {
+          click.counts = item.initialCount + 1;
+          console.log("gggg000")
+        } else {
+          click.counts = 1;
+        }
+      }
+      click.id = id;
+      setLoad(!load);
+      {
+        console.log('YYYY', item.count);
+      }
+    } else {
+      const updatedSize = size.map(item =>
+        item.id === id ? { ...item, count: item.count - 1, initialCount: item.initialCount - 1} : item );
+        setSize(updatedSize);
+
+        const upSize = sized.map(item =>
+          item.id === id ? { ...item, count: item.count - 1} : item );
+          setSized(upSize);
+
+          const updatedItems = [...allmet];
+        updatedItems[manual] = {
+          ...updatedItems[manual],
+          sizes: upSize,
+        };
+        const updtedown = {
+          ...materials,
+          data: {
+            ...materials.data,
+            [type] : updatedItems
+            
+          }
+        }
+        console.log('vvvupdtedown88',updtedown)
+        setOverchange(updtedown);
+        console.log("updatedItemsupdatedItems23", updatedItems);
+        setAllmet(updatedItems);
+        console.log(type,"type YYYYY")
+
+      if (item.count > 0) {
+        console.log("RRRTTTwTTTTTTTTTTTTTTTTTTTTTTTTTTT")
+        
         if (click.id === id) {
-          click.counts += 1;
+          click.counts -= 1;
+          console.log("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW")
         } else {
           if (item.initialCount > 0) {
-            click.counts = item.initialCount;
+            click.counts = item.initialCount - 1;
+            console.log("ggggGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGppp")
           } else {
-            click.counts = 1;
+            click.counts = -1;
           }
         }
         click.id = id;
         setLoad(!load);
-        {
-          console.log('YYYY', item.count);
-        }
       } else {
-        if (item.count > 0) {
-          console.log("RRRTTT")
-          item.count--;
-          item.initialCount--;
-          if (click.id === id) {
-            click.counts -= 1;
-          } else {
-            if (item.initialCount > 0) {
-              click.counts = item.initialCount;
-            } else {
-              click.counts = -1;
-            }
-          }
-          click.id = id;
-          setLoad(!load);
-        } else {
-          console.log('Something went wrong');
-        }
+        console.log('Something went wrong');
       }
     }
-    console.log('%%', data);
-  };
+  }
+  console.log('%%', data);
+};
   const renderItems = ({ item, index }: { item: MaterialSizesType; index: number }) => (
     <View style={styles.itemcontentbar} key={index}>
       <View style={styles.typecontentbar}>
@@ -115,9 +171,17 @@ console.log(materialinfo,"materialinfo")
         </Text>
       </View>
       <View style={styles.rowset}>
-        <TouchableOpacity style={styles.btnselector} onPress={() => [handleProductCount(item.id, index, 'dec'), popup()]}>
+        {
+          item?.count === 0 ?
+          <TouchableOpacity style={styles.btnselector} >
           <Text style={styles.icontxt}>—</Text>
         </TouchableOpacity>
+          :
+          <TouchableOpacity style={styles.btnselector} onPress={() => [handleProductCount(item.id, index, 'dec'), popup()]}>
+          <Text style={styles.icontxt}>—</Text>
+        </TouchableOpacity>
+        }
+        
         <View style={styles.number}>
           <Text style={styles.Count}>{item?.count}</Text>
         </View>
@@ -183,15 +247,19 @@ console.log(materialinfo,"materialinfo")
               })}
             </ScrollView> */}
             <View style={styles.productback}>
-              <TouchableOpacity style={styles.donebar} onPress={() => navigation.navigate('MaterialTypes')}>
+              <TouchableOpacity style={styles.donebar} onPress={() => 
+                {navigation.navigate('MaterialTypes');
+                dispatch(addEstimate(overchange));}}>
                 <Image source={require('../../assets/img/Group112.png')} />
               </TouchableOpacity>
+              {console.log(overchange,"***updtedown***")}
               <TouchableOpacity
                 style={styles.donebar}
                 onPress={() => {
                   setVisible(false),
                  (click.counts = 0);
                  setLoad(!load);
+                 dispatch(addEstimate(overchange));
                 }}> 
                   {/* size?.map(item => (item.initialCount = 0));
                   setLoad(!load);
@@ -205,6 +273,7 @@ console.log(materialinfo,"materialinfo")
 
       <ScrollView style={styles.cardcontainer}>
         <View style={styles.cardboxcontainer}>
+        
           {
             allmet?.map((item, itemIndex) => {
               return (
@@ -215,7 +284,9 @@ console.log(materialinfo,"materialinfo")
                     setMatType(item?.type),
                     setMatItemName(item?.name),
                     setSize(item?.sizes),
-                    setManual(itemIndex)
+                    setManual(itemIndex),
+                    setSized(item?.sizes)
+                    
 
                   ]}
                   key={item.name}>
@@ -444,3 +515,18 @@ const styles = StyleSheet.create({
     color: '#AAAAAA',
   },
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

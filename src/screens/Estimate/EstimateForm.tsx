@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { TextInput, Button, useTheme, Text } from 'react-native-paper';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
-
-import { addCustomer } from '../../store/slices/EstimateStateSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCustomer, addEstimate } from '../../store/slices/EstimateStateSlice';
 import styles from './Estimate.style';
 import colors from '../../assets/colors';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useLazyGetMaterialsQuery } from '../../store/slices/IdentityApiSlice';
-
+import { selectMaterials } from '../../store/selectors/apiSelectors'
 const EstimateForm = () => {
   const dispatch = useDispatch();
   const { appColors } = useTheme();
@@ -18,19 +17,28 @@ const EstimateForm = () => {
   const [area, setArea] = useState('');
   const [mobile, setMobile] = useState('');
   const [getMaterialList, { isLoading, isError, data, error }] = useLazyGetMaterialsQuery();
+  const materials  = useSelector(selectMaterials);
+console.log("materials23145",materials?.data)
   const createEstimate = () => {
     dispatch(addCustomer({ name, area, mobile }));
+    // dispatch(addEstimate(materials));
     getMaterialList()
       .then(() => navigation.navigate('MaterialTypes'))
       .catch(err => console.log(err));
     console.log(name, area, mobile, 'customer details');
   };
 
+  const changedispatch = () => {
+    dispatch(addEstimate(materials));
+    console.log("GIVEN")
+  }
+{console.log("getMaterialList",data)}
+  
   return (
     <View style={[styles.panelButtonContainer]}>
       {isLoading ? (
         <View>
-          {/* please add styles here */}
+        
           <Image source={require('../../assets/img/loading.gif')} />
         </View>
       ) : (
@@ -110,11 +118,12 @@ const EstimateForm = () => {
           <Button
             disabled={name === '' || area === '' || mobile === ''}
             style={styless.btn}
-            onPress={() => createEstimate()}>
+            onPress={() => [createEstimate(),changedispatch()]}>
             Estimate
           </Button>
         </>
-      )}
+      )
+      }
     </View>
   );
 };

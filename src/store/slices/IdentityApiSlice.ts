@@ -86,6 +86,12 @@ export const IdentityApiSlice = ApiSlice.injectEndpoints({
       },
       invalidatesTags: ['User'],
     }),
+    setFavRemove: builder.mutation<User, User>({
+      query: function (data) {
+        return { url: 'users/fav/remove', method: 'PUT', body: { ...data } };
+      },
+      invalidatesTags: ['User'],
+    }),
   }),
   overrideExisting: true,
 });
@@ -107,6 +113,7 @@ export const {
   useGetPlacesQuery,
   useAddEstimateMutation,
   useUpdateProfilePhotoMutation,
+  useSetFavRemoveMutation,
 } = IdentityApiSlice;
 
 export const {
@@ -124,4 +131,5 @@ export const {
   addEstimate,
   updateProfilePhoto,
   getPlaces,
+  setFavRemove,
 } = IdentityApiSlice.endpoints;
