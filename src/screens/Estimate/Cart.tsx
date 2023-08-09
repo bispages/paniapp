@@ -3,7 +3,9 @@ import { TextInput, View,StyleSheet, Image, TouchableOpacity, ScrollView } from 
 import { Text, FAB, useTheme } from 'react-native-paper';
 import colors from '../../assets/colors';
 import { useNavigation } from '@react-navigation/native';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { selectEstimateState } from '../../store/slices/EstimateStateSlice';
+import { addEstimate } from '../../store/slices/EstimateStateSlice';
 const data =[   
     {
       id:1,
@@ -51,47 +53,83 @@ const data =[
 
 const Estimate = () => {
   const navigation = useNavigation();
+
+  const materialsdatas = useSelector(selectEstimateState);
+  const matypes = materialsdatas.estimateItems.data ? Object.keys(materialsdatas.estimateItems.data) : [];
+  const materialinfo = materialsdatas.estimateItems?.data;
+
+  console.log("materialsdatas",materialsdatas);
+  console.log("matypes",matypes);
+  console.log("materialinfo",materialinfo)
   
   return (
     <ScrollView
     showsVerticalScrollIndicator={false}
      style={styles.container}>
-        {/* <View style={styles.headcontainer}>
-        <TouchableOpacity onPress={()=>navigation.goBack()}>
-            <Image source={require('../../assets/img/backarrow.png')} style={styles.back}></Image>
-            </TouchableOpacity>
-            <Text style={styles.headtag}>Cart View</Text>
-        </View> */}
-        
-        <View style={styles.itemscontainer}>
-            <Text style={styles.producttag}>UPVC</Text>
+    
+        {
+          matypes.map((item, key) => {
+            return (
+
+           
+        <View style={styles.itemscontainer} key={key}>
+            <Text style={styles.producttag}>{item}</Text>
             <View style={styles.productitems}>
                 {
-                    data.map((item)=>{
+                    materialinfo[item].map((items)=>{
                         return (
-                            <Text style={styles.productitemslist}>
-                            {item?.title}
+                          items.sizes.map((itemss,index)=> {
+                            return (
+
+                          <View style={{display:'flex', flexDirection:'row',justifyContent:'center',borderBottomWidth:1.8,borderBottomColor:'#F6F6F6'}}> 
+                             <View style={{width:'40%',display:'flex',alignItems:'flex-start'}}>
+                           
+                             {itemss.count === 0 ?
+                                ("")
+                              :
+                               <Text style={styles.productitemslist}> 
+                            {items?.name}
                             </Text>
+                          }
+                            </View>
+                            <View style={{width:'60%',display:'flex',justifyContent:'center'}}>
+                           
+                                {itemss.count === 0 ?
+                                ("")
+                              :
+                              <View style={{display:'flex', flexDirection:'row',}}>
+                                <Text style={styles.productitemslists}>
+                            - {itemss?.unit} inch
+                            </Text>
+                            <Text style={styles.productitemslists}>
+                           {itemss?.count} nose
+                            </Text>
+                            <Text style={styles.productitemslists}>
+                           ₹{itemss.price * itemss.count}
+                            </Text>
+                            </View>
+                            }
+                            </View>
+                            </View>
+                           
+                              )
+                            })
+                            
+                            
+                           
                         )
                     })
                 }
                
+               
+               
 
             </View>
 
-            <Text style={styles.producttag}>PVC</Text>
-            <View style={styles.productitems}>
-                {
-                    data.map((item)=>{
-                        return (
-                            <Text style={styles.productitemslist}>
-                            {item?.title}
-                            </Text>
-                        )
-                    })
-                }
-            </View>
         </View>
+         )
+        })
+      }
         
     </ScrollView>
    
@@ -102,6 +140,8 @@ export default Estimate;
 const styles = StyleSheet.create({
     container:{
         flexDirection:'column',
+        flex: 1,
+        display:'flex'
     },
 
     headcontainer: {
@@ -156,10 +196,21 @@ const styles = StyleSheet.create({
     flexDirection:'column'
   },
   productitemslist:{
-    fontSize:16,
-    lineHeight:19,
+    fontSize:18,
+    lineHeight:20,
     color:'#323232',
-    marginVertical:5
+    marginVertical:5,
+  
+  },
+  productitemslists:{
+    fontSize:18,
+    lineHeight:20,
+    color:'#323232',
+    marginVertical:5,
+    marginRight:20
+
+
+  
   },
   price:{
     color:'#434242',
