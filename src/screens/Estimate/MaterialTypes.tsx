@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView,ActivityIndicator, Pressable, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
+import { Text} from 'react-native-paper';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import styles from './Estimate.style';
 import colorss from '../../assets/colors';
@@ -9,18 +9,34 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { selectMaterials } from '../../store/selectors/apiSelectors';
 import { useSelector, useDispatch } from 'react-redux';
 import { addEstimate, selectEstimateState } from '../../store/slices/EstimateStateSlice';
+import { useAddEstimateMutation } from '../../store/slices/IdentityApiSlice';
+import { selectUserId } from '../../store/selectors';
+import { Button, useTheme } from 'react-native-paper';
+
 
 const MaterialTypes = () => {
+  const arr = [
+    {name:'abc',
+  add:'yyh'}
+  ]
   const { colors } = useTheme();
   const dispatch = useDispatch();
+  const { appColors } = useTheme();
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [vist, setVisit] = useState(false);
- 
+  const [materials, setMaterials] = useState([]);
+  const userId = useSelector(selectUserId);
+  const [customerName, setCustomerName] = useState('');
+  const [customerAddress, setCustomerAddress] = useState('');
+  const [customerPincode, setCustomerPincode] = useState();
+  const [customerPhone, setCustomerPhone] = useState();
+  const [estimateName, setEstimateName] = useState('');
+  const [totalAmount, settotalAmount] = useState(0);
   // get data from redux store
 
   const matt = useSelector(selectEstimateState);
 
-console.log("mattmatt",matt)
+console.log("mattmatt",matt.estimateItems.data)
   const matypes = matt.estimateItems.data ? Object.keys(matt.estimateItems.data) : [];
 
 console.log('87878787',matypes)
@@ -29,9 +45,47 @@ console.log('87878787',matypes)
     // navigation.navigate("ChooseShop")
     navigation.navigate('FinalEstimate');
   };
-  // const movetocart = () => {
-  //   navigation.navigate('Cart');
-  // };
+  const [addEtimateto, { isLoading: addEtimatetoLoader }] = useAddEstimateMutation();
+ 
+  const saveDetails = async () => {
+    setMaterials([matt.estimateItems.data]);
+    setCustomerName(matt.customer.name?.toString())
+    setCustomerAddress(matt.customer.area?.toString());
+    setCustomerPhone(matt.customer.mobile?.toString());
+    setEstimateName('my firstestimate');
+    setCustomerPincode('680300');
+    settotalAmount(20.5);
+    console.log("userId",userId);
+    console.log("estimateName",estimateName)
+    console.log("materials",materials)
+    console.log("customerName",customerName)
+    console.log("customerAddress",customerAddress)
+    console.log("customerPincode",customerPincode)
+    console.log("customerPhone",customerPhone)
+    console.log("totalAmount",totalAmount)
+    const userDetails = {
+
+      userId,
+      estimateName : estimateName,
+      materials : materials,
+      customerName : customerName ,
+      customerAddress :customerAddress ,
+      customerPincode : customerPincode,
+      customerPhone : customerPhone,
+      totalAmount : totalAmount,
+  
+    };
+    try {
+      const response = await addEtimateto(userDetails);
+      console.log('API Response:', response);
+      // navigation.navigate('FinalEstimate');
+    } catch (error) {
+      console.error('API Error:', error);
+     
+    }
+     
+    
+  };
 
   const moveToMaterialItemSelect = (type: string) => {
     setTimeout(() => {
@@ -76,6 +130,7 @@ console.log('87878787',matypes)
       </View>
       }
       <View style={styless.btncontainer}>
+       
         <TouchableOpacity style={styless.btn}>
           <Text>Reset Estimate</Text>
         </TouchableOpacity>
@@ -89,9 +144,16 @@ console.log('87878787',matypes)
         ) : null}
       </View>
       <View style={styless.btncontainers}>
-        <TouchableOpacity style={styless.btns} onPress={changestate}>
+      <Button
+      dark
+      loading={addEtimatetoLoader}
+      mode="contained"
+      onPress={saveDetails}
+      style={styless.btns}
+     >Generate Estimate</Button>
+        {/* <TouchableOpacity style={styless.btns} onPress={changestate}>
           <Text style={styless.btntxt}>Generate Estimate</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

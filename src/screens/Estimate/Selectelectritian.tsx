@@ -193,19 +193,27 @@ const Select = () => {
         </ScrollView>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.filter}>
-          {nearusers?.length === 0 ? (
-            <Text style={styles.dets}>There is no Nearby users</Text>
+          
+            {isLoading ? (
+              <View style={{ display: 'flex', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color="#6B7887" />
+              </View>
+         
           ) : (
             <>
-              {isLoading ? (
+            {console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHH")}
+              { nearusers?.length === 0 ? (
                 <View style={{ display: 'flex', alignItems: 'center' }}>
-                  <ActivityIndicator size="large" color="#6B7887" />
+                   {console.log("77777777777777777777777777777777")}
+                <Text style={styles.dets}>There is no Nearby users</Text>
                 </View>
               ) : (
                 <Fragment>
                   {nearusers?.map((item, i) => {
                     return (
                       <View style={styles.card} key={i}>
+                         {console.log("888888888888888888888888888888888888")}
+                       
                         <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
                         <View style={styles.subcard}>
                           <Text style={styles.name}>{item?.userName}</Text>

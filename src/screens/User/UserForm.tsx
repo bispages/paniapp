@@ -38,12 +38,12 @@ import { professionList } from '../../utils/professionList';
 import { categoryList } from '../../utils/categoryList';
 
 type routeParams = {
-  route: { params: { userPhone: string } };
+  route: { params: { userPhone: string; userType: number; } };
 };
 
-const UserForm = ({ route: { params = null } }: routeParams) => {
-  const { item } = params;
-console.log("PINCODEUSERTYPE",USERTYPE)
+const UserForm = ({ route: { params } }: routeParams) => {
+  const { userPhone, userType } = params;
+console.log("PINCODEUSERTYPE",userType)
   const userId = useSelector(selectUserId);
   const [base64Image, setBase64Image] = useState(null);
   const [imageData, setImageData] = useState(null);
@@ -54,7 +54,7 @@ console.log("PINCODEUSERTYPE",USERTYPE)
   const [longitude, setLongitude] = useState(''); 
   const [openmode, setOpenmode] = useState(false);
   const [search, setSearch] = useState('');
-  const [userType, setUserType] = useState(USERTYPE.USER);
+  // const [userType, setUserType] = useState(USERTYPE.USER);
   const [image, setImage] = useState<Image | null>(null);
   // const [selectedItems, setSelectedItems] = useState<ItemList[]>([]);
   const [saveDisabled, setSaveDisabled] = useState(true);
