@@ -50,8 +50,7 @@ console.log("PINCODEUSERTYPE",userType)
   const [userName, setUserName] = useState('');
   const [pincode, setPincode] = useState();
   const [place, setPlace] = useState('');
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState(''); 
+  const [placeId, setPlaceId] = useState(''); 
   const [openmode, setOpenmode] = useState(false);
   const [search, setSearch] = useState('');
   // const [userType, setUserType] = useState(USERTYPE.USER);
@@ -184,9 +183,10 @@ console.log(pincode,"PINCODEITEM")
   const selectaction = (item) => {
     setPincode(item?.pincode);
     setPlace(item?.placeName);
-    setLatitude(item?.latitude); 
-    setLongitude(item?.longitude);
+    setPlaceId(item?.placeId); 
+    
     setOpenmode(false);
+    console.log('byuvyvuyv',item)
    }
 
  
@@ -200,8 +200,7 @@ console.log(pincode,"PINCODEITEM")
       userType,
       image,
       place,
-      longitude,
-      latitude,
+      placeId,
       // category: selectedItems
       category: [],
     };
@@ -443,6 +442,7 @@ console.log(pincode,"PINCODEITEM")
     style={{height:60, backgroundColor:'rgba(243, 243, 243, 0.8)', paddingHorizontal:15,
     borderRadius:8, margin:8, display:'flex', flexDirection:'row',justifyContent:'space-between'}}
     onPress={()=>selectaction(item)}>
+      {console.log("QWERQWERT",item)}
      
       <View style={{ display:'flex', flexDirection:'column', height:60,
       justifyContent:'center'}}>

@@ -1,62 +1,86 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TextInput, Image, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, ScrollView, ActivityIndicator, Text } from 'react-native';
 
 import colors from '../../assets/colors';
 import { useNavigation } from '@react-navigation/native';
+import { useGetEstimateDetQuery } from '../../store/slices/IdentityApiSlice';
 
+type routeParams = {
+  route: { params: { estimateId: string; } };
+};
 
-const Orderdet = () => {
+const Orderdet = ({ route: { params } }: routeParams) => {
     const navigation = useNavigation();
+    const { estimateId } = params;
+    const { data: estdet, isLoading } = useGetEstimateDetQuery( estimateId );
+
+    console.log("NNNNNNNNNNNNN",estdet)
   return (
     <View style={styles.ordercontainer}>
-        <View style={styles.headbar}>
-        {/* <Text style={styles.head}>Order Details</Text> */}
+      {
+        isLoading ?
+        (
+          <View style={{display:'flex',
+          alignItems:'center', hight: '40%'}}>
+        <ActivityIndicator size="large" color="#6B7887"/>
         </View>
+        )
+        :(
+          <>
+          
+        <View style={styles.headbar}>
+       
+        </View>
+        
        
             <View style={styles.shophead}>
                 <Text style={styles.shop}>Starlink Electricals</Text>
                 <Text style={styles.place}>Thrissur, Ollur</Text>
                 <View style={styles.dethead}>
                     <Text style={styles.price}>20-8-2022</Text>
-                    <Text style={styles.price}>10,000 RS</Text>
+                    <Text style={styles.price}>{estdet?.totalAmount} RS</Text>
                 </View>
 
             </View>
             <Text style={styles.billingaddress}>Billing Address</Text>
             <View style={styles.shophead}>
-            <Text style={styles.shop}>Alphy Benny</Text>
+            <Text style={styles.shop}>{estdet?.customerName}</Text>
                 <View style={styles.dethead}>
-                <Text style={styles.place}>Ollur center, thrissur</Text>
-                    <Text style={styles.price}>8943793274</Text>
+                <Text style={styles.place}>{estdet?.customerAddress}</Text>
+                    <Text style={styles.price}>{estdet?.customerPhone}</Text>
                 </View>
 
             </View>
-
-            <ScrollView style={styles.containerbox}
-            showsVerticalScrollIndicator={false}
-            >
-                <Text style={styles.places}>UPVC</Text>
-                <Text style={styles.items}>1. Insulation Tape - 3 Nos - Rs 30</Text>
-                <Text style={styles.items}>2. Insulation Tape - 3 Nos - Rs 30</Text>
-                <Text style={styles.items}>3. Insulation Tape - 3 Nos - Rs 30</Text>
-                <Text style={styles.places}>UPVC</Text>
-                <Text style={styles.items}>1. Insulation Tape - 3 Nos - Rs 30</Text>
-                <Text style={styles.places}>PPR</Text>
-                <Text style={styles.items}>1. Insulation Tape - 3 Nos - Rs 30</Text>
-                <Text style={styles.items}>1. Insulation Tape - 3 Nos - Rs 30</Text>
-                <Text style={styles.items}>1. Insulation Tape - 3 Nos - Rs 30</Text>
-                <Text style={styles.items}>1. Insulation Tape - 3 Nos - Rs 30</Text>
-                <Text style={styles.items}>1. Insulation Tape - 3 Nos - Rs 30</Text>
-
-                <Text style={styles.items}>1. Insulation Tape - 3 Nos - Rs 30</Text>
-                <Text style={styles.items}>1. Insulation Tape - 3 Nos - Rs 30</Text>
-                <Text style={styles.items}>1. Insulation Tape - 3 Nos - Rs 30</Text>
-                <Text style={styles.items}>1. Insulation Tape - 3 Nos - Rs 30</Text>
+           
 
                
 
-            </ScrollView>
+            <ScrollView style={styles.containerbox}
+            showsVerticalScrollIndicator={false}
+            
+            >
+              <>
+               {
+              estdet.materials.map((item,index) => {
+                return (
+                  <>
+                
+                <Text style={styles.places}>{item?.materialType}</Text>
+                <Text style={styles.items}>{index + 1}. {item?.materialName} - {item?.quantity} Nos - Rs {item?.price}</Text>
+                
+                </>
+                )
+              })
+            }
+               </>
 
+            </ScrollView>
+          
+            </>
+
+)
+
+}
         
        
      </View>

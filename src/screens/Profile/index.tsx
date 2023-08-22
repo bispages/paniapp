@@ -20,7 +20,7 @@ import {
   USERFORM_BOTSHEET_SNAPMID,
   USERFORM_BOTSHEET_SNAPMIN,
 } from '../../utils/constants';
-
+import RNFetchBlob from 'rn-fetch-blob';
 
 const Profile = () => {
   const userId = useSelector(selectUserId);
@@ -110,6 +110,7 @@ const Profile = () => {
       .then((image: Image) => {
         closeBotSheet(photoBottomSheet);
         if ('path' in image) setImage(image);
+        
         // convertToBase64(image.path);
         
       })
@@ -124,7 +125,7 @@ const Profile = () => {
     })
       .then((image: Image) => {
         closeBotSheet(photoBottomSheet);
-        if ('path' in image) setImage(image);
+        if ('path' in image) setImage(image.uri);
       })
       .catch(err => console.log(err));
   };

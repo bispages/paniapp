@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TextInput, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TextInput, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors';
 import { useNavigation } from '@react-navigation/native';
@@ -50,15 +50,25 @@ const Profile = () => {
   const navigation = useNavigation();
   const userId = useSelector(selectUserId);
   const { data: users, isLoading } = useGetMyOrderListQuery({ userId });
-  // console.log("WWW",users.estimates)
+ 
   return (
     <View style={styles.ordercontainer}>
+      {
+        isLoading ? (
+          <View style={{display:'flex',
+          alignItems:'center', hight: '40%'}}>
+          <ActivityIndicator size="large" color="#6B7887"/>
+          </View>
+        )
+        :(
+
+       
          <View style={styles.container}>
         {
             users?.estimates?.map((item,i)=>{
                 return (
                     <TouchableOpacity style={styles.cardcontainer} key={i} 
-                    onPress={()=>navigation.navigate('Orderdet')
+                    onPress={()=>navigation.navigate('Orderdet', {estimateId : item?.estimateId})
 
                     }>
                     <View style={styles.imagecard}>
@@ -66,9 +76,9 @@ const Profile = () => {
         
                      </View>
                     <View style={styles.carddet}>
-                    <Text style={styles.date}>20-08-2022//</Text>
+                    <Text style={styles.date}>20-08-2022</Text>
                     <Text style={styles.name}>{item?.estimateName}</Text>
-                    <Text style={styles.place}>Thrissur//</Text>
+                    <Text style={styles.place}>Thrissur</Text>
         
                     </View>
                      <View style={styles.contactdet}>
@@ -88,6 +98,8 @@ const Profile = () => {
       
         
         </View>
+         )
+        }
     </View>
   );
 };

@@ -170,6 +170,10 @@ const Select = () => {
             <>
               {favusers?.map((item, i) => {
                 return (
+                  <>
+                  {
+                    item?.userType === 0 ?
+                  
                   <View style={styles.card} key={i}>
                     <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
                     <View style={styles.subcard}>
@@ -186,6 +190,9 @@ const Select = () => {
                       <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} />
                     </View>
                   </View>
+                  :
+                  ("") }
+                  </>
                 );
               })}
             </>
@@ -193,7 +200,7 @@ const Select = () => {
         </ScrollView>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.filter}>
-          
+           
             {isLoading ? (
               <View style={{ display: 'flex', alignItems: 'center' }}>
                 <ActivityIndicator size="large" color="#6B7887" />
@@ -201,10 +208,9 @@ const Select = () => {
          
           ) : (
             <>
-            {console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHH")}
               { nearusers?.length === 0 ? (
                 <View style={{ display: 'flex', alignItems: 'center' }}>
-                   {console.log("77777777777777777777777777777777")}
+                   
                 <Text style={styles.dets}>There is no Nearby users</Text>
                 </View>
               ) : (
@@ -212,8 +218,6 @@ const Select = () => {
                   {nearusers?.map((item, i) => {
                     return (
                       <View style={styles.card} key={i}>
-                         {console.log("888888888888888888888888888888888888")}
-                       
                         <Image source={require('../../assets/img/Ellipse10.png')} style={styles.shopimg} />
                         <View style={styles.subcard}>
                           <Text style={styles.name}>{item?.userName}</Text>

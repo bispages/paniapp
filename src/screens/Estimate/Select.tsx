@@ -128,48 +128,64 @@ const Select = () => {
       </View>
 
       {toggleState === false ? (
-        <ScrollView showsVerticalScrollIndicator={false}
-        style={styles.filter}
-        >
-          {datas.map(item => {
+        <ScrollView showsVerticalScrollIndicator={false} style={styles.filter}>
+          {favusers?.map(item => {
             return (
-              <View style={styles.card}>
-                <Image source={require('../../assets/img/shopimg.png')} style={styles.shopimg} />
-                <View style={styles.subcard}>
-                  <Text style={styles.name}>{item?.title}</Text>
-
-                  <View style={styles.detcard}>
-                    <Image source={require('../../assets/img/star.png')} style={styles.favicon} />
-                    <Text style={styles.det}>{item?.tag}</Text>
+              <>
+                {item?.userType === 0 ? (
+                  <View style={styles.favbardiv}>
+                    <Text style={{ fontSize: 16, fontWeight: '400', color: Colors.name }}>There is no favouristes</Text>
                   </View>
-                </View>
-                <View style={styles.call}>
-                  <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} />
-                </View>
-              </View>
+                ) : (
+                  <View style={styles.card}>
+                    <Image source={require('../../assets/img/shopimg.png')} style={styles.shopimg} />
+                    <View style={styles.subcard}>
+                      <Text style={styles.name}>{item?.userName}</Text>
+
+                      <View style={styles.detcard}>
+                        <Image source={require('../../assets/img/star.png')} style={styles.favicon} />
+                        <Text style={styles.det}>{item?.place}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.call}>
+                      <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} />
+                    </View>
+                  </View>
+                )}
+              </>
             );
           })}
         </ScrollView>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false}
-        style={styles.filter}
-        >
-          {data.map(item => {
+        <ScrollView showsVerticalScrollIndicator={false} style={styles.filter}>
+          {nearusers?.map(item => {
             return (
-              <View style={styles.card}>
-                <Image source={require('../../assets/img/shopimg.png')} style={styles.shopimg} />
-                <View style={styles.subcard}>
-                  <Text style={styles.name}>{item?.title}</Text>
-
-                  <View style={styles.detcard}>
-                    <Image source={require('../../assets/img/Vector.png')} style={styles.favicon} />
-                    <Text style={styles.det}>{item?.tag}</Text>
+              <>
+                {item?.userType === 0 ? (
+                  <>
+                   <View style={styles.favbardiv}>
+                    <Text style={{ fontSize: 16, fontWeight: '400', color: Colors.name }}>There is no near Shops</Text>
                   </View>
-                </View>
-                <View style={styles.call}>
-                  <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} />
-                </View>
-              </View>
+                    
+                    
+                  </>
+                ) : (
+                  <View style={styles.card}>
+                    <Image source={require('../../assets/img/shopimg.png')} style={styles.shopimg} />
+                    <View style={styles.subcard}>
+                      <Text style={styles.name}>{item?.userName}</Text>
+
+                      <View style={styles.detcard}>
+                        <Image source={require('../../assets/img/Vector.png')} style={styles.favicon} />
+                        <Text style={styles.det}>{item?.place}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.call}>
+                      <Image source={require('../../assets/img/phone-call.png')} style={styles.callicon} />
+                    </View>
+                  </View>
+                )}
+              </>
             );
           })}
         </ScrollView>
@@ -195,6 +211,11 @@ const styles = StyleSheet.create({
   filter: {
     display: 'flex',
     flexDirection: 'column',
+  },
+  favbardiv: {
+    display: 'flex',
+    alignItems: 'center',
+    paddingVertical: 10,
   },
   subcard: {
     display: 'flex',
@@ -236,7 +257,6 @@ const styles = StyleSheet.create({
     height: 110,
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
-    
   },
   toggletxt: {
     fontSize: 19,
